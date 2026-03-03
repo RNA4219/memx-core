@@ -25,7 +25,15 @@ next_review_due: 2026-06-03
    - 未実行の場合は理由を 1 行で記載。
 4. `commands`
    - 実行・提案コマンドを列挙。
-   - **正本（canonical source）** は `memx_spec_v3/docs/quickstart.md` の API 起動/投入/検索/表示の各コマンド例とする。
+   - **正本（canonical source）** は `memx_spec_v3/docs/quickstart.md` とし、コマンド表記は**リポジトリルート起点**の `go run ./memx_spec_v3/go/cmd/mem ...` に統一する。
+   - commands セクションには最低限以下を短く再掲する。
+     - ingest: `go run ./memx_spec_v3/go/cmd/mem in short --title "..." --stdin --api-url http://127.0.0.1:7766`
+     - search: `go run ./memx_spec_v3/go/cmd/mem out search "..." --api-url http://127.0.0.1:7766`
+     - show: `go run ./memx_spec_v3/go/cmd/mem out show <NOTE_ID> --api-url http://127.0.0.1:7766`
+   - `cd memx_spec_v3/go` + `go run ./cmd/mem ...` は代替表記としてのみ許容し、正本扱いしない。
+   - 差異チェック手順（更新時は必須）:
+     1. `rg -n "go run ./memx_spec_v3/go/cmd/mem|go run ./cmd/mem|cd memx_spec_v3/go" memx_spec_v3/docs/quickstart.md RUNBOOK.md HUB.codex.md`
+     2. 正本が quickstart のみであること、RUNBOOK/HUB が同一規約で追従していることを確認する。
    - 参照リンク: [`memx_spec_v3/docs/quickstart.md`](memx_spec_v3/docs/quickstart.md)
 5. `notes`
    - 判断理由、制約、未解決事項を最小限で記載。

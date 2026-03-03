@@ -9,11 +9,11 @@ next_review_due: 2026-06-03
 # RUNBOOK
 
 ## v1 必須運用フロー
-1. **ingest**: `mem in short`（または `POST /v1/notes:ingest`）で short へ投入。
-2. **search**: `mem out search`（または `POST /v1/notes:search`）で FTS 検索。
-3. **show**: `mem out show`（または `GET /v1/notes/{id}`）で単一ノート参照。
+1. **ingest**: `go run ./memx_spec_v3/go/cmd/mem in short`（または `POST /v1/notes:ingest`）で short へ投入。
+2. **search**: `go run ./memx_spec_v3/go/cmd/mem out search`（または `POST /v1/notes:search`）で FTS 検索。
+3. **show**: `go run ./memx_spec_v3/go/cmd/mem out show`（または `GET /v1/notes/{id}`）で単一ノート参照。
 
-## `mem in short` 手順
+## `go run ./memx_spec_v3/go/cmd/mem in short` 手順
 1. CLI で `file` または stdin から本文を読み込み、request を生成。
 2. API へ request を送信（in-proc または HTTP）。
 3. Service 側で Gatekeeper(`memory_store`)・ノート保存・タグ/埋め込み更新・`short_meta` 更新を実行。
@@ -50,6 +50,8 @@ next_review_due: 2026-06-03
 ### 実行前提
 - 必須バイナリ: `go`(1.22+), `python3`(3.10+)
 - 実行ディレクトリ: リポジトリルート（`/workspace/memx`）
+- コマンド正本: リポジトリルート起点の `go run ./memx_spec_v3/go/cmd/mem ...`
+- 代替表記: `cd memx_spec_v3/go` 後に `go run ./cmd/mem ...`（正本ではない）
 - 入力データ形式: UTF-8 プレーンテキスト（1ノート約500文字、1行1ノートで生成）
 - 計測対象コマンド実体:
   - ingest: `go run ./memx_spec_v3/go/cmd/mem in short`
