@@ -184,7 +184,7 @@ python workflow-cookbook/tools/codemap/update.py --targets docs/birdseye/index.j
 ```
 
 ## Observability / 確認手順
-1. 必須指標の定義は `governance/metrics.yaml` を唯一の参照元として確認する。
+1. 性能閾値の正本は `EVALUATION.md` とし、`governance/metrics.yaml` はその同期先として一致を維持する。
 2. 日次確認では `response_time` / `compatibility` / `error_classification` / `recall_threshold` の breach 有無を確認する。
 3. breach 発生時は `governance/metrics.yaml` の `action_on_breach` に従ってインシデントを起票する。
 
