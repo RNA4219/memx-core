@@ -32,13 +32,13 @@ priority: high
 
 ### CLI
 
-| MUST (v1) | SHOULD (v1.x) | FUTURE (v1.1+) |
+| MUST (v1) | SHOULD (v1.x) | FUTURE (v2+) |
 | --- | --- | --- |
 | `mem in short`, `mem out search`, `mem out show` | `mem gc short`（`mem.features.gc_short=true` 時のみ有効な実験機能） | `mem out recall`, `mem working`, `mem tag`, `mem meta`, `mem lineage`, `mem distill`, `mem out context` |
 
 ### API
 
-| MUST (v1) | SHOULD (v1.x) | FUTURE (v1.1+) |
+| MUST (v1) | SHOULD (v1.x) | FUTURE (v2+) |
 | --- | --- | --- |
 | `POST /v1/notes:ingest`, `POST /v1/notes:search`, `GET /v1/notes/{id}` | `POST /v1/gc:run`（`mem.features.gc_short=true` 時のみ有効な実験機能） | Recall/Working/Tag/Meta/Lineage 系 API |
 
@@ -127,7 +127,7 @@ priority: high
 - [ ] エラーコード変更時は `memx_spec_v3/docs/requirements.md` と `memx_spec_v3/docs/error-contract.md` を更新対象に含めた
 - [ ] Commands に検証コマンドを順序付きで記載済み
 - [ ] Release Note Draft を記載済み
-- [ ] CHANGES/CHANGELOG への反映項目を記載済み
+- [ ] `memx_spec_v3/CHANGES.md` と `CHANGELOG.md` への反映項目を記載済み
 - [ ] `Status: done` 前に `Moved-to-CHANGES: YYYY-MM-DD` を追記する
 ```
 
@@ -139,7 +139,7 @@ priority: high
 
 <a id="requirements-traceability"></a>
 
-## 0-2. 要件トレーサビリティ
+## 0-3. 要件トレーサビリティ
 
 <a id="主要要件id固定"></a>
 
@@ -856,13 +856,14 @@ gc:
 | --- | --- | --- | --- |
 | `S0` | 検知直後 | `pending_compensation_count > 0` | `S1` |
 | `S1` | 補償実行中 | `retry_count <= 2` かつ `archive+lineage` の片系不足が存在 | `S2` or `S3` |
-| `S2` | 重複許容安定 | `dup_archive_count >= 1` を許容しつつ `欠損=0` を維持 | `S4` |
+| `S2` | 重複許容安定 | `dup_archive_count >= 1` を許容しつつ `欠損=0` を維持 | `S4`（`pending_compensation_count==0` かつ `short_delete_ready_ratio==1.0` かつ `dup_archive_count<=1`）or `S3` |
 | `S3` | 未収束 | `retry_count > 2` または 30分超過で `pending_compensation_count > 0` | `S5` |
 | `S4` | 収束完了 | `pending_compensation_count == 0` かつ `short_delete_ready_ratio == 1.0` かつ `dup_archive_count <= 1` | 終端 |
 | `S5` | 要起票終端 | `docs/IN-*.md` 起票 + 再計画チケット発行済み | 終端 |
 
 - `S2` は「重複許容の暫定安定状態」とし、欠損ゼロを維持したまま `S4` へ収束させる中間状態とする。
 - `S2` のまま 30 分を超過した場合は `S3`（未収束）へ遷移し、`S5` へ進める。
+- `S2 -> S4` 遷移は「重複許容後の最終収束条件（未補償ゼロ・Delete 再開可・重複許容上限内）」を同時充足した場合に限定する。
 
 ### 5-4. インシデント記録（`docs/IN-*.md`）最小監査項目
 
