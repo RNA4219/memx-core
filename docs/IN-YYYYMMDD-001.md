@@ -23,6 +23,7 @@
 
 ## waiver運用時の必須記録項目（REQ-NFR-006 連動）
 
+- 運用ルール: waiver 記録は必ず `docs/IN-<実日付>-<連番>.md` に残し、`EVALUATION.md` の運用NFR合否判定で証跡として参照可能な状態にする。
 - 対象: `REQ-NFR-001` / `REQ-RET-001` / 運用NFR（`REQ-NFR-002`〜`REQ-NFR-005`）で fail を一時許容する場合。
 - `docs/IN-<実日付>-<連番>.md` に必須記録すること:
   1. waiver対象要件ID（例: `REQ-NFR-005`）

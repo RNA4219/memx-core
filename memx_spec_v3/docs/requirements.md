@@ -50,21 +50,26 @@ priority: high
 | v1必須 | エラーコード（入力不備: 400系 / 内部障害: 500系 を返すこと） |
 | v1必須 | 最小性能目標（`ingest`/`search`/`show` がローカル単体で実用応答時間を維持すること） |
 
-## 0-2. v1/v1.x/v2 移行ポリシー
+## 0-2. バージョニングと段階移行
 
 本節は、機能追加・仕様変更・廃止を `MUST(v1)` / `SHOULD(v1.x)` / `FUTURE(v2+)` の3段階で運用するための正本要件とする。
+`v1` は後方互換維持を最優先とし、破壊変更は `FUTURE(v2+)` へ隔離して段階移行する。
 
-### 0-2-1. 段階別ルール（追加のみ・非互換禁止・廃止条件）
+### 0-2-1. 段階別ルール（許可変更 / 禁止変更 / 廃止条件）
 
-| 区分 | 追加のみ | 非互換禁止 | 廃止条件 |
+| 区分 | 許可変更 | 禁止変更 | 廃止条件 |
 | --- | --- | --- | --- |
-| MUST (v1) | 後方互換を維持した拡張のみ追加可能（任意フィールド追加、任意オプション追加） | 既存 CLI/API 入出力の型・意味・必須性の変更、既存エラーコード削除、既存コマンド/エンドポイント削除 | v1 系では廃止不可。廃止は `FUTURE(v2+)` へ昇格して予告し、`CHANGELOG.md` と `memx_spec_v3/CHANGES.md` に破壊変更チェックリストを記載したうえで次メジャーで実施 |
-| SHOULD (v1.x) | 実験機能として追加可能（feature flag 既定 OFF） | 既定 ON 化、flag なし常時有効化、MUST と同名 I/F の上書き | まず feature flag を deprecated 扱いにし 1 つ以上のマイナー期間で警告、次メジャーで削除 |
-| FUTURE (v2+) | 次メジャー向けに仕様追加・再設計可能 | v1 系へ逆流させる破壊的導入（互換フラグなし） | `v1 -> v2` 移行手順を明示し、互換期間の並行提供方針を定義してから廃止 |
+| MUST (v1) | 後方互換を維持した拡張のみ追加可能（任意フィールド追加、任意オプション追加、任意パラメータ追加） | 既存 CLI/API 入出力の型・意味・必須性の変更、既存エラーコード削除、既存コマンド/エンドポイント削除、`--json` 既定出力の非同型化 | v1 系では廃止不可。廃止は `FUTURE(v2+)` へ昇格して予告し、`CHANGELOG.md` と `memx_spec_v3/CHANGES.md` に破壊変更チェックリストを記載したうえで次メジャーで実施 |
+| SHOULD (v1.x) | 実験機能として追加可能（feature flag 既定 OFF、既定挙動に影響しないこと） | 既定 ON 化、flag なし常時有効化、MUST と同名 I/F の上書き、flag 未指定での出力仕様変更 | まず feature flag を deprecated 扱いにし 1 つ以上のマイナー期間で警告、次メジャーで削除 |
+| FUTURE (v2+) | 次メジャー向けに仕様追加・再設計可能（互換フラグ/移行導線付き） | v1 系へ逆流させる破壊的導入（互換フラグなし）、移行手順未定義のままの強制切替 | `v1 -> v2` 移行手順を明示し、互換期間の並行提供方針を定義してから廃止 |
 
 ### 0-2-2. エラーコード拡張の昇格条件（service sentinel 連動）
 
 - `CONFLICT` / `GATEKEEP_DENY` / `FEATURE_DISABLED` は、**service 層に対応する sentinel error が実装済みである場合のみ** `INTERNAL` から個別コードへ昇格してよい。
+- 適用条件（実装有無との対応）は次の通り。
+  - `CONFLICT`: `service.ErrConflict`（同等 sentinel）実装済み時のみ適用。未実装時は `INTERNAL`。
+  - `GATEKEEP_DENY`: `service.ErrGatekeepDeny`（同等 sentinel）実装済み時のみ適用。未実装時は `INTERNAL`。
+  - `FEATURE_DISABLED`: `service.ErrFeatureDisabled`（同等 sentinel）実装済み時のみ適用。未実装時は `INTERNAL`。
 - 昇格時の必須条件は次の通り。
   1. `go/service` に sentinel error を追加し、再試行可否の意味が固定されていること。
   2. `go/api/errors.go`（または同等の `mapError`）に明示マッピングを追加すること。
@@ -128,38 +133,36 @@ priority: high
 
 - 本テンプレートは `docs/TASKS.md` の「Task Seed 必須項目」「CHANGES 連携ルール」と矛盾しないことを必須条件とする。
 - セキュリティ/保持に関わる Task Seed では、Requirements 欄に `REQ-SEC-001` / `REQ-RET-001` / `REQ-SEC-AUD-001` / `REQ-SEC-AUD-002` / `REQ-SEC-GRD-001` の該当IDを必ず列挙する。
+- 特に `docs/TASKS.md` の `Requirements` / `Release Note Draft` / `Status: done` 条件（`Moved-to-CHANGES`）と同一基準で運用する。
 
 ---
 
 ## 0-2. 要件トレーサビリティ
 
-### 主要要件ID（固定）
+### 主要要件ID（CLI/API/GC/Security/Error 固定）
 
-| 要件領域 | Requirement ID | 受入条件（要約） | 判定基準（pass/fail） | 検証コマンド（RUNBOOK） | EVALUATION 相互参照 |
-| --- | --- | --- | --- | --- | --- |
-| CLI | `REQ-CLI-001` | `mem in short` / `mem out search` / `mem out show` の `--json` 出力が API 契約と一致する。 | pass: 3コマンドが契約一致 / fail: いずれか不一致。 | `go run ./memx_spec_v3/go/cmd/mem in short ...` / `go run ./memx_spec_v3/go/cmd/mem out search ...` / `go run ./memx_spec_v3/go/cmd/mem out show ...`（[trace-manual](../../RUNBOOK.md#trace-manual)） | [EVALUATION: REQ-CLI-001](../../EVALUATION.md#req-cli-001-passfail) |
-| API | `REQ-API-001` | `POST /v1/notes:ingest` / `POST /v1/notes:search` / `GET /v1/notes/{id}` が v1 契約を維持する。 | pass: 3エンドポイントがv1契約一致 / fail: いずれか逸脱。 | `go run ./memx_spec_v3/go/cmd/mem in short ...` / `go run ./memx_spec_v3/go/cmd/mem out search ...` / `go run ./memx_spec_v3/go/cmd/mem out show ...`（[trace-manual](../../RUNBOOK.md#trace-manual)） | [EVALUATION: REQ-API-001](../../EVALUATION.md#req-api-001-passfail) |
-| GC | `REQ-GC-001` | `mem gc short --dry-run` が DB 非更新で予定操作を返し、閾値判定を満たす場合のみ実行対象を出力する。 | pass: dry-runでDB非更新かつ判定整合 / fail: 更新発生または判定不整合。 | `go run ./memx_spec_v3/go/cmd/mem gc short --dry-run --api-url http://127.0.0.1:7766`（[trace-manual](../../RUNBOOK.md#trace-manual)） | [EVALUATION: REQ-GC-001](../../EVALUATION.md#req-gc-001-passfail) |
-| Security | `REQ-SEC-001` | `sensitivity` 判定で `secret` を fail-closed（保存禁止＋マスク）とし、`public/internal` は定義どおりに扱う。 | pass: `secret` 保存禁止+マスク成立 / fail: fail-closed違反。 | `go run ./memx_spec_v3/go/cmd/mem in short ...` と `go run ./memx_spec_v3/go/cmd/mem out search ...`（[trace-manual](../../RUNBOOK.md#trace-manual)） | [EVALUATION: REQ-SEC-001](../../EVALUATION.md#req-sec-001-passfail) |
-| Retention | `REQ-RET-001` | `archive` の退避・物理削除が保持期限と hold 条件を満たす場合にのみ実行され、監査ログ必須項目を記録する。 | pass: 保持期限/hold/監査ログ要件を満たす / fail: いずれか欠落（必要時 waiver）。 | `go run ./memx_spec_v3/go/cmd/mem gc short --dry-run --api-url http://127.0.0.1:7766`（[trace-manual](../../RUNBOOK.md#trace-manual)） | [EVALUATION: REQ-RET-001](../../EVALUATION.md#req-ret-001-passfail-waiver) |
-| Error | `REQ-ERR-001` | `INVALID_ARGUMENT/NOT_FOUND/INTERNAL` を v1 MUST とし、再試行可否ルールと整合する。 | pass: 3コード+再試行可否整合 / fail: コード欠落または可否不整合。 | `go run ./memx_spec_v3/go/cmd/mem in short ...` / `go run ./memx_spec_v3/go/cmd/mem out show ...`（[trace-manual](../../RUNBOOK.md#trace-manual)） | [EVALUATION: REQ-ERR-001](../../EVALUATION.md#req-err-001-passfail) |
-| Performance | `REQ-NFR-001` | `ingest/search/show` の p50/p95 が閾値以内。 | pass: 6指標すべて閾値以内 / fail: 1指標超過または条件不一致（必要時 waiver）。 | `python3 -m pytest -q`（[trace-test-pytest](../../RUNBOOK.md#trace-test-pytest)）, `node --test`（[trace-test-node](../../RUNBOOK.md#trace-test-node)）, `go run ./memx_spec_v3/go/cmd/mem ...`（[trace-perf](../../RUNBOOK.md#trace-perf)） | [EVALUATION: REQ-NFR-001](../../EVALUATION.md#req-nfr-001-passfail-waiver) |
+| 要件領域 | Requirement ID | 受入基準（期待結果） | 検証コマンド（RUNBOOK 1:1） | EVALUATION 相互参照 |
+| --- | --- | --- | --- | --- |
+| CLI | `REQ-CLI-001` | `mem out search` の `--json` 出力が API 契約と同型で返る。 | [`trace-req-cli-001`](../../RUNBOOK.md#trace-req-cli-001) | [REQ-CLI-001](../../EVALUATION.md#req-cli-001-passfail) |
+| API | `REQ-API-001` | `POST /v1/notes:ingest` が v1 契約（入力/出力/HTTP）を維持する。 | [`trace-req-api-001`](../../RUNBOOK.md#trace-req-api-001) | [REQ-API-001](../../EVALUATION.md#req-api-001-passfail) |
+| GC | `REQ-GC-001` | `mem gc short --dry-run` が DB 非更新で判定結果のみ返す。 | [`trace-req-gc-001`](../../RUNBOOK.md#trace-req-gc-001) | [REQ-GC-001](../../EVALUATION.md#req-gc-001-passfail) |
+| Security | `REQ-SEC-001` | `sensitivity=secret` 相当入力を fail-closed（保存禁止）で拒否する。 | [`trace-req-sec-001`](../../RUNBOOK.md#trace-req-sec-001) | [REQ-SEC-001](../../EVALUATION.md#req-sec-001-passfail) |
+| Error | `REQ-ERR-001` | `NOT_FOUND`/`INVALID_ARGUMENT`/`INTERNAL` の契約と再試行可否が整合する。 | [`trace-req-err-001`](../../RUNBOOK.md#trace-req-err-001) | [REQ-ERR-001](../../EVALUATION.md#req-err-001-passfail) |
 
-### Task Seed 転記用固定表（Source / Requirements）
+### Task Seed 転記用固定表（Source / Requirements 直接引用用）
 
-| Requirement ID | Source（転記用） | Requirements（転記用） |
+| Requirement ID | Source（引用用） | Requirements（引用用） |
 | --- | --- | --- |
-| `REQ-CLI-001` | `memx_spec_v3/docs/requirements.md#3-cli-要件` | `CLI v1必須3コマンドのJSON互換を維持する` |
-| `REQ-API-001` | `memx_spec_v3/docs/requirements.md#6-api-要件v13-追加` | `API v1必須3エンドポイント契約を維持する` |
-| `REQ-GC-001` | `memx_spec_v3/docs/requirements.md#3-5-mem-gc-shortobserver--reflector` | `GC dry-run/閾値判定/DB非更新契約を満たす` |
-| `REQ-SEC-001` | `memx_spec_v3/docs/requirements.md#2-7-security--retention-requirements` | `sensitivity判定をfail-closedで適用する` |
-| `REQ-RET-001` | `memx_spec_v3/docs/requirements.md#2-7-security--retention-requirements` | `archive退避/削除と監査ログ要件を満たす` |
-| `REQ-SEC-AUD-001` | `memx_spec_v3/docs/requirements.md#2-7-2-actor--approval--audit-責任分界表2-7-12-7-5` | `archive_moveの監査ログ固定項目を満たす` |
-| `REQ-SEC-AUD-002` | `memx_spec_v3/docs/requirements.md#2-7-2-actor--approval--audit-責任分界表2-7-12-7-5` | `archive_purgeの監査ログ固定項目を満たす` |
-| `REQ-SEC-GRD-001` | `memx_spec_v3/docs/requirements.md#2-7-5-guardrails-fail-closed-との整合チェック要件` | `GUARDRAILS fail-closed整合チェックを満たす` |
-| `REQ-ERR-001` | `memx_spec_v3/docs/requirements.md#6-4-エラーモデル` | `ErrorCode契約と再試行可否を維持する` |
-| `REQ-NFR-001` | `memx_spec_v3/docs/requirements.md#5-1-性能目標v1必須3エンドポイント` | `性能閾値（ingest/search/show）を満たす` |
-
+| `REQ-CLI-001` | `memx_spec_v3/docs/requirements.md#3-cli-要件` | `CLI v1必須3コマンドのJSON互換を維持し、mem out search の --json 出力は API 契約と同型を維持する。` |
+| `REQ-API-001` | `memx_spec_v3/docs/requirements.md#6-api-要件v13-追加` | `API v1必須3エンドポイント契約を維持し、POST /v1/notes:ingest は v1 契約を維持する。` |
+| `REQ-GC-001` | `memx_spec_v3/docs/requirements.md#3-5-mem-gc-shortobserver--reflector` | `GC dry-run/閾値判定/DB非更新契約を満たし、mem gc short --dry-run は DB を更新せず判定結果のみ返す。` |
+| `REQ-SEC-001` | `memx_spec_v3/docs/requirements.md#2-7-security--retention-requirements` | `sensitivity判定をfail-closedで適用し、secret は fail-closed で拒否する。` |
+| `REQ-RET-001` | `memx_spec_v3/docs/requirements.md#2-7-security--retention-requirements` | `archive退避/削除と監査ログ要件を満たす。` |
+| `REQ-SEC-AUD-001` | `memx_spec_v3/docs/requirements.md#2-7-2-actor--approval--audit-責任分界表2-7-12-7-5` | `archive_moveの監査ログ固定項目を満たす。` |
+| `REQ-SEC-AUD-002` | `memx_spec_v3/docs/requirements.md#2-7-2-actor--approval--audit-責任分界表2-7-12-7-5` | `archive_purgeの監査ログ固定項目を満たす。` |
+| `REQ-SEC-GRD-001` | `memx_spec_v3/docs/requirements.md#2-7-5-guardrails-fail-closed-との整合チェック要件` | `GUARDRAILS fail-closed整合チェックを満たす。` |
+| `REQ-ERR-001` | `memx_spec_v3/docs/requirements.md#6-4-エラーモデル` | `ErrorCode契約とretryableルール（再試行可否）を維持する。` |
+| `REQ-NFR-001` | `memx_spec_v3/docs/requirements.md#5-1-性能目標v1必須3エンドポイント` | `性能閾値（ingest/search/show）を満たす。` |
 ---
 
 ## 1. 全体アーキテクチャ
@@ -813,6 +816,20 @@ gc:
 - `RTO` は障害検知時点から正常系または暫定系サービス復帰までの許容時間を指す。
 - 再処理方針は `at-least-once` を採用し、重複は許容するが欠損は許容しない（重複は `REQ-NFR-005` の収束条件で解消する）。
 
+#### 5-2-1. RTO/RPO 判定の固定ルール
+
+- `RTO` の起点は `detected_at`、終点は `mitigated_at`（暫定復旧）または `resolved_at`（恒久復旧）の先着時刻とする。
+- `RPO` は障害復旧後に再投入が必要だった最古データ時刻と `detected_at` の差分で算出する。
+- `REQ-NFR-002` の合否は、同一インシデントに対して `rto_minutes <= 30` かつ `rpo_minutes <= 5` の同時成立を必須とする。
+- 判定証跡は `artifacts/ops/incident-summary.json` を正本とし、手計算値は参考情報扱いとする。
+
+#### 5-2-2. 再試行方針（運用固定）
+
+- 自動再試行の対象は一時障害（DB lock、LLM timeout、HTTP 429/502/503/504）のみとする。
+- 再試行回数は 1 リクエスト（または 1 ノート）あたり最大 2 回、待機は指数バックオフ（`1s -> 2s`、ジッタ許容）を推奨値とする。
+- `INVALID_ARGUMENT` / `NOT_FOUND` / `GATEKEEP_DENY` / 恒久障害の `INTERNAL` は再試行禁止とし、運用エスカレーションへ遷移する。
+- 再試行打ち切り後は `rollback` または `replan` を必須化し、`docs/IN-*.md` に再試行回数と打ち切り理由を記録する。
+
 ### 5-3. 整合性回復要件（Archive 補償フロー）
 
 - Requirement ID: `REQ-NFR-005`
@@ -827,6 +844,20 @@ gc:
 4. `short_delete_ready_ratio == 1.0`（Delete 判定対象の全件が削除可能状態）。
 5. 上記 1〜4 を障害検知から 30 分以内に満たせない場合は「未収束」とし、`docs/IN-*.md` 起票と再計画チケット発行を必須とする。
 
+状態定義（重複許容後の収束条件）:
+
+| 状態ID | 名称 | 判定条件 | 次状態 |
+| --- | --- | --- | --- |
+| `S0` | 検知直後 | `pending_compensation_count > 0` | `S1` |
+| `S1` | 補償実行中 | `retry_count <= 2` かつ `archive+lineage` の片系不足が存在 | `S2` or `S3` |
+| `S2` | 重複許容安定 | `dup_archive_count >= 1` を許容しつつ `欠損=0` を維持 | `S4` |
+| `S3` | 未収束 | `retry_count > 2` または 30分超過で `pending_compensation_count > 0` | `S5` |
+| `S4` | 収束完了 | `pending_compensation_count == 0` かつ `short_delete_ready_ratio == 1.0` かつ `dup_archive_count <= 1` | 終端 |
+| `S5` | 要起票終端 | `docs/IN-*.md` 起票 + 再計画チケット発行済み | 終端 |
+
+- `S2` は「重複許容の暫定安定状態」とし、欠損ゼロを維持したまま `S4` へ収束させる中間状態とする。
+- `S2` のまま 30 分を超過した場合は `S3`（未収束）へ遷移し、`S5` へ進める。
+
 ### 5-4. インシデント記録（`docs/IN-*.md`）最小監査項目
 
 - Requirement ID: `REQ-NFR-006`
@@ -837,6 +868,19 @@ gc:
   4. 復旧行動監査: `再試行回数` / `ロールバック実施有無` / `再計画チケットID`
   5. 影響監査: `影響対象` / `影響期間` / `影響規模` / `CIA影響`
   6. 証跡: `関連ログ・メトリクス・判定結果ファイル` の保存先パス
+
+#### 5-4-1. waiver 時の必須記録（`docs/IN-*.md` 運用連動）
+
+- waiver を許容する場合でも、記録媒体は必ず `docs/IN-<実日付>-<連番>.md` とする（口頭/チャットのみは不可）。
+- 必須項目は `docs/IN-BASELINE.md` および `docs/IN-YYYYMMDD-001.md` の waiver セクションと同一フォーマットを用いる。
+- 必須記録項目:
+  1. waiver 対象要件ID
+  2. waiver 理由
+  3. 影響範囲
+  4. 暫定運用策
+  5. 是正期限
+  6. 責任者
+  7. 解除条件
 
 ---
 

@@ -58,9 +58,15 @@ next_review_due: 2026-06-03
 
 | 手順 | 主対象NFR-ID | 判定に使う主要証跡 |
 | --- | --- | --- |
+| 検知・初期化（Detect） | `REQ-NFR-002`, `REQ-NFR-003` | `incident-summary.json.detected_at`, `recovery-log.ndjson.detect` |
 | 再試行（Retry） | `REQ-NFR-003`, `REQ-NFR-004` | `recovery-log.ndjson.retry_count`, `incident-summary.json.mitigated_at` |
 | ロールバック（Rollback） | `REQ-NFR-002`, `REQ-NFR-005` | `incident-summary.json.rto_minutes/rpo_minutes`, `recovery-log.ndjson.pending_compensation_count` |
 | 再計画（Re-plan） | `REQ-NFR-003`, `REQ-NFR-005`, `REQ-NFR-006` | `docs/IN-*.md`, `recovery-log.ndjson.replan_ticket_id` |
+
+### 0) 検知・初期化（Detect）
+- 要件紐付け: `REQ-NFR-002`, `REQ-NFR-003`
+- 障害検知時点を `incident-summary.json.detected_at` と `recovery-log.ndjson` の `detect` イベントで固定記録する。
+- 後続の RTO/RPO 判定、15分暫定復旧判定はこの `detected_at` を起点に算出する。
 
 ### 1) 再試行（Retry）
 - 要件紐付け: `REQ-NFR-003`, `REQ-NFR-004`
@@ -130,7 +136,7 @@ node --test
 
 <a id="trace-manual"></a>
 
-### manual（CLI/API/GC/Error）
+### manual（CLI/API/GC/Security/Error）
 ```bash
 # CLI/API ingest
 printf '%s' 'traceability-sample' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title traceability --api-url http://127.0.0.1:7766
@@ -143,6 +149,41 @@ go run ./memx_spec_v3/go/cmd/mem out show 1 --api-url http://127.0.0.1:7766
 
 # GC dry-run
 go run ./memx_spec_v3/go/cmd/mem gc short --dry-run --api-url http://127.0.0.1:7766
+```
+
+<a id="trace-req-cli-001"></a>
+
+### REQ-CLI-001 検証コマンド
+```bash
+go run ./memx_spec_v3/go/cmd/mem out search 'traceability' --api-url http://127.0.0.1:7766
+```
+
+<a id="trace-req-api-001"></a>
+
+### REQ-API-001 検証コマンド
+```bash
+go run ./memx_spec_v3/go/cmd/mem in short --stdin --title traceability --api-url http://127.0.0.1:7766
+```
+
+<a id="trace-req-gc-001"></a>
+
+### REQ-GC-001 検証コマンド
+```bash
+go run ./memx_spec_v3/go/cmd/mem gc short --dry-run --api-url http://127.0.0.1:7766
+```
+
+<a id="trace-req-sec-001"></a>
+
+### REQ-SEC-001 検証コマンド
+```bash
+printf '%s' 'secret-token-for-trace' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title trace-sec --api-url http://127.0.0.1:7766
+```
+
+<a id="trace-req-err-001"></a>
+
+### REQ-ERR-001 検証コマンド
+```bash
+go run ./memx_spec_v3/go/cmd/mem out show 999999 --api-url http://127.0.0.1:7766
 ```
 
 <a id="trace-perf"></a>

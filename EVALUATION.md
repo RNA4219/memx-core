@@ -10,8 +10,10 @@ next_review_due: 2026-06-03
 
 ## v1 受け入れ基準（Release Scope Matrix 準拠）
 - 判定対象（MUST (v1)）: `mem in short` / `mem out search` / `mem out show` と `POST /v1/notes:ingest` / `POST /v1/notes:search` / `GET /v1/notes/{id}`。
-- 入出力互換: MUST (v1) の CLI→API 入出力マッピングが保持される。
-- エラーコード整合: MUST (v1) の入力不備は 400 系、内部障害は 500 系を返す。
+- 入出力互換（`REQ-CLI-001` / `REQ-API-001`）: MUST (v1) の CLI→API 入出力マッピングが保持される。
+- エラーコード整合（`REQ-ERR-001`）: MUST (v1) の入力不備は 400 系、内部障害は 500 系を返す。
+- GC dry-run 契約（`REQ-GC-001`）: `mem gc short --dry-run` は DB 非更新で判定結果のみ返す。
+- Security fail-closed（`REQ-SEC-001`）: `sensitivity=secret` は保存禁止で評価する。
 - 最小性能目標（同一計測条件、MUST (v1) API のみ）:
   - `POST /v1/notes:ingest`: P50 <= 120ms, P95 <= 250ms
   - `POST /v1/notes:search`: P50 <= 80ms, P95 <= 180ms
@@ -20,12 +22,12 @@ next_review_due: 2026-06-03
 ## 要件IDトレーサビリティ（判定基準との相互参照）
 | Requirement ID | 判定基準 | 判定ルール参照 | requirements.md 相互参照 |
 | --- | --- | --- | --- |
-| <a id="req-cli-001-passfail"></a>`REQ-CLI-001` | pass/fail | 本書「v1 受け入れ基準（Release Scope Matrix 準拠）」・`RUNBOOK.md` manual 手順 | [requirements: REQ-CLI-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
-| <a id="req-api-001-passfail"></a>`REQ-API-001` | pass/fail | 本書「v1 受け入れ基準（Release Scope Matrix 準拠）」・`RUNBOOK.md` manual 手順 | [requirements: REQ-API-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
-| <a id="req-gc-001-passfail"></a>`REQ-GC-001` | pass/fail | `RUNBOOK.md` の `mem gc short` 手順および manual コマンド | [requirements: REQ-GC-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
-| <a id="req-sec-001-passfail"></a>`REQ-SEC-001` | pass/fail | `requirements.md` 2-7-1 の `sensitivity` 契約 | [requirements: REQ-SEC-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
+| <a id="req-cli-001-passfail"></a>`REQ-CLI-001` | pass/fail | 本書「v1 受け入れ基準（Release Scope Matrix 準拠）」・`RUNBOOK.md` の `trace-req-cli-001` | [requirements: REQ-CLI-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
+| <a id="req-api-001-passfail"></a>`REQ-API-001` | pass/fail | 本書「v1 受け入れ基準（Release Scope Matrix 準拠）」・`RUNBOOK.md` の `trace-req-api-001` | [requirements: REQ-API-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
+| <a id="req-gc-001-passfail"></a>`REQ-GC-001` | pass/fail | `RUNBOOK.md` の `trace-req-gc-001` | [requirements: REQ-GC-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
+| <a id="req-sec-001-passfail"></a>`REQ-SEC-001` | pass/fail | `RUNBOOK.md` の `trace-req-sec-001` | [requirements: REQ-SEC-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
 | <a id="req-ret-001-passfail-waiver"></a>`REQ-RET-001` | pass/fail/waiver | 本書「性能合否基準（fail / waiver）」の運用を準用し、保持期限逸脱は waiver 記録必須 | [requirements: REQ-RET-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
-| <a id="req-err-001-passfail"></a>`REQ-ERR-001` | pass/fail | 本書「エラーコード整合」および `requirements.md` 6-4 | [requirements: REQ-ERR-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
+| <a id="req-err-001-passfail"></a>`REQ-ERR-001` | pass/fail | `RUNBOOK.md` の `trace-req-err-001` と `requirements.md` 6-4 | [requirements: REQ-ERR-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
 | <a id="req-nfr-001-passfail-waiver"></a>`REQ-NFR-001` | pass/fail/waiver | 本書「性能合否基準（fail / waiver）」および「REQ-NFR-001 合否判定ルール」 | [requirements: REQ-NFR-001](./memx_spec_v3/docs/requirements.md#主要要件id固定) |
 
 ## 性能合否基準（fail / waiver）
@@ -50,6 +52,16 @@ next_review_due: 2026-06-03
 ## 運用NFR（可用性/復旧/整合性回復）合否基準
 
 - 対象要件: `REQ-NFR-002` / `REQ-NFR-003` / `REQ-NFR-004` / `REQ-NFR-005` / `REQ-NFR-006`
+
+### 運用NFR 合否マトリクス（必要証跡 / fail条件）
+
+| NFR-ID | 必要証跡（最低限） | fail 条件 |
+| --- | --- | --- |
+| `REQ-NFR-002` | `incident-summary.json.rto_minutes`, `incident-summary.json.rpo_minutes` | `rto_minutes > 30` または `rpo_minutes > 5`、値欠損 |
+| `REQ-NFR-003` | `incident-summary.json.detected_at`, `incident-summary.json.mitigated_at` | `mitigated_at - detected_at > 15分`、時刻欠損/逆転 |
+| `REQ-NFR-004` | `incident-summary.json.retry_count`, `recovery-log.ndjson` の retry イベント | `retry_count > 2`、回数不整合 |
+| `REQ-NFR-005` | `recovery-log.ndjson.pending_compensation_count`, `short_delete_ready_ratio`, `rollback/replan` イベント | `pending_compensation_count != 0`、`short_delete_ready_ratio != 1.0`、30分以内の収束/起票未達 |
+| `REQ-NFR-006` | 対応する `docs/IN-*.md`（最小監査項目 + waiver 必須項目） | 必須項目欠落、waiver 期限切れ、再計画チケット未記録 |
 
 ### 証跡ファイル（必須）
 - `artifacts/ops/incident-summary.json`
