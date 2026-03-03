@@ -54,6 +54,14 @@ next_review_due: 2026-06-03
 
 - 適用要件: `REQ-NFR-002` / `REQ-NFR-003` / `REQ-NFR-004` / `REQ-NFR-005` / `REQ-NFR-006`
 
+### 障害時手順のNFR-ID対応表
+
+| 手順 | 主対象NFR-ID | 判定に使う主要証跡 |
+| --- | --- | --- |
+| 再試行（Retry） | `REQ-NFR-003`, `REQ-NFR-004` | `recovery-log.ndjson.retry_count`, `incident-summary.json.mitigated_at` |
+| ロールバック（Rollback） | `REQ-NFR-002`, `REQ-NFR-005` | `incident-summary.json.rto_minutes/rpo_minutes`, `recovery-log.ndjson.pending_compensation_count` |
+| 再計画（Re-plan） | `REQ-NFR-003`, `REQ-NFR-005`, `REQ-NFR-006` | `docs/IN-*.md`, `recovery-log.ndjson.replan_ticket_id` |
+
 ### 1) 再試行（Retry）
 - 要件紐付け: `REQ-NFR-003`, `REQ-NFR-004`
 - 初動で一時障害を判定した場合のみ再試行を実施する。
@@ -63,10 +71,11 @@ next_review_due: 2026-06-03
 ### 2) ロールバック（Rollback）
 - 要件紐付け: `REQ-NFR-002`, `REQ-NFR-005`
 - `archive 実在 + 対応 lineage 実在` を満たさない状態では short 側 Delete を禁止し、ロールバックしてデータ喪失を回避する。
-- 復旧手順の実行後、RTO 30 分以内に暫定系（縮退運用を含む）へ復帰できることを確認する。
+- 復旧手順の実行後、`RTO <= 30分` / `RPO <= 5分` を `incident-summary.json` で確認する。
+- 補償収束の確認として `pending_compensation_count == 0` と `short_delete_ready_ratio == 1.0` を `recovery-log.ndjson` で確認する。
 
 ### 3) 再計画（Re-plan）
-- 要件紐付け: `REQ-NFR-003`, `REQ-NFR-006`
+- 要件紐付け: `REQ-NFR-003`, `REQ-NFR-005`, `REQ-NFR-006`
 - 再試行上限到達または 30 分以内に収束しない場合、`docs/IN-*.md` を起票して再計画チケットを発行する。
 - `docs/IN-*.md` には検知時刻/暫定復旧完了時刻/恒久復旧完了時刻・再試行回数・ロールバック実施有無を必須記録する。
 

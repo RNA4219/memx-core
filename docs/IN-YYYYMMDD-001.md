@@ -21,6 +21,18 @@
   - 影響監査（影響対象/期間/規模/CIA）
   - 証跡ファイル保存先（ログ/メトリクス/判定結果）
 
+## waiver運用時の必須記録項目（REQ-NFR-006 連動）
+
+- 対象: `REQ-NFR-001` / `REQ-RET-001` / 運用NFR（`REQ-NFR-002`〜`REQ-NFR-005`）で fail を一時許容する場合。
+- `docs/IN-<実日付>-<連番>.md` に必須記録すること:
+  1. waiver対象要件ID（例: `REQ-NFR-005`）
+  2. waiver理由（技術的制約/外部依存/緊急運用の別）
+  3. 期限（UTC、失効日時）
+  4. 暫定リスク受容者（承認者）
+  5. 代替統制（監視強化・手動運用手順・追加検証）
+  6. 解除条件（どの証跡が揃えば waiver を解消するか）
+  7. 関連証跡パス（`artifacts/ops/incident-summary.json`、`artifacts/ops/recovery-log.ndjson` など）
+
 ## 1. 検知（Detection）
 
 - 検知日時: `YYYY-MM-DDThh:mm:ssZ`

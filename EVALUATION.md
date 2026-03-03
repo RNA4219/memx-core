@@ -56,6 +56,7 @@ next_review_due: 2026-06-03
   - 必須キー: `incident_id`, `detected_at`, `mitigated_at`, `resolved_at`, `rto_minutes`, `rpo_minutes`, `retry_count`
 - `artifacts/ops/recovery-log.ndjson`
   - 必須イベント: `detect`, `retry`, `rollback`（実施時）, `replan`（実施時）, `mitigate`, `resolve`
+  - 必須キー: `pending_compensation_count`, `short_delete_ready_ratio`
 - `docs/IN-*.md`
   - `REQ-NFR-006` で定義した最小監査項目を満たすこと
 
@@ -65,11 +66,13 @@ next_review_due: 2026-06-03
   2. `incident-summary.json.rpo_minutes <= 5`（`REQ-NFR-002`）
   3. `mitigated_at - detected_at <= 15分`（`REQ-NFR-003`）
   4. `retry_count <= 2`（`REQ-NFR-004`）
-  5. `recovery-log.ndjson` に整合性回復イベント（`rollback` または `replan`）が存在し、30 分以内に収束または `docs/IN-*.md` 起票済み（`REQ-NFR-005`）
-  6. 対応する `docs/IN-*.md` が最小監査項目を欠落なく記載（`REQ-NFR-006`）
+  5. `pending_compensation_count == 0` かつ `short_delete_ready_ratio == 1.0`（`REQ-NFR-005`）
+  6. `recovery-log.ndjson` に整合性回復イベント（`rollback` または `replan`）が存在し、30 分以内に収束または `docs/IN-*.md` 起票済み（`REQ-NFR-005`）
+  7. 対応する `docs/IN-*.md` が最小監査項目を欠落なく記載（`REQ-NFR-006`）
 - fail 条件:
-  - 上記 1〜6 のいずれか 1 つでも不成立
+  - 上記 1〜7 のいずれか 1 つでも不成立
   - 証跡ファイル欠損、または時刻/回数の整合が取れない
+  - waiver 期限切れ、または waiver 必須記録項目の欠落
 
 ## governance/metrics.yaml 同期運用ルール
 - `governance/metrics.yaml` は本書（`EVALUATION.md`）を正本として同期する。
