@@ -37,3 +37,41 @@ next_review_due: 2026-06-03
 - `MiniLLMClient`: タグ・スコア・機密度推定。
 - `ReflectLLMClient`: Observer/Reflector 要約更新。
 - タイムアウト 15 秒、最大 2 回リトライ（指数バックオフ）、再試行可/不可を区別して実装する。
+
+
+## 性能再計測手順（EVALUATION.md 同条件）
+1. テストデータ投入（10,000 件 / 1件 約500文字）を実施。
+2. 計測環境がローカル単体（4 vCPU / 16GB RAM / NVMe SSD / Linux x86_64）であることを確認。
+3. ウォームアップとして各エンドポイントを 20 回実行。
+4. 本計測として各エンドポイントを 200 回実行し、P50/P95 を算出。
+
+### 実行コマンド例
+```bash
+mkdir -p artifacts/perf
+
+# 1) データ投入（同条件データセット）
+python scripts/perf_seed_notes.py \
+  --store short \
+  --count 10000 \
+  --body-length 500 \
+  --output artifacts/perf/seed-result.json
+
+# 2) ウォームアップ（20回）
+python scripts/perf_probe.py \
+  --endpoint ingest --endpoint search --endpoint show \
+  --warmup 20 \
+  --runs 0 \
+  --output artifacts/perf/warmup-result.json
+
+# 3) 本計測（200回）
+python scripts/perf_probe.py \
+  --endpoint ingest --endpoint search --endpoint show \
+  --warmup 0 \
+  --runs 200 \
+  --output artifacts/perf/perf-result.json
+```
+
+### 出力保存先
+- シード結果: `artifacts/perf/seed-result.json`
+- ウォームアップ結果: `artifacts/perf/warmup-result.json`
+- 本計測結果（P50/P95 含む）: `artifacts/perf/perf-result.json`

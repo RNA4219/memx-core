@@ -33,3 +33,4 @@ next_review_due: 2026-06-03
 - [ ] GC トリガ判定は `memory_policy.yaml.gc.short` のみを参照している。
 - [ ] `short_meta` はヒント運用とし、GC 前に正確値再計算を行う。
 - [ ] インシデント記録をテンプレート要件に沿って作成できる。
+- [ ] 性能SLO達成確認（EVALUATION.md の計測条件で ingest/search/show の P50/P95 が閾値内）を完了している。
