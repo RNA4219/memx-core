@@ -332,13 +332,31 @@ mem out recall "Qwen3.5-27B ベンチマーク結果"   --scope self   --stores 
 - `--top-k`：ベクター検索の anchor 数
 - `--range`：anchor 前後何件を同ストアから連結するか
 
-内部仕様（方針）：
+内部仕様（疑似仕様 / 実装可能レベル）：
 
 1. クエリを EmbeddingClient で embed → ベクター取得。
 2. 指定ストアの `note_embeddings` を横断し cosine 類似度を計算（将来 sqlite-vec 等に差し替え）。
+   - 類似度式：`score = dot(q, v) / (||q|| * ||v||)`（q: クエリ埋め込み, v: ノート埋め込み）
+   - `||q|| == 0` または `||v|| == 0` の場合は `score = 0` とみなす。
+   - 取得対象は `score >= 0.20` のノートのみ（閾値）。
 3. スコア上位 `top-k` 件を anchor とする。
+   - `top-k` の有効範囲は `1..50`。未指定時は `8`。
+   - `top-k > 50` 指定時は `50` に丸める。
+   - 同点時タイブレークは `created_at DESC` → `id ASC`。
 4. anchor ごとに `created_at` ベースで `range` 件の Before/After ノートを取得。
-5. Working Memory（memopedia の pinned ノート）がある場合は、結果の先頭にマージする。
+   - `range` は `0..10` の整数（未指定時 `3`）。
+   - 先頭ノートでは `Before` は存在分のみ（0 件を許容）。
+   - 末尾ノートでは `After` は存在分のみ（0 件を許容）。
+5. `--stores` は以下で正規化する。
+   - 入力文字列を `,` で分割し、前後空白を trim、空要素を除去。
+   - 小文字化して `short|chronicle|memopedia|archive` に解決する。
+   - 重複は先に出現した順で一意化する。
+   - 未指定時は `short,chronicle,memopedia`。
+   - 不正値を含む場合は 400 系入力エラーとして失敗させる。
+6. `Conn.Embed == nil` の場合は実行モードで分岐する。
+   - デフォルトはエラー（`semantic recall requires embedding client`）。
+   - 明示フラグ（例: `--allow-fts-fallback`）指定時のみ FTS 限定検索へフォールバックする。
+7. Working Memory（memopedia の pinned ノート）がある場合は、結果の先頭にマージする。
 
 ### 3-5. `mem gc short`（Observer / Reflector）
 
