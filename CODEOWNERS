@@ -1,5 +1,5 @@
 /governance/** @governance-team
-/docs/IN-*.md @governance-team
+/docs/** @governance-team
 /memx_spec_v3/schema/** @schema-team
 /.github/PULL_REQUEST_TEMPLATE.md @governance-team
 /.github/ISSUE_TEMPLATE/bug.yml @governance-team

@@ -1,16 +1,17 @@
-algorithm:
-  name: weighted_sum
-  score_formula: "(impact * 0.40) + (urgency * 0.30) + (risk * 0.20) + (recovery_cost * 0.10)"
+priority_score:
+  algorithm: weighted_sum
+  formula: "(impact * 0.40) + (urgency * 0.30) + (risk * 0.20) + (recovery_cost * 0.10)"
+  scale: [1, 5]
   dimensions:
     impact:
       weight: 0.40
-      scale: [1, 5]
+      description: 影響範囲・ユーザー影響度
     urgency:
       weight: 0.30
-      scale: [1, 5]
+      description: 対応期限・業務停止リスク
     risk:
       weight: 0.20
-      scale: [1, 5]
+      description: 障害拡大・再発確率
     recovery_cost:
       weight: 0.10
-      scale: [1, 5]
+      description: 復旧コスト・実装工数

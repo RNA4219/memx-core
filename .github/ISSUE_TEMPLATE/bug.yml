@@ -5,16 +5,16 @@ labels:
   - bug
 body:
   - type: input
-    id: intent_id
+    id: related_intent
     attributes:
       label: 関連 Intent ID
-      description: 例: IN-20250303-001
+      description: "例: IN-20250303-001"
       placeholder: IN-YYYYMMDD-XXX
     validations:
       required: true
 
   - type: textarea
-    id: steps
+    id: reproduction_steps
     attributes:
       label: 再現手順
       description: 再現可能な最小手順を箇条書きで記載してください。
@@ -26,7 +26,7 @@ body:
       required: true
 
   - type: textarea
-    id: expected
+    id: expected_result
     attributes:
       label: 期待値
       description: 本来の挙動を記載してください。
@@ -34,7 +34,7 @@ body:
       required: true
 
   - type: textarea
-    id: actual
+    id: actual_result
     attributes:
       label: 実測値
       description: 実際の挙動・ログ・エラーを記載してください。
