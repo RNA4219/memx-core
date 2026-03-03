@@ -1,0 +1,8 @@
+{
+  "node_id": "governance_policy",
+  "role": "spec_policy",
+  "depends_on": [],
+  "generated_at": "2026-03-03T08:48:22Z",
+  "source": "governance/policy.yaml",
+  "summary": "fail-closed と変更境界、QA境界の統制ポリシーを定義。"
+}

@@ -1,0 +1,10 @@
+{
+  "node_id": "governance_prioritization",
+  "role": "spec_prioritization",
+  "depends_on": [
+    "governance_policy"
+  ],
+  "generated_at": "2026-03-03T08:48:22Z",
+  "source": "governance/prioritization.yaml",
+  "summary": "impact/urgency/risk/recovery_cost の重み付き優先度スコア規則を定義。"
+}

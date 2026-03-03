@@ -20,3 +20,19 @@
 - `generated_at` は更新時刻（UTC, RFC3339）で揃える。
 - `depends_on` は「そのノードが成立するために先に読む/参照するノード」を記述する。
 - PR 作成前に `index.json` のノード一覧と `caps/*.json` の内容整合を確認する。
+
+## 変更内容と capsule 更新対応表
+
+| 変更ファイル | 更新する capsule |
+| --- | --- |
+| `memx_spec_v3/docs/requirements.md` | `docs/birdseye/caps/requirements.json` |
+| `memx_spec_v3/docs/quickstart.md` | `docs/birdseye/caps/quickstart.json` |
+| `memx_spec_v3/go/service/service.go` | `docs/birdseye/caps/service.json` |
+| `memx_spec_v3/go/api/http_server.go` | `docs/birdseye/caps/api.json` |
+| `GUARDRAILS.md` | `docs/birdseye/caps/GUARDRAILS.md.json` |
+| `RUNBOOK.md` | `docs/birdseye/caps/RUNBOOK.md.json` |
+| `CHECKLISTS.md` | `docs/birdseye/caps/CHECKLISTS.md.json` |
+| `EVALUATION.md` | `docs/birdseye/caps/EVALUATION.md.json` |
+| `governance/policy.yaml` | `docs/birdseye/caps/governance.policy.yaml.json` |
+| `governance/prioritization.yaml` | `docs/birdseye/caps/governance.prioritization.yaml.json` |
+
