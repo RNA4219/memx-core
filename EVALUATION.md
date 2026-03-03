@@ -63,6 +63,8 @@ next_review_due: 2026-06-03
 | `REQ-NFR-005` | `recovery-log.ndjson.pending_compensation_count`, `short_delete_ready_ratio`, `rollback/replan` イベント | `pending_compensation_count != 0`、`short_delete_ready_ratio != 1.0`、30分以内の収束/起票未達 |
 | `REQ-NFR-006` | 対応する `docs/IN-*.md`（最小監査項目 + waiver 必須項目） | 必須項目欠落、waiver 期限切れ、再計画チケット未記録 |
 
+補足: waiver 運用時の必須記録項目は `docs/IN-BASELINE.md` および `docs/IN-YYYYMMDD-001.md` の waiver セクションを正本として `docs/IN-<実日付>-<連番>.md` に転記する。
+
 ### 証跡ファイル（必須）
 - `artifacts/ops/incident-summary.json`
   - 必須キー: `incident_id`, `detected_at`, `mitigated_at`, `resolved_at`, `rto_minutes`, `rpo_minutes`, `retry_count`
