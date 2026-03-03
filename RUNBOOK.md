@@ -68,6 +68,55 @@ next_review_due: 2026-06-03
 ## 関連ドキュメント
 - エラー契約: `memx_spec_v3/docs/error-contract.md`
 
+## 要件トレーサビリティ用 検証コマンド（正本）
+
+<a id="trace-lint"></a>
+
+### lint（ruff）
+```bash
+python3 -m ruff check .
+```
+
+<a id="trace-type"></a>
+
+### type（mypy/strict）
+```bash
+python3 -m mypy --strict memx_spec_v3
+```
+
+<a id="trace-test-pytest"></a>
+
+### test（pytest）
+```bash
+python3 -m pytest -q
+```
+
+<a id="trace-test-node"></a>
+
+### test（node:test）
+```bash
+node --test
+```
+
+<a id="trace-manual"></a>
+
+### manual（CLI/API/GC/Error）
+```bash
+# CLI/API ingest
+printf '%s' 'traceability-sample' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title traceability --api-url http://127.0.0.1:7766
+
+# CLI/API search
+go run ./memx_spec_v3/go/cmd/mem out search 'traceability' --api-url http://127.0.0.1:7766
+
+# CLI/API show
+go run ./memx_spec_v3/go/cmd/mem out show 1 --api-url http://127.0.0.1:7766
+
+# GC dry-run
+go run ./memx_spec_v3/go/cmd/mem gc short --dry-run --api-url http://127.0.0.1:7766
+```
+
+<a id="trace-perf"></a>
+
 ## 性能再計測手順（EVALUATION.md 同条件）
 1. テストデータ投入（10,000 件 / 1件 約500文字）を実施。
 2. 計測環境がローカル単体（4 vCPU / 16GB RAM / NVMe SSD / Linux x86_64）であることを確認。

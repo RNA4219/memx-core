@@ -17,12 +17,23 @@ next_review_due: 2026-06-03
   - `POST /v1/notes:search`: P50 <= 80ms, P95 <= 180ms
   - `GET /v1/notes/{id}`: P50 <= 40ms, P95 <= 90ms
 
+## 要件IDトレーサビリティ（判定基準との相互参照）
+| Requirement ID | 判定基準 | 判定ルール参照 |
+| --- | --- | --- |
+| `REQ-CLI-001` | pass/fail | 本書「v1 受け入れ基準（Release Scope Matrix 準拠）」・`RUNBOOK.md` manual 手順 |
+| `REQ-API-001` | pass/fail | 本書「v1 受け入れ基準（Release Scope Matrix 準拠）」・`RUNBOOK.md` manual 手順 |
+| `REQ-GC-001` | pass/fail | `RUNBOOK.md` の `mem gc short` 手順および manual コマンド |
+| `REQ-SEC-001` | pass/fail | `requirements.md` 2-7-1 の `sensitivity` 契約 |
+| `REQ-RET-001` | pass/fail/waiver | 本書「性能合否基準（fail / waiver）」の運用を準用し、保持期限逸脱は waiver 記録必須 |
+| `REQ-ERR-001` | pass/fail | 本書「エラーコード整合」および `requirements.md` 6-4 |
+| `REQ-NFR-001` | pass/fail/waiver | 本書「性能合否基準（fail / waiver）」および「REQ-NFR-001 合否判定ルール」 |
+
 ## 性能合否基準（fail / waiver）
 - 判定対象データセットは `short` 10,000 件 / 1件 約500文字（UTF-8）、ローカル単体（4 vCPU / 16GB RAM / NVMe SSD / Linux x86_64）、ウォームアップ20回、本計測200回で固定する。
-- 合格（pass）: `ingest` / `search` / `show` の **p50/p95 が全て閾値以内**。
-- 不合格（fail）: いずれか 1 指標でも閾値超過、または計測条件が不一致。
+- 合格（pass）: `REQ-NFR-001` の `ingest` / `search` / `show` の **p50/p95 が全て閾値以内**。
+- 不合格（fail）: `REQ-NFR-001` でいずれか 1 指標でも閾値超過、または計測条件が不一致。
 - 例外承認（waiver）:
-  - fail を一時的に許容する場合のみ適用できる。
+  - `REQ-NFR-001` / `REQ-RET-001` の fail を一時的に許容する場合のみ適用できる。
   - 最低限、`docs/IN-YYYYMMDD-XXX.md` のインシデント記録、超過理由、是正期限、暫定運用策、責任者を明記する。
   - waiver は期限付きとし、期限超過時は自動的に fail 扱いへ戻す。
 
