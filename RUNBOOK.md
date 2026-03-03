@@ -161,6 +161,8 @@ PY
 - 本計測結果（P50/P95 含む）: `artifacts/perf/perf-result.json`
 
 ## インシデント/不具合起票
+- 初期運用ベースライン: [`docs/IN-BASELINE.md`](docs/IN-BASELINE.md)
+- インシデント記録テンプレート: [`docs/INCIDENT_TEMPLATE.md`](docs/INCIDENT_TEMPLATE.md)
 - 不具合起票時は GitHub Issue テンプレートを使用する: [.github/ISSUE_TEMPLATE/bug.yml](.github/ISSUE_TEMPLATE/bug.yml)
 - 再現手順・期待値/実際値・影響範囲・関連 Intent ID を必ず記入する。
 
