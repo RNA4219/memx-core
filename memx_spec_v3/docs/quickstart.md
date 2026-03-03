@@ -39,3 +39,6 @@ go run ./cmd/mem out show <NOTE_ID> --api-url http://127.0.0.1:7766
 
 - `--api-url` を省略すると CLI は in-proc で Service を呼びます（HTTP を経由しない）。
 - SQLite ドライバは `modernc.org/sqlite` を想定しています。環境に合わせて差し替えてください。
+
+## 関連ドキュメント
+- エラー契約: `./error-contract.md`

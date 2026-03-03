@@ -37,3 +37,6 @@ next_review_due: 2026-06-03
 - `MiniLLMClient`: タグ・スコア・機密度推定。
 - `ReflectLLMClient`: Observer/Reflector 要約更新。
 - タイムアウト 15 秒、最大 2 回リトライ（指数バックオフ）、再試行可/不可を区別して実装する。
+
+## 関連ドキュメント
+- エラー契約: `memx_spec_v3/docs/error-contract.md`

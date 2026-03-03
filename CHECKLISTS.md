@@ -23,6 +23,7 @@ next_review_due: 2026-06-03
 - [ ] v1 必須 API（ingest / search / get）が動作する。
 - [ ] v1 内で必須フィールド削除・意味変更・成功レスポンス破壊を行っていない。
 - [ ] `--json` 出力互換を維持している。
+- [ ] エラー契約（`INVALID_ARGUMENT` / `NOT_FOUND` / `INTERNAL`）に破壊変更がない。
 
 ## Safety/Policy チェック
 - [ ] Gatekeeper の `needs_human` を deny 相当で扱っている。
