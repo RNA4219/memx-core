@@ -7,6 +7,14 @@ status: planned
 
 # TASK.recall-query-normalization-03-03-2026
 
+## Source
+- orchestration/memx-v1-bootstrap.md#Phase 2
+
+## Node IDs
+- requirements: 仕様出典（requirements ノード）
+- api: 実装対象ノード
+- service: 依存実装ノード
+
 ## Objective
 - `memx_spec_v3/go/db/recall.go` の検索入力正規化と閾値判定を安定化し、`top-k`/`range`/`stores` の解釈差分と埋め込み未設定時の挙動を明確化する。
 

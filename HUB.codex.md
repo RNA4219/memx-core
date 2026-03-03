@@ -74,12 +74,14 @@ next_review_due: 2026-06-03
 4. 工程4: 既存 Task Seed との差分統合
    - 入力: `TASK.*-MM-DD-YYYY.md`
    - 処理: 既存タスクとの重複・競合を検出し、追記/新規作成の方針を決定する。
-   - 出力（Task Seed への写像）: Objective/Requirements/Commands/Dependencies/Status を差分反映する。
+   - レビュー規則: `Source` 未記載の Task Seed は差し戻し（reviewing 継続）とし、出典追記後に再レビューする。
+   - 出力（Task Seed への写像）: Source/Objective/Requirements/Commands/Dependencies/Status を差分反映する。
 
 5. 工程5: TASKS 形式への最終落とし込み
    - 入力: 工程1〜4の統合結果
    - 処理: `docs/TASKS.md` の必須項目規約に整形し、語彙・命名・並び順を検証する。
-   - 出力（Task Seed への写像）: 最終的に `Objective / Requirements / Commands / Dependencies / Status` を満たす Task Seed を確定する。
+   - レビュー規則: `Source` が欠落した Task Seed は承認せず、工程4へ差し戻す。
+   - 出力（Task Seed への写像）: 最終的に `Source / Objective / Requirements / Commands / Dependencies / Status` を満たす Task Seed を確定する。
 
 6. 工程6: 完了タスクの履歴反映
    - 入力: `Status: done` の Task Seed と `memx_spec_v3/CHANGES.md` の差分
@@ -109,7 +111,7 @@ status: planned
 | YAML キー | 転記先（Task Seed） | 転記ルール |
 | --- | --- | --- |
 | `task_id` | ファイル名 `TASK.<slug>-<MM-DD-YYYY>.md` | `task_id` の `TASK.` 以降をファイル名として使用 |
-| `source` | `Requirements` 補足行 | 追跡元として `- source: <path>#Phase...` 形式で列挙 |
+| `source` | `Source` | 追跡元として `- <path>#Phase...` 形式で列挙 |
 | `objective` | `Objective` | 1〜3 行で要約せず原文転記 |
 | `requirements` | `Requirements` | 箇条書きで順序維持して転記 |
 | `commands` | `Commands` | 実行順を維持して上から転記 |

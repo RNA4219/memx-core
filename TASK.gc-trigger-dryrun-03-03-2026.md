@@ -7,6 +7,13 @@ status: planned
 
 # TASK.gc-trigger-dryrun-03-03-2026
 
+## Source
+- orchestration/memx-v1-bootstrap.md#Phase 2
+
+## Node IDs
+- requirements: 仕様出典（requirements ノード）
+- service: 実装対象ノード
+
 ## Objective
 - `memx_spec_v3/go/db/gc.go` の GC trigger 判定と dry-run JSON を固定化し、dry-run で副作用が発生しないことを保証する。
 

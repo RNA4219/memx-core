@@ -12,7 +12,17 @@
   - `deadline`: 期日を `YYYY-MM-DD` 形式で記載する。
 
 ## 2. Task Seed 必須項目
-各 Task Seed には次の5項目を必須で含める。
+各 Task Seed には次の6項目を必須で含める。
+
+### Source
+- 要件の出典を `path#Section` 形式で記載する。
+- 例: `orchestration/memx-v1-bootstrap.md#Phase 2`
+- 複数ある場合は箇条書きで列挙する。
+
+### Node IDs
+- `docs/birdseye/index.json` の `node_id` を記載する。
+- 依存グラフ（`depends_on`）と照合する対象タスクでは必須、照合対象外タスクでは任意とする。
+- 記載形式は箇条書きで、依存元/依存先の対応がわかるように補足行を付ける。
 
 ### Objective
 - タスクの目的を1〜3行で記載する。
