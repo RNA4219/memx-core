@@ -26,6 +26,15 @@ next_review_due: 2026-06-03
   - 最低限、`docs/IN-YYYYMMDD-XXX.md` のインシデント記録、超過理由、是正期限、暫定運用策、責任者を明記する。
   - waiver は期限付きとし、期限超過時は自動的に fail 扱いへ戻す。
 
+## `REQ-NFR-001` 合否判定ルール
+- 判定対象は `results.ingest` / `results.search` / `results.show` の `p50_ms` / `p95_ms` のみ。
+- fail 条件（閾値超過）は以下のいずれか 1 つでも満たした場合とする。
+  - `results.ingest.p50_ms > 120` または `results.ingest.p95_ms > 250`
+  - `results.search.p50_ms > 80` または `results.search.p95_ms > 180`
+  - `results.show.p50_ms > 40` または `results.show.p95_ms > 90`
+- pass 条件は上記 6 指標がすべて閾値以内（`<=`）であること。
+- `p50_ms` / `p95_ms` の欠損、または計測条件不一致は fail 扱いとする。
+
 ## governance/metrics.yaml 同期運用ルール
 - `governance/metrics.yaml` は本書（`EVALUATION.md`）を正本として同期する。
 - 少なくとも性能項目 `ingest` / `search` / `show` の **項目名** と **閾値文字列** は完全一致させる。

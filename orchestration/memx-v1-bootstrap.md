@@ -55,4 +55,5 @@ status: planned
 - 初回実装バッチ着手前に `ruff check .` / `mypy --strict .` / `pytest` のゲートを定義し、全通過を実行条件として明記している
 - 上記ゲート失敗時は「直前の安定コミットへロールバック」または「Task Seed を再分割して再計画」のいずれかを必須実施として記載している
 - 再計画時は失敗要因と再試行条件を `TASK.memx-bootstrap-03-03-2026.md` に追記する運用が明記されている
+- 性能ゲート確認タスク（`REQ-NFR-001` 判定: `artifacts/perf/perf-result.json` の `ingest/search/show` p50/p95 が全閾値以内）を Task Seed に 1 件以上追加している
 - Phase 3 のチェックボックスがすべて完了している

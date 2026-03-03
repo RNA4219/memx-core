@@ -114,6 +114,22 @@ next_review_due: 2026-06-03
 }
 ```
 
+### ローカル再現ベンチ（正本コマンド）
+```bash
+# API 起動（別ターミナル）
+go run ./memx_spec_v3/go/cmd/mem api serve --addr 127.0.0.1:7766 --short ./artifacts/perf/short.db
+
+# 同条件データ生成 + warmup(20) + 本計測(200) + 結果出力
+# 下段の「実行コマンド例」をそのまま実行する（ローカル再現の正本手順）。
+```
+
+### 結果記録フォーマット（最低限）
+- 最低限、`artifacts/perf/perf-result.json` に以下を必須記録する。
+  - `results.ingest.p50_ms` / `results.ingest.p95_ms`
+  - `results.search.p50_ms` / `results.search.p95_ms`
+  - `results.show.p50_ms` / `results.show.p95_ms`
+- `p50` / `p95` が欠損している結果は `REQ-NFR-001` 判定に使用しない。
+
 ### 実行コマンド例
 ```bash
 mkdir -p artifacts/perf
