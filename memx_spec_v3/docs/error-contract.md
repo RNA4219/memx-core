@@ -17,3 +17,18 @@
 - `mapError` の分岐順は `ErrNotFound` → `ErrInvalidArgument` → 文字列救済 (`contains("invalid argument")`) → `INTERNAL`。
 - HTTP ステータス変換は `writeErr` にて `INVALID_ARGUMENT=400`, `NOT_FOUND=404`, それ以外未定義コードは `500`。
 - JSON のエラーレスポンスは `api.Error` 型（`code`, `message`, `details?`）。
+
+
+## 追加ケース: GC feature disabled（`POST /v1/gc:run`）
+
+`mem.features.gc_short=false` の場合は全環境共通で以下を返す。
+
+- HTTP status: `409 Conflict`
+- body:
+
+```json
+{
+  "code": "FEATURE_DISABLED",
+  "message": "gc_short feature is disabled"
+}
+```

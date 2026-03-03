@@ -681,7 +681,9 @@ gc:
   - request: `{target, options?}`
   - response: `{status}`
 
-`POST /v1/gc:run` は v1 MUST には含めない。feature flag 無効時は 404（未提供）または 409（feature disabled）のいずれかを返し、デプロイ単位で挙動を固定する。
+`POST /v1/gc:run` は v1 MUST には含めない。`mem.features.gc_short=false` の場合、全環境で **HTTP 409 + `{ "code": "FEATURE_DISABLED", "message": "gc_short feature is disabled" }`** を固定で返す（404 へのフォールバック禁止）。
+
+この無効時挙動は「デプロイ単位で選択」ではなく **全環境共通固定** とし、クライアントは `FEATURE_DISABLED` を恒久エラーとして扱う（同一条件での自動リトライ不可、運用者による feature flag 変更後のみ再試行可）。
 
 ### 6-3-1. v1必須3エンドポイント契約（`requirements.md` × `go/api/types.go` 照合）
 
