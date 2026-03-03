@@ -37,3 +37,7 @@ next_review_due: 2026-06-03
 - `MiniLLMClient`: タグ・スコア・機密度推定。
 - `ReflectLLMClient`: Observer/Reflector 要約更新。
 - タイムアウト 15 秒、最大 2 回リトライ（指数バックオフ）、再試行可/不可を区別して実装する。
+
+## インシデント/不具合起票
+- 不具合起票時は GitHub Issue テンプレートを使用する: [.github/ISSUE_TEMPLATE/bug.yml](.github/ISSUE_TEMPLATE/bug.yml)
+- 再現手順・期待値/実際値・影響範囲・関連 Intent ID を必ず記入する。
