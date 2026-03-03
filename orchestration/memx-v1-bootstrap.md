@@ -29,14 +29,20 @@ status: planned
 - `CHECKLISTS.md`
 - `TASK.memx-bootstrap-03-03-2026.md`
 - `memx_spec_v3/docs/requirements.md`
+- `REQ-STORE-SHORT-001`, `REQ-STORE-SHORT-002`
+- `REQ-STORE-CHR-001`, `REQ-STORE-CHR-002`
+- `REQ-STORE-MP-001`, `REQ-STORE-MP-002`
+- `REQ-STORE-ARC-001`, `REQ-STORE-ARC-002`
 
 - [ ] フェーズ横断タスクを 0.5 日以内の単位へ分割する
+- [ ] store別要件ID（`REQ-STORE-*`）を 1要件=1Task Seed（0.5d）で分解する
 - [ ] 各タスクに Done 条件（検証コマンド or 成果物）を 1 つ以上付与する
 - [ ] 依存順に並べ替え、並行実行可能タスクを明示する
 - [ ] 個別 Task Seed を作成する（`TASK.recall-query-normalization-03-03-2026.md` / `TASK.gc-trigger-dryrun-03-03-2026.md` / `TASK.migrate-other-ddl-order-03-03-2026.md`）
 
 ### Done Criteria
 - Task Seed が 3 件以上作成され、`TASK.*.md` としてリポジトリに存在する
+- store別 Task Seed は `REQ-STORE-*` を `Depends on` または `Requirements` に必ず記載し、1 Task Seed あたり 1 要件のみを扱う
 - 依存解決済み条件として、各 Task Seed の `Depends on` が循環参照なしでトポロジカル順に並んでいる
 - 各 Task Seed に必須検証コマンド（最低 1 つの `lint` / `type` / `test`）が明記されている
 - Phase 2 のチェックボックスがすべて完了している
