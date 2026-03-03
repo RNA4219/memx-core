@@ -14,3 +14,8 @@
 - [RUNBOOK.md](../../RUNBOOK.md)
 - [GUARDRAILS.md](../../GUARDRAILS.md)
 - [EVALUATION.md](../../EVALUATION.md)
+
+
+## ローカル運用補足（最小版）
+- [memx最小版: セキュリティ運用補足](../security/minimal_operations.md)
+- [Security Policy](../../SECURITY.md)

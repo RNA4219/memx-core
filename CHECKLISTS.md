@@ -26,6 +26,8 @@ next_review_due: 2026-06-03
 - [ ] エラー契約（`INVALID_ARGUMENT` / `NOT_FOUND` / `INTERNAL`）に破壊変更がない。
 
 ## Safety/Policy チェック
+- [ ] `docs/security/minimal_operations.md` のデータ分類（public/internal/secret）に沿って保存・出力・マスキングを確認している。
+- [ ] Gatekeeper `deny`/`needs_human` 発生時の記録先・再試行条件・エスカレーション手順を確認している。
 - [ ] Gatekeeper の `needs_human` を deny 相当で扱っている。
 - [ ] 保存前/出力前フックを維持している。
 - [ ] secrets ブロック方針（policy + gatekeeper）を守っている。
