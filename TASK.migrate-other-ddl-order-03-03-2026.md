@@ -26,5 +26,8 @@ status: planned
 - `memx_spec_v3/docs/requirements.md` のマイグレーション方針
 - `TASK.memx-bootstrap-03-03-2026.md`
 
+## Release Note Draft
+- `chronicle`/`memopedia`/`archive` の DDL 適用順と `user_version` 更新運用を明確化し、既存DBの再実行時も安全に移行できるようにする。
+
 ## Status
 - planned

@@ -26,5 +26,8 @@ status: planned
 - `memx_spec_v3/docs/requirements.md` の検索仕様確定
 - `TASK.memx-bootstrap-03-03-2026.md`
 
+## Release Note Draft
+- 検索入力正規化と閾値判定を安定化し、`top-k`/`range`/`stores` 指定時の検索結果一貫性を向上させる。
+
 ## Status
 - planned

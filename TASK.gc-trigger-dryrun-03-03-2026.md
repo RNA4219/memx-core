@@ -26,5 +26,8 @@ status: planned
 - `memx_spec_v3/docs/requirements.md` の GC ポリシー節
 - `TASK.memx-bootstrap-03-03-2026.md`
 
+## Release Note Draft
+- GC trigger 判定と dry-run JSON の挙動を固定し、dry-run 実行時にDB副作用が起きないことを利用者向けに保証する。
+
 ## Status
 - planned

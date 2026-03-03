@@ -12,7 +12,7 @@
   - `deadline`: 期日を `YYYY-MM-DD` 形式で記載する。
 
 ## 2. Task Seed 必須項目
-各 Task Seed には次の5項目を必須で含める。
+各 Task Seed には次の6項目を必須で含める。
 
 ### Objective
 - タスクの目的を1〜3行で記載する。
@@ -29,6 +29,10 @@
 - 前提タスク、依存PR、外部条件を列挙する。
 - 依存がない場合は `- none` と記載する。
 
+### Release Note Draft
+- `CHANGELOG.md` に転記する利用者影響の要約を1〜3行で記載する。
+- 実装詳細ではなく「何が変わるか」「利用者への影響」を簡潔に記載する。
+
 ### Status
 - ステータス語彙は HUB と同一の次のみを許可する。
   - planned
@@ -37,6 +41,8 @@
   - reviewing
   - blocked
   - done
+- `Status: done` へ遷移する条件として、Task Seed に `Release Note Draft` 記入済みであること。
+- `Status: done` へ遷移する条件として、移送後に `Moved-to-CHANGES: YYYY-MM-DD` を追記済みであること。
 
 ## 3. CHANGES 連携ルール（memx_spec_v3/CHANGES.md / CHANGELOG.md）
 - 正本（canonical source）はリポジトリルートの `CHANGELOG.md` とする。
