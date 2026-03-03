@@ -759,6 +759,25 @@ gc:
 - `GATEKEEP_DENY` → 403
 - `INTERNAL` → 500
 
+`go/service/errors` と `go/api/errors.go` の現行方針（`ErrInvalidArgument` / `ErrNotFound` を明示マッピングし、それ以外は `INTERNAL` へフォールバック）に整合する運用分類を以下で固定する。
+
+| 代表事象 | service 層の分類 | API `code` | HTTP | 再試行可否 | 備考 |
+| --- | --- | --- | --- | --- | --- |
+| 入力不備（必須欠落・形式不正・空文字） | `ErrInvalidArgument` | `INVALID_ARGUMENT` | 400 | 不可 | クライアント入力修正が必要。 |
+| DB ロック（`database is locked` / busy timeout 超過） | 現行は汎用エラー（将来 `ErrConflict` 候補） | `INTERNAL`（将来 `CONFLICT` 検討可） | 500（将来 409 検討可） | 条件付き可 | 短時間で解消しうるため指数バックオフ再試行対象。長時間継続時は運用アラート。 |
+| LLM タイムアウト（上流 timeout / 502/503/504） | 汎用エラー | `INTERNAL` | 500 | 条件付き可 | 一時障害として再試行対象。最大回数超過で失敗扱い。 |
+| Gatekeeper deny / needs_human(v1.3 では deny 扱い) | 将来 sentinel 化（`ErrGatekeepDeny`） | `GATEKEEP_DENY`（未実装時は `INTERNAL`） | 403（未実装時は 500） | 不可 | ポリシー判定のため再試行では解消しない。入力/運用判断が必要。 |
+
+#### エラーコード別 再試行可否表
+
+| API `code` | HTTP | 再試行可否 | ルール |
+| --- | --- | --- | --- |
+| `INVALID_ARGUMENT` | 400 | 不可 | 入力を修正して再実行。 |
+| `NOT_FOUND` | 404 | 不可 | 対象 ID・クエリを見直す。 |
+| `CONFLICT` | 409 | 条件付き可 | DB ロック等の一時競合のみ再試行。恒久競合は不可。 |
+| `GATEKEEP_DENY` | 403 | 不可 | ポリシー deny は即時失敗。再試行禁止。 |
+| `INTERNAL` | 500 | 条件付き可 | 原因が一時障害（DB lock / LLM timeout / upstream 502/503/504）の場合のみ指数バックオフ。恒久障害は不可。 |
+
 ### 6-5. 互換性ポリシー（v1）
 
 - v1 系（`/v1/*`）では、既存クライアントを壊さない後方互換を維持する。

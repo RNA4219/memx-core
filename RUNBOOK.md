@@ -55,6 +55,16 @@ next_review_due: 2026-06-03
 - `ReflectLLMClient`: Observer/Reflector 要約更新。
 - タイムアウト 15 秒、最大 2 回リトライ（指数バックオフ）、再試行可/不可を区別して実装する。
 
+## エラーコード別 再試行戦略（運用）
+- 即時再試行（1 回のみ）:
+  - 直前の接続瞬断や軽微なネットワーク揺らぎで、`INTERNAL` かつ一時障害と判定できる場合。
+- 指数バックオフ再試行（最大 2 回）:
+  - `INTERNAL` で原因が DB ロック、LLM タイムアウト、HTTP 429/502/503/504 の場合。
+  - 推奨待機: 1s → 2s（ジッタ許容）。
+- 再試行禁止:
+  - `INVALID_ARGUMENT`（入力不備）、`NOT_FOUND`（対象不存在）、`GATEKEEP_DENY`（ポリシー deny）。
+  - 恒久的な `INTERNAL`（設定不備・スキーマ不整合等）は再試行せず原因修正を優先。
+
 ## 関連ドキュメント
 - エラー契約: `memx_spec_v3/docs/error-contract.md`
 
