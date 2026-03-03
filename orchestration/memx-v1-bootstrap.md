@@ -53,6 +53,10 @@ status: planned
 - `HUB.codex.md`
 - `memx_spec_v3/docs/quickstart.md`
 
+### Gate（要件更新時）
+- 要件ファイル（`memx_spec_v3/docs/requirements.md` / `docs/TASKS.md` / `CHANGELOG.md` / `memx_spec_v3/CHANGES.md`）に差分がある場合、レビュー完了前は Phase 3 へ進行してはならない。
+- レビュー完了条件は、owner を含む最小 2 承認（owner + reviewer 1 名以上）とする。
+
 - [ ] 実行コマンドのテンプレートを確認し、手戻りリスクを事前に記録する
 - [ ] 検証観点（lint/type/test）をタスク単位で割り当てる
 - [ ] 初回実装バッチを 1 日未満で完了する順序へ最終調整する

@@ -71,6 +71,24 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 - [ ] `memx_spec_v3/CHANGES.md` と `CHANGELOG.md` への反映項目を記載済み
 - [ ] `Status: done` 前に `Moved-to-CHANGES: YYYY-MM-DD` を追記する
 
+
+## 2-2. 変更タイプ別チェックリスト（requirements 0-0-4 整合）
+
+### 互換維持変更
+- [ ] `Requirements` に後方互換維持（CLI/API/`--json` 同型）を明記する
+- [ ] `Commands` に最低 1 つの `lint` / `type` / `test` を記載する
+- [ ] `Release Note Draft` を記載する
+
+### 破壊変更
+- [ ] 本書「2-1. 破壊変更時の追記チェックリスト」を全件追記する
+- [ ] 対象 I/F・移行先・移行期限・移行手順（2ステップ以上）を記載する
+- [ ] `CHANGELOG.md` と `memx_spec_v3/CHANGES.md` の双方へ同日反映する
+
+### 実験機能（feature flag 既定 OFF）
+- [ ] feature flag 名・既定値 OFF・有効化条件を `Requirements` に明記する
+- [ ] 既定挙動に影響しないことを `Requirements` に明記する
+- [ ] 廃止/昇格条件（次マイナー or 次メジャー）を記載する
+
 ## 3. CHANGES 連携ルール（memx_spec_v3/CHANGES.md / CHANGELOG.md）
 - 正本（canonical source）はリポジトリルートの `CHANGELOG.md` とする。
 - `memx_spec_v3/CHANGES.md` は v3 仕様の履歴・互換性破壊テンプレート管理用の補助台帳として扱う。
