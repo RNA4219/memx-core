@@ -1,12 +1,20 @@
 # memx_spec v3
 
-要件定義（v1.3）と、CLI→API→Service→DB のレイヤリングを反映した最小実装をまとめた ZIP です。
+要求/仕様/設計/I/F 契約と、CLI→API→Service→DB の最小実装をまとめたディレクトリです。
 
 ## 構成
 
-- `docs/requirements.md`  
-  システム全体の要件定義（目的・アーキテクチャ・CLI・GC・LLM役割など、レビュー内容を反映）。
-- `schema/short.sql`  
+- `docs/requirements.md`
+  要求事項（MUST/SHOULD/FUTURE）と ID 定義の正本。
+- `docs/spec.md`
+  仕様（ユースケース、スコープ境界、非ゴール、受け入れ観点）。
+- `docs/design.md`
+  設計（レイヤ構成、DB責務分割、移行戦略）。
+- `docs/interfaces.md`
+  CLI/API I/O、互換ルール、エラー面。
+- `docs/CONTRACTS.md`
+  API/CLI の機械可読契約一覧（フィールド単位）。
+- `schema/short.sql`
   `short.db` 用の CREATE TABLE スキーマ（FTS5 トリガ修正・カラム制約調整・user_version 追加済み）。
 
 ### Go（モジュールは `go/` 配下）
