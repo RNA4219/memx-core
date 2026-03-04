@@ -1,7 +1,7 @@
 # DESIGN ACCEPTANCE REPORT: DESIGN-ACCEPTANCE-20260304
 
 - Report ID: DESIGN-ACCEPTANCE-20260304
-- 入力サマリ: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304.md`
+- 入力サマリ: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-002.md`
 - 判定ロジック正本: `memx_spec_v3/docs/design-doc-dod-spec.md`
 
 ## 1. 対象章
@@ -39,6 +39,12 @@
 
 ## 6. 最終判定
 - 判定: `fail`
+- 参照元固定: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-002.md`（最新 validation 実体）
+- `mapping_match_check` 比較ログ:
+  - comparison_at: `2026-03-04T08:40:55Z`
+  - comparison_targets:
+    - `memx_spec_v3/docs/design-chapter-node-mapping-spec.md`（4.3 章対応表）
+    - `docs/birdseye/index.json`（`node_id: design` / `node_id: interfaces`）
 - 根拠（`memx_spec_v3/docs/design-doc-dod-spec.md` 正本条件との差分）:
-  - REQ網羅率が `100%` 条件未達（実測 `0%`）。
-  - 章別検証サマリの `mapping_match_check` が全章 `fail` であり、参照解決適合率 `100%` 条件未達。
+  - REQ網羅率が `100%` 条件未達（章別検証サマリ上で 0% の章が存在）。
+  - `mapping_match_check` は全章 `pass` を確認済み。
