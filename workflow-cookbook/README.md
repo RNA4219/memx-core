@@ -32,6 +32,8 @@ canary rules.
 - 人間にもエージェント（Codex等）にも読ませやすい最小フォーマット
 - 言語・技術スタック非依存（存在するコマンドだけ使用）
 
+- 品質ゲート参照先: `workflow-cookbook/` の変更は [`docs/QUALITY_GATES.md`](docs/QUALITY_GATES.md) を参照（memx 本体スコープとは別運用）。
+
 ## 使い方（最短）
 
 参加前に [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) を読み、連絡窓口と遵守事項を確認してください。
