@@ -54,6 +54,7 @@
 - 互換性や非機能制約がある場合はここに明記する。
 - エラーコードを新規追加・変更するタスクでは、`memx_spec_v3/docs/requirements.md` の「6-4. エラーモデル」と `memx_spec_v3/docs/error-contract.md` を同時更新対象に含める。
 - API/CLI の契約（request/response/error/`--json`）を変更するタスクでは、`memx_spec_v3/docs/contracts/openapi.yaml` と `memx_spec_v3/docs/contracts/cli-json.schema.json` の更新を必須とする。
+- Phase 2〜4 対象タスクでは、`memx_spec_v3/docs/design-chapter-validation-spec.md` に準拠した章別検証サマリ作成（`chapter_id` / `req_coverage` / `contract_alignment_high_count` / `link_broken_count` / `birdseye_issue_count` / `evidence_paths`）を必須要件として記載する。
 
 ### Commands
 - 実行・検証コマンドを列挙する。
@@ -63,6 +64,7 @@
   - 現行の必須最小構成は `go test ./...`（Go）で、Python/Node は対象外として扱う。
   - 仕様書作成・更新タスクでも同じ判定基準（`docs/QUALITY_GATES.md`）を `Commands` に記載し、Task 起票時の誤記載を防止する。
 - 品質ゲート参照スコープは「memx 本体（`memx_spec_v3/`）は `docs/QUALITY_GATES.md`、`workflow-cookbook/` は `workflow-cookbook/docs/QUALITY_GATES.md`」と明記する。
+- Phase 2〜4 対象タスクでは、章別検証サマリの作成・更新・添付確認コマンド（または確認手順）を `Commands` に明記する。
 
 ### Dependencies
 - 前提タスク、依存PR、外部条件を列挙する。
