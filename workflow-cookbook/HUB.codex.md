@@ -227,3 +227,24 @@ in_progress → blocked → in_progress（解除後に戻す）
 - `impacted_node_ids`: 影響を受けたノードID一覧（不明な場合は `unknown` を明記）。
 - `provisional_decision`: 暫定判断（停止 / 限定継続 / 警告付き継続）と理由。
 - `regen_request_to`: 再生成依頼先（担当チーム/ロール名、または `human-operator`）。
+
+#### 運用テンプレート（Birdseyeアクセス異常時の再生成依頼）
+
+> 復旧手順の詳細は [`tools/codemap/README.md` の「Birdseyeアクセス異常時の復旧手順」](tools/codemap/README.md#birdseyeアクセス異常時の復旧手順) を参照。
+
+```yaml
+birdseye_regen_request:
+  requested_to_role: "<依頼先ロール>"
+  execute_emit: "index|caps|hot"
+  post_checks:
+    generated_files:
+      - "docs/birdseye/index.json"
+      - "docs/birdseye/hot.json"
+      - "docs/birdseye/caps/*.json"
+    missing_resolved: true
+    generated_at_updated: true
+  re_escalation_if:
+    - "実行コマンドが非ゼロ終了した"
+    - "必要成果物が生成されない、またはJSONパースに失敗した"
+    - "欠損が解消しない、または generated_at が更新されない"
+```
