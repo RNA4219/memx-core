@@ -17,6 +17,7 @@ CLI -> API -> Service(Usecase) -> DB / LLM / Gatekeeper
 - DB/LLM/Gatekeeper: 副作用を持つインフラ層。
 
 ## 2. DB 責務分割
+- ADR: [ADR-0001: 4DB分割と責務境界](../../docs/ADR/ADR-0001-4db-boundary.md)
 - `short.db`: 一次投入先。短期メモ、GC 対象の起点。
 - `chronicle.db`: 時系列ログ（出来事・進捗）。
 - `memopedia.db`: 抽象知識（定義・方針）。
@@ -134,7 +135,13 @@ short 固有:
 | `REQ-ERR-001` | [requirements.md#6-4-エラーモデル](./requirements.md#6-4-エラーモデル) |
 | `REQ-SEC-001` | [requirements.md#2-7-security--retention-requirements](./requirements.md#2-7-security--retention-requirements) |
 
-## 5. 設計→契約→検証 導線
+## 5. ADR参照運用ルール
+- 本書で設計判断を追加/変更する場合は、該当節に ADR リンクを追記する。
+- ADR 未作成で判断を固定しない。最小でも `Context / Decision / Consequences / Status / Date` を満たす ADR を先に作成する。
+- 本書の該当節リンクと `requirements.md` の対応節リンクは同一PRで更新する。
+- v1必須3エンドポイント関連は [ADR-0002](../../docs/ADR/ADR-0002-v1-required-endpoints.md)、ErrorCode/retryable 関連は [ADR-0003](../../docs/ADR/ADR-0003-errorcode-retryable-boundary.md) を参照する。
+
+## 6. 設計→契約→検証 導線
 参照順は以下の固定順序とする。
 1. `interfaces.md`（I/F 設計の確認）
 2. `contracts/openapi.yaml`（HTTP 契約の確認）
