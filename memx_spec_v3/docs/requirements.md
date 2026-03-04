@@ -16,7 +16,7 @@ priority: high
 - 参照起点は `spec.md` とし、仕様レビュー時は同ファイルから辿る。
 
 ## 0. 目的とスコープ
-設計詳細は `design.md`、I/F 詳細は `interfaces.md`、契約詳細は `CONTRACTS.md` を正本とする。
+設計詳細は `design.md`、I/F 詳細は `interfaces.md` を参照し、契約詳細は正本の `contracts/openapi.yaml` と `contracts/cli-json.schema.json` を参照する。
 
 ## 1. MUST（v1）
 - CLI: `mem in short` / `mem out search` / `mem out show` を提供する。
