@@ -58,7 +58,7 @@
 5. Birdseye issue件数
 6. 最終判定
 
-上記6項目はテンプレート実体（`memx_spec_v3/docs/reviews/DESIGN-ACCEPTANCE-YYYYMMDD.md`）の章見出しとして固定し、名称変更・省略・順序入替を禁止する。
+上記6項目はテンプレート専用ファイル（`memx_spec_v3/docs/reviews/DESIGN-ACCEPTANCE-YYYYMMDD.md`）の章見出しとして固定し、名称変更・省略・順序入替を禁止する。テンプレートは実体判定には使用せず、実体は `DESIGN-ACCEPTANCE-<実日付>.md` のみを作成・更新する。
 
 ## 4. 判定規則（固定）
 - `memx_spec_v3/docs/design-review-spec.md` と合わせて、最終判定の正本は `memx_spec_v3/docs/design-doc-dod-spec.md` とする。

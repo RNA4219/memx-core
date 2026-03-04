@@ -23,8 +23,9 @@
 ## 5. 差戻し条件（チェックID: DA-LC-05）
 以下のいずれかに該当した場合、受け入れ判定を差し戻す。
 1. 必須6項目（対象章/REQ網羅率/high差分件数/リンク不達件数/Birdseye issue件数/最終判定）の欠落
-2. `evidence_paths` の不整合（未存在パス、誤パス、参照不能パスを含む）
-3. gate 列が `high`
+2. `DESIGN-ACCEPTANCE-YYYYMMDD.md`（テンプレート専用）を実体判定・Status遷移・Release判定の証跡として利用した
+3. `evidence_paths` の不整合（未存在パス、誤パス、参照不能パスを含む）
+4. gate 列が `high`
 
 ## 6. 参照
 - 入力元・判定規則: `memx_spec_v3/docs/design-acceptance-report-spec.md`
