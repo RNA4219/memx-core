@@ -151,6 +151,11 @@ in_progress → blocked → in_progress（解除後に戻す）
 ```yaml
 - task_id: 20240401-01
   source: orchestration/api-rollout.md#Phase1
+  birdseye:
+    node_id: node-orchestration-api-rollout-phase1
+    role: orchestration
+    hops: 0
+    caps_ref: docs/birdseye/caps/orchestration.api-rollout.json
   objective: API Gateway ルーティング切替の段階実行
   scope:
     in: [infra/aws/apigw]
@@ -165,6 +170,10 @@ in_progress → blocked → in_progress（解除後に戻す）
   dependencies:
     - 20240331-ops-01
 ```
+
+受け入れ条件（最低限）:
+
+- Task Seed に記録された `birdseye.node_id` から、`docs/birdseye/index.json` の元ノードを一意に逆引きできること。
 
 ## 6. 運用メモ
 

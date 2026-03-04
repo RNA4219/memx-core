@@ -40,6 +40,22 @@ next_review_due: YYYY-MM-DD
 - Behavior / I/O / Constraints / Acceptance Criteria を `TASK.codex.md` の粒度で箇条書き。
 - セキュリティ関連タスクでは `REQ-SEC-001` / `REQ-RET-001` / `REQ-SEC-AUD-001` / `REQ-SEC-AUD-002` / `REQ-SEC-GRD-001` の参照を明記する。
 - Lint/Type/Test のゼロエラーを必須条件として明記する。
+- 受け入れ条件には「Task Seed から元ノードを一意に逆引きできる」チェックを含める。
+
+### Birdseye metadata
+
+- Task Seed に以下を記載する。
+  - 必須: `birdseye.node_id`, `birdseye.role`
+  - 任意: `birdseye.hops`（`0|1|2`）, `birdseye.caps_ref`
+- 記入例:
+
+```yaml
+birdseye:
+  node_id: node-orchestration-api-rollout-phase1
+  role: orchestration
+  hops: 0
+  caps_ref: docs/birdseye/caps/orchestration.api-rollout.json
+```
 
 ## Affected Paths
 - グロブ表記で変更予定ファイル群を列挙。

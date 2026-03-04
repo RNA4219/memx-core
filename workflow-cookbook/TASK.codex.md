@@ -17,6 +17,11 @@ base_branch: main
 work_branch: feat/short-slug
 priority: P1|P2|P3
 langs: [auto]   # auto | python | typescript | go | rust | etc.
+birdseye:
+  node_id: ""   # 必須: docs/birdseye/index.json のノードID
+  role: ""      # 必須: node の役割（例: orchestration / guardrail）
+  hops: 0       # 任意: 0|1|2（探索起点からの距離）
+  caps_ref: ""  # 任意: docs/birdseye/caps/*.json 参照パス
 ```
 
 ## Objective
@@ -42,6 +47,10 @@ langs: [auto]   # auto | python | typescript | go | rust | etc.
 - Acceptance Criteria:
   - {{検収条件1}}
   - {{検収条件2}}
+  - Task Seed の `birdseye.node_id` から元ノードを一意に逆引きできる。
+- Birdseye metadata:
+  - 必須: `birdseye.node_id`, `birdseye.role`
+  - 任意: `birdseye.hops`（0|1|2）, `birdseye.caps_ref`
 - Security Requirement IDs（該当時は必須記載）:
   - `REQ-SEC-001` / `REQ-RET-001`
   - `REQ-SEC-AUD-001` / `REQ-SEC-AUD-002`
