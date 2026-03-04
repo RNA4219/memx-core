@@ -128,6 +128,12 @@ next_review_due: 2025-11-21
   - `task_seed_cycle_time_minutes` が 1440 分を超過: 受付から着手までの待機要因（担当者アサイン、依頼内容不備など）を振り返り、対応 SLA を再共有する。
   - `birdseye_refresh_delay_minutes` が 60 分を超過: Birdseye 更新ジョブの実行ログとスケジューラ状態を確認し、必要に応じて手動更新を実施。
 
+## HUB 更新トリガー時の最短運用手順
+
+- 再生成: `python tools/codemap/update.py --targets docs/birdseye/index.json,docs/birdseye/hot.json --emit index+caps` を実行し、`index.json` と `hot.json` を同時更新する。
+- 差分確認: `git diff -- docs/birdseye/index.json docs/birdseye/hot.json` で想定外差分の有無を確認する。
+- 鮮度確認: `docs/birdseye/index.json.generated_at` と `docs/birdseye/hot.json.generated_at` の更新、ならびに `docs/birdseye/hot.json.refresh_command` と `docs/BIRDSEYE.md` 記載コマンドの一致をレビューゲートとして確認する。
+
 ## Outbound Request Approval
 
 - 申請項目: [アウトバウンド通信申請テンプレート](tickets/outbound-request.md#申請テンプレート) を利用し、依頼者・宛先ドメイン/ポート・用途・送信データ分類・想定期間・
