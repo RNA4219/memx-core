@@ -39,6 +39,15 @@
 
 ## 6. 最終判定
 - 判定: `pass`
+
+- 参照元固定: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-002.md`（最新 validation 実体）
+
+- `mapping_match_check` 比較ログ:
+  - comparison_at: `2026-03-04T08:40:55Z`
+  - comparison_targets:
+    - `memx_spec_v3/docs/design-chapter-node-mapping-spec.md`（4.3 章対応表）
+    - `docs/birdseye/index.json`（`node_id: design` / `node_id: interfaces`）
+
 - 根拠（`memx_spec_v3/docs/design-doc-dod-spec.md` 正本条件）:
   - REQ網羅率 `100%` を満たす。
   - high差分件数 / リンク不達件数 / Birdseye issue件数はいずれも `0`。

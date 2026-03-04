@@ -33,6 +33,7 @@
 | `memx_spec_v3/docs/interfaces.md#3. 互換ルール` | `REQ-ID 割当が 0 件。traceability.md に当該章へ紐づく Design/Interface Mapping を追記する必要あり。` |
 
 ## mapping_match_check 判定ログ
+- この節を `mapping_match_check` 判定ログの正本とする。
 - comparison_at: `2026-03-04T08:40:55Z`
 - comparison_inputs:
   - `memx_spec_v3/docs/design-chapter-node-mapping-spec.md` (4.3 章対応表)
