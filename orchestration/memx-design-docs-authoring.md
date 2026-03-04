@@ -50,7 +50,7 @@ status: planned
 - [ ] 章ごとに `Dependencies` と `Status: planned` を記述する（Task Seed 1件/章、<=0.5d）
 
 ### Done Criteria
-- 全章ドラフトが `Source/Node IDs/Objective/Requirements/Commands/Dependencies/Status` を満たす
+- 全章ドラフトが `Source/Node IDs/Objective/Requirements/Commands/Dependencies/Status` を満たし、`memx_spec_v3/docs/design-template.md` に準拠している
 - 各章が HUB ノード抽出ルールでそのまま Task Seed 化できる
 - 章ごとの未解決事項が 0.5d 以内の追加タスクへ分解済みである
 
