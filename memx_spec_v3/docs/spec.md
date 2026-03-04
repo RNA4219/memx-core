@@ -70,7 +70,7 @@ priority: high
 > 品質ゲート（lint/type/test）の判定基準は、仕様更新時を含めて `docs/QUALITY_GATES.md` を唯一の参照先として固定する。
 
 1. `requirements.md` を更新する。
-2. `traceability.md` を更新する。
+2. `traceability.md` を更新する（主要REQ/主要REQ以外を含む追加・変更 REQ-ID を同一PRで 1 行 1 要件で追記する）。
 3. 正本スキーマ（`contracts/openapi.yaml` / `contracts/cli-json.schema.json`）を更新する。
 4. `interfaces.md` と `CONTRACTS.md` を更新する。
 5. `EVALUATION*` / `operations-spec.md`（RUNBOOK 相当）を更新する。
