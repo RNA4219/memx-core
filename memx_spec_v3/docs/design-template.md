@@ -17,6 +17,7 @@ next_review_due: 2026-06-04
 
 ### Source
 - `path#Section` 形式で記述する。
+- `orchestration/memx-design-docs-authoring.md` 由来の入力参照名は、`memx_spec_v3/docs/design-reference-resolution-spec.md` の正規パスマッピングで解決した値のみ記載する。
 - 複数ある場合は箇条書きで列挙する。
 - `TBD` やテンプレートID（例: `IN-<YYYYMMDD>-001`）は記載しない。
 
@@ -57,6 +58,7 @@ next_review_due: 2026-06-04
 - `Dependencies`: 前提条件列挙（本テンプレートの `Dependencies` 見出しで充足）。
 - `Status`: 許可語彙 `planned/active/in_progress/reviewing/blocked/done` のみ使用。
 - `Release Note Draft`: `design.md` 章本文では任意。Task Seed 化・完了化（`done`）時に必須で補完する。
+- Task Seed 化時は `docs/TASKS.md` の「2-1-1. Task Seed 起票時の参照解決チェック（常時必須）」を満たすこと。
 
 ## 記入例（雛形）
 

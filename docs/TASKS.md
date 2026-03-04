@@ -37,6 +37,7 @@
 - 要件の出典を `path#Section` 形式で記載する。
 - 例: `orchestration/memx-v1-bootstrap.md#Phase 2`
 - 複数ある場合は箇条書きで列挙する。
+- `orchestration/memx-design-docs-authoring.md` 由来の入力参照名を使う場合は、`memx_spec_v3/docs/design-reference-resolution-spec.md` の正規パスマッピングで解決した値のみを許可する。
 - `HUB.codex.md` 工程2の運用ルールに従い、要件根拠として許可するインシデント記録は **`docs/IN-<実日付>-<連番>.md` のみ** とする（`docs/IN-BASELINE.md` は補助資料、`docs/IN-<YYYYMMDD>-001.md` などのテンプレートIDは不可）。
 - `Source` にテンプレートID（例: `IN-<YYYYMMDD>-001`）または `TBD` を含む Task Seed は、`reviewing` を継続して差し戻す。
 
@@ -95,6 +96,12 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 - [ ] `Release Note Draft` を記載済み
 - [ ] `memx_spec_v3/CHANGES.md` と `CHANGELOG.md` への反映項目を記載済み
 - [ ] `Status: done` 前に `Moved-to-CHANGES: YYYY-MM-DD` を追記する
+
+## 2-1-1. Task Seed 起票時の参照解決チェック（常時必須）
+
+- [ ] `Source` の全行が `path#Section` 形式で、`#Section` が空でない
+- [ ] `requirements.md` / `design.md` / `interfaces.md` / `traceability.md` / `EVALUATION.md` / `RUNBOOK.md` / `docs/birdseye/index.json` を参照する場合、`memx_spec_v3/docs/design-reference-resolution-spec.md` の正規パスへ解決済み
+- [ ] 相対名・曖昧名・複数候補解決が 0 件（1件でもあれば fail し、`reviewing` で差し戻し）
 
 
 ## 2-2. 変更タイプ別チェックリスト（requirements 0-0-4 整合）
