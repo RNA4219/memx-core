@@ -57,6 +57,7 @@ next_review_due: 2025-11-14
   フォローアップが残っていないか確認する
 - 新規 ADR を含むリリースでは [docs/ADR/README.md](docs/ADR/README.md) の索引更新を完了し、レビューフローで確認する
 - 受け入れ基準に対するエビデンス
+- `req_coverage=100%`（[docs/qa/req_coverage_report.md](docs/qa/req_coverage_report.md)）を確認
 - 影響範囲の再確認
 - PR に `type:*` および `semver:*` ラベルを付与済み
 - [Security Review Checklist](docs/security/Security_Review_Checklist.md) に沿って準備→実装→レビューの各フェーズを完了し、リリース判定と証跡を残す
