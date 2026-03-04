@@ -120,7 +120,7 @@
 - `Status: done` へ遷移する条件として、移送後に `Moved-to-CHANGES: YYYY-MM-DD` を追記済みであること。
 - `Status: done` へ遷移する条件として、Phase 2〜4 対象タスクは最新の `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-003.md` が更新済みで、対象章の `req_coverage` が `100%` または `集計対象外` で、`mapping_match_check` が `pass` であること。
 - `docs/birdseye/index.json` と `nodes[].capsule` 実体の不整合を検知した場合は、対象 Task Seed の `Status` を `blocked` へ遷移し、欠落 capsule のパス・検知コマンド・暫定対処を Task Seed に記録する。
-- Birdseye Readiness Check の `ready/degraded/blocked` は入力健全性の判定語彙であり、Task Seed `Status` には使用しない（`degraded` は不可）。
+- Birdseye Readiness の語彙定義は `HUB.codex.md#birdseye-readiness-check` を正本とし、本書では再定義しない。
 
 ### 完了前チェック（`Release Note Draft` / `Status` / `Moved-to-CHANGES`）
 - [ ] `Release Note Draft` を 1〜3 行で記載済み（`CHANGELOG.md` 反映内容と一致）
@@ -223,6 +223,11 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 ### 起票時タスク化提案（2-1-3: 競合回避のため分離）
 - 提案1: 「Trigger 判定のみ」を行う 0.5d Task Seed を先行起票し、該当 Trigger IDs と必須更新先を固定する。
 - 提案2: 「文書反映 + レビュー記録 + CHANGES 転記」を行う後続 Task Seed を分離し、`done` 条件を満たした時点で統合する。
+
+
+## Birdseye Readiness Check
+- `notes.readiness_status` の語彙定義と運用ルールは [`HUB.codex.md` の「Birdseye Readiness Check」](../HUB.codex.md#birdseye-readiness-check) を正本とする。
+- 本書では Task Seed `Status` の許可語彙のみを定義し、`readiness_status` の値定義は行わない。
 
 ## 2-2. 共通チェックリスト
 
