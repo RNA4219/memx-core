@@ -45,6 +45,19 @@
   - `evidence_paths`
 - 章別検証サマリ参照が欠落している章が 1 件でもある場合、最終判定は `fail` とする。
 
+
+## 3.2 入力エビデンスの共通メタスキーマ検証（必須）
+統合レポート作成前に、2章で定義した全入力エビデンスが `memx_spec_v3/docs/design-evidence-schema-spec.md` の共通必須キーに準拠していることを検証する。
+
+- 検証対象キー: `run_id` / `generated_at` / `source_commit` / `chapter_id` / `tool` / `status` / `severity_summary` / `evidence_paths`
+- 1キーでも欠落がある入力は不受理とし、統合レポートの最終判定は `fail` とする。
+- 受理可否は Task Seed の `Commands` に記録した検証コマンド結果で追跡可能であること。
+
+## 3.3 変更計画（導入ステップ）
+1. 既存4仕様の出力節に共通メタキー追記ルールを反映する。
+2. 各検証成果物テンプレートへ共通キーを追記し、サンプルを更新する。
+3. Phase 4 統合時に、入力エビデンスのキー存在チェックを必須ゲート化する。
+
 ## 4. 判定規則（固定）
 - `memx_spec_v3/docs/design-review-spec.md` と合わせて、最終判定の正本は `memx_spec_v3/docs/design-doc-dod-spec.md` とする。
 

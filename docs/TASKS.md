@@ -83,6 +83,8 @@
   - `test -f memx_spec_v3/docs/reviews/inventory/DESIGN-SOURCE-INVENTORY-$(date +%Y%m%d).md`
   - `rg -n "^\| .* \| REQ-" memx_spec_v3/docs/reviews/inventory/DESIGN-SOURCE-INVENTORY-$(date +%Y%m%d).md`
   - `rg -n "\| blocked \|" memx_spec_v3/docs/reviews/inventory/DESIGN-SOURCE-INVENTORY-$(date +%Y%m%d).md`
+  - `rg -n "run_id|generated_at|source_commit|chapter_id|tool|status|severity_summary|evidence_paths" <artifact-path>`
+  - `python -c 'import json,sys;d=json.load(open(sys.argv[1]));keys=["run_id","generated_at","source_commit","chapter_id","tool","status","severity_summary","evidence_paths"];print([k for k in keys if k not in d]);sys.exit(1 if any(k not in d for k in keys) else 0)' <artifact.json>`
 - 品質ゲート参照スコープは「memx 本体（`memx_spec_v3/`）は `docs/QUALITY_GATES.md`、`workflow-cookbook/` は `workflow-cookbook/docs/QUALITY_GATES.md`」と明記する。
 - Phase 2〜4 対象タスクでは、章別検証サマリの作成・更新・添付確認コマンド（または確認手順）を `Commands` に明記する。
 

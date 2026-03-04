@@ -254,6 +254,26 @@ action: "リンク先追加または参照先修正"
 
 ---
 
+
+## 9.3 共通メタキー追記ルール
+`memx_spec_v3/docs/design-evidence-schema-spec.md` 準拠で、9.1 集計出力および 9.2 詳細レポートに以下キーを必須追記する。
+
+```
+run_id
+generated_at
+source_commit
+chapter_id
+tool
+status
+severity_summary
+evidence_paths
+```
+
+- `severity_summary` は `high` / `medium` / `low` 件数を保持する。
+- `evidence_paths` はリンク抽出元ファイルと検証ログの実体パスを列挙する。
+
+---
+
 # 10. Phase 3 運用
 
 `orchestration/memx-design-docs-authoring.md` の Phase 3 では

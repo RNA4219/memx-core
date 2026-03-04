@@ -64,6 +64,21 @@ action: "文言統一のみ実施。互換性影響なし。"
 - `source_refs`: 判定根拠の参照元（ファイル行またはスキーマパス）
 - `action`: 解消方針・保留理由・移行手順
 
+
+## 4.1 共通メタキー追記ルール
+`memx_spec_v3/docs/design-evidence-schema-spec.md` 準拠で、4章の出力レコードには以下キーを必須追記する。
+
+- `run_id`
+- `generated_at`
+- `source_commit`
+- `chapter_id`
+- `tool`
+- `status`
+- `severity_summary`
+- `evidence_paths`
+
+`severity_summary` は差分全体の件数サマリを保持し、各 `diff_id` レコードは `evidence_paths` に根拠ファイルを列挙する。
+
 ## 5. 運用ルール
 - Phase 3 の契約同期判定は本仕様を基準に実施する。
 - 判定結果は章別 Task Seed の `Requirements` / `Commands` に反映する。

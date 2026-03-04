@@ -41,6 +41,21 @@
 - `medium`: 参照重複や capsule 欠落で章生成が停止/不安定
 - `low`: 運用で回避可能だが追補が必要
 
+
+## 4.1 共通メタキー追記ルール
+`memx_spec_v3/docs/design-evidence-schema-spec.md` 準拠で、Issue レコードと集計サマリの両方に次のキーを必須とする。
+
+- `run_id`
+- `generated_at`
+- `source_commit`
+- `chapter_id`
+- `tool`
+- `status`
+- `severity_summary`
+- `evidence_paths`
+
+`chapter_id` は章横断チェックの場合 `global` を使用し、`evidence_paths` は `docs/birdseye/index.json` と検証ログ実体を含める。
+
 ## 5. ステータス連携ルール
 - 検証で issue を 1 件でも検知した時点で、該当 Task の `Status` を `blocked` に遷移させる。
 - 複数 issue がある場合、Task は全 issue 解消まで `blocked` を維持する。

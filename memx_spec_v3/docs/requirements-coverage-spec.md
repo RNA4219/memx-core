@@ -238,6 +238,27 @@ coverage_report:
 
 ---
 
+
+## 8.4 共通メタキー追記ルール
+`memx_spec_v3/docs/design-evidence-schema-spec.md` 準拠で、8.1〜8.3 の成果物に以下キーを必須追記する。
+
+```
+run_id
+generated_at
+source_commit
+chapter_id
+tool
+status
+severity_summary
+evidence_paths
+```
+
+- `status` は既存の `phase3_gate`/判定結果と矛盾しない値を記録する。
+- `severity_summary` は `{high, medium, low}` を必須キーとして保持する（coverage は通常すべて `0`）。
+- `evidence_paths` には `requirements.md` / `traceability.md` / 出力レポート実体を含める。
+
+---
+
 # 9. `design-review-spec.md` 参照規約
 
 `memx_spec_v3/docs/design-review-spec.md` の判定根拠セクションでは
