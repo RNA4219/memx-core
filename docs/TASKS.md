@@ -61,6 +61,7 @@
   - lint/type/test の基準は `docs/QUALITY_GATES.md` に従う。
   - 現行の必須最小構成は `go test ./...`（Go）で、Python/Node は対象外として扱う。
   - 仕様書作成・更新タスクでも同じ判定基準（`docs/QUALITY_GATES.md`）を `Commands` に記載し、Task 起票時の誤記載を防止する。
+- 品質ゲート参照スコープは「memx 本体（`memx_spec_v3/`）は `docs/QUALITY_GATES.md`、`workflow-cookbook/` は `workflow-cookbook/docs/QUALITY_GATES.md`」と明記する。
 
 ### Dependencies
 - 前提タスク、依存PR、外部条件を列挙する。

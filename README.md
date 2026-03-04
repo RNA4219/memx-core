@@ -17,6 +17,8 @@ Local-first personal memory & knowledge store for LLM agents.
 
 > README では重複記述を避け、詳細仕様は `spec.md` の役割分担に従って参照してください。
 
+- 品質ゲート参照先と適用範囲: memx 本体（`memx_spec_v3/`）は [`docs/QUALITY_GATES.md`](./docs/QUALITY_GATES.md)、`workflow-cookbook/` は [`workflow-cookbook/docs/QUALITY_GATES.md`](./workflow-cookbook/docs/QUALITY_GATES.md) を参照。
+
 ## Governance Docs
 - [BLUEPRINT.md](./BLUEPRINT.md)
 - [RUNBOOK.md](./RUNBOOK.md)
