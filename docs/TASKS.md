@@ -118,14 +118,14 @@
   - done
 - `Status: done` へ遷移する条件として、Task Seed に `Release Note Draft` 記入済みであること。
 - `Status: done` へ遷移する条件として、移送後に `Moved-to-CHANGES: YYYY-MM-DD` を追記済みであること。
-- `Status: done` へ遷移する条件として、Phase 2〜4 対象タスクは最新の `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-<実日付>.md` が更新済みで、対象章の `req_coverage` が 0% ではなく `mapping_match_check` が `pass` であること。
+- `Status: done` へ遷移する条件として、Phase 2〜4 対象タスクは最新の `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-003.md` が更新済みで、対象章の `req_coverage` が `100%` または `集計対象外` で、`mapping_match_check` が `pass` であること。
 - `docs/birdseye/index.json` と `nodes[].capsule` 実体の不整合を検知した場合は、対象 Task Seed の `Status` を `blocked` へ遷移し、欠落 capsule のパス・検知コマンド・暫定対処を Task Seed に記録する。
 
 ### 完了前チェック（`Release Note Draft` / `Status` / `Moved-to-CHANGES`）
 - [ ] `Release Note Draft` を 1〜3 行で記載済み（`CHANGELOG.md` 反映内容と一致）
 - [ ] `Status` が許可語彙（planned/active/in_progress/reviewing/blocked/done）のいずれかで、`done` へ遷移する根拠を記載済み
 - [ ] `Moved-to-CHANGES: YYYY-MM-DD` を追記済み、または未移送理由を明記済み
-- [ ] Phase 2〜4 対象タスクは `DESIGN-CHAPTER-VALIDATION-<実日付>.md` の対象章行が更新済みで、`req_coverage != 0%` かつ `mapping_match_check = pass` を満たす
+- [ ] Phase 2〜4 対象タスクは `DESIGN-CHAPTER-VALIDATION-20260304-003.md` の対象章行が更新済みで、`req_coverage = 100%` または `集計対象外` かつ `mapping_match_check = pass` を満たす
 - [ ] 上記3項目は `memx_spec_v3/docs/design-deliverables-package-spec.md` の成果物パッケージ要件と矛盾しない
 
 

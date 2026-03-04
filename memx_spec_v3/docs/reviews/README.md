@@ -46,6 +46,12 @@
 - 差戻し条件: テンプレート `DESIGN-ACCEPTANCE-YYYYMMDD.md` の実体利用は禁止（検出時は差し戻し）。
 - 差戻し条件: `DESIGN-ACCEPTANCE-<実日付>.md` の実体未作成時は `Status: reviewing` を維持し、`done` へ遷移しない。
 
+## 最新実体参照ルール
+- 判定・進捗確認で参照する正本は、常に当日更新の最新実体ファイルとする（旧実体の値を流用しない）。
+- 2026-03-04 時点の最新実体:
+  - 章別検証: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-003.md`
+  - 受け入れ判定: `memx_spec_v3/docs/reviews/DESIGN-ACCEPTANCE-20260304.md`
+
 ## クローズ条件
 - 記録クローズは以下を全て満たした時点とする。
   - 判定が確定し、根拠参照（`EVALUATION.md` + 証跡）が記載済み。
