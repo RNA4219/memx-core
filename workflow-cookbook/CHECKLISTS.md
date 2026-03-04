@@ -29,6 +29,7 @@ next_review_due: 2025-11-14
   [`GUARDRAILS.md`](GUARDRAILS.md) を再確認
 - ラベル運用・テンプレ遵守は `HUB.codex.md` と `TASK.codex.md` のタスク分割フローに合わせる
 - Birdseye 欠損時は `HUB.codex.md`「Birdseyeアクセス異常時ハンドリング」のケース判定と `notes` 必須4項目（欠損ファイル/影響ノードID/暫定判断/再生成依頼先）を PR 説明に記載
+- `docs/qa/contract_align_report.md` の更新有無を確認し、契約変更がある場合は aligned / mismatch と是正タスクが反映されていることをレビューする
 
 ## Ops / Incident
 
