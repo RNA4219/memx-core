@@ -175,6 +175,7 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 ## 2-1-3. Phase 3（契約整合）チェック（必須）
 
 - [ ] `memx_spec_v3/docs/contracts/reports/` 配下に `CONTRACT-ALIGN-YYYYMMDD-###.md` と `LATEST.md` が存在することを確認した
+- [ ] レビュー証跡として `memx_spec_v3/docs/reviews/CONTRACT-ALIGN-<実日付>.md`（例: `CONTRACT-ALIGN-20260304.md`）の命名規則で実体を作成し、受け入れレポートから1ホップ参照できることを確認した
 - [ ] 更新順序を `CONTRACT-ALIGN作成 -> LATEST更新 -> EVALUATION照合` で実施し、逆順更新がないことを確認した
 - [ ] `memx_spec_v3/docs/contracts/reports/LATEST.md` の必須キー（`report_id/report_path/decision_date/high_count/phase3_status`）を schema 固定として全件記載されていることを確認した（1件でも欠落なら fail）
 - [ ] `LATEST.md` は当該判定のたびに毎回更新し、`report_id/report_path/decision_date/high_count/phase3_status` の5キーを前回値のまま残置していないことを確認した
@@ -210,6 +211,7 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 - [ ] 証跡仕様準拠確認: Phase 対象の証跡（lint/type/test/link/contract/birdseye/coverage）が `memx_spec_v3/docs/design-gate-evidence-spec.md` の保存先・命名規則・最小記録粒度（実行日時・コマンド・結果・判定）に準拠している
 
 ### 2-1-4-1. design-doc-dod-spec 判定一致チェック手順（完了条件）
+- [ ] `memx_spec_v3/docs/reviews/DESIGN-GATE-EVIDENCE-INDEX.md` を一次参照として使用し、5条件（`req_coverage` / `mapping_match_check` / `contract_align_report` / `design_acceptance` / `go.sum tracked`）の判定値・根拠ファイル・根拠見出しを確認した
 - [ ] `memx_spec_v3/docs/design-doc-dod-spec.md` の 6 条件（REQ網羅率/high差分/リンク不達/Birdseye issue/レビュー記録完備/参照解決適合率）を入力証跡で照合した
 - [ ] `memx_spec_v3/docs/reviews/DESIGN-ACCEPTANCE-<実日付>.md` の「6. 最終判定」が上記照合結果と一致することを記録した
 - [ ] 不一致時は `Status: reviewing` を維持し、差戻し理由を Task Seed に追記した
