@@ -32,8 +32,8 @@
 - `memx_spec_v3/docs/traceability.md`
 - `memx_spec_v3/docs/design.md`
 - `memx_spec_v3/docs/interfaces.md`
-- `memx_spec_v3/docs/EVALUATION.md`
-- `memx_spec_v3/docs/RUNBOOK.md`
+- `docs/birdseye/caps/EVALUATION.md.json`
+- `docs/birdseye/caps/RUNBOOK.md.json`
 - `docs/birdseye/index.json`
 
 ### 必須チェック

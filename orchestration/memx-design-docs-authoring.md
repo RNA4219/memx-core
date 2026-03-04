@@ -31,8 +31,8 @@ status: planned
 - `traceability.md`
 - `design.md`
 - `interfaces.md`
-- `EVALUATION.md`
-- `RUNBOOK.md`
+- `docs/birdseye/caps/EVALUATION.md.json`
+- `docs/birdseye/caps/RUNBOOK.md.json`
 - `docs/birdseye/index.json`
 
 > 注記: Dependencies では非正規名の記載を許可するが、Task Seed / Phase 1 抽出表 / 章ドラフト / レビュー記録へ転記する時点で `memx_spec_v3/docs/design-reference-resolution-spec.md` に従い正規パスへ正規化すること。
@@ -42,8 +42,8 @@ status: planned
 - [ ] `traceability.md` を入力成果物として主要 REQ-ID の設計/I/F/評価/契約マッピングを確認する（Task Seed 1件、<=0.5d）
 - [ ] `design.md` の章見出しと要件IDの参照有無を対応表にする（Task Seed 1件、<=0.5d）
 - [ ] `interfaces.md` の入出力契約を要件ID単位で列挙する（Task Seed 1件、<=0.5d）
-- [ ] `EVALUATION.md` の評価観点を要件IDに紐づける（Task Seed 1件、<=0.5d）
-- [ ] `RUNBOOK.md` の運用手順と契約依存箇所を抽出する（Task Seed 1件、<=0.5d）
+- [ ] `docs/birdseye/caps/EVALUATION.md.json` の評価観点を要件IDに紐づける（Task Seed 1件、<=0.5d）
+- [ ] `docs/birdseye/caps/RUNBOOK.md.json` の運用手順と契約依存箇所を抽出する（Task Seed 1件、<=0.5d）
 - [ ] `docs/birdseye/index.json` から node_id と depends_on を取得し、`memx_spec_v3/docs/design-chapter-node-mapping-spec.md` 準拠の章対応表（chapter_id -> node_id）を更新する（Task Seed 1件、<=0.5d）
 
 ### Done Criteria
@@ -64,8 +64,8 @@ status: planned
 - `requirements.md`
 - `design.md`
 - `interfaces.md`
-- `EVALUATION.md`
-- `RUNBOOK.md`
+- `docs/birdseye/caps/EVALUATION.md.json`
+- `docs/birdseye/caps/RUNBOOK.md.json`
 - `docs/birdseye/index.json`
 - `memx_spec_v3/docs/design-acceptance-report-spec.md`
 
@@ -93,8 +93,8 @@ status: planned
 - `traceability.md`
 - `design.md`
 - `interfaces.md`
-- `EVALUATION.md`
-- `RUNBOOK.md`
+- `docs/birdseye/caps/EVALUATION.md.json`
+- `docs/birdseye/caps/RUNBOOK.md.json`
 - `docs/birdseye/index.json`
 
 > 注記: Dependencies では非正規名の記載を許可するが、Task Seed / Phase 1 抽出表 / 章ドラフト / レビュー記録へ転記する時点で `memx_spec_v3/docs/design-reference-resolution-spec.md` に従い正規パスへ正規化すること。
@@ -103,8 +103,8 @@ status: planned
 - [ ] `design.md` と `interfaces.md` の契約差分を比較し、相違を解消する（`memx_spec_v3/docs/contract-alignment-spec.md` に従う）（Task Seed 1件、<=0.5d）
 - [ ] `traceability.md` を入力成果物として参照し、要件ID網羅率と契約対応の欠落を補完する（Task Seed 1件、<=0.5d）
 - [ ] `design.md` と `interfaces.md` の契約差分を比較し、相違を解消する（Task Seed 1件、<=0.5d）
-- [ ] `RUNBOOK.md` の手順リンクが契約記述と一致するか確認する（Task Seed 1件、<=0.5d）
-- [ ] `EVALUATION.md` の評価項目リンクが最新章へ到達するか確認する（Task Seed 1件、<=0.5d）
+- [ ] `docs/birdseye/caps/RUNBOOK.md.json` の手順リンクが契約記述と一致するか確認する（Task Seed 1件、<=0.5d）
+- [ ] `docs/birdseye/caps/EVALUATION.md.json` の評価項目リンクが最新章へ到達するか確認する（Task Seed 1件、<=0.5d）
 - [ ] Birdseye 検証 issue（node_id 参照切れを含む）を `docs/birdseye/memx-birdseye-validation-spec.md` に従って修正する（Task Seed 1件、<=0.5d）
 - [ ] 章間リンクの相対パス/アンカー健全性を確認する（Task Seed 1件、<=0.5d）
 - [ ] Phase 3 Done Criteria 判定時に `memx_spec_v3/docs/link-integrity-spec.md` を参照する運用タスクを登録し、章別 Task Seed へ反映する（Task Seed 1件、<=0.5d）
@@ -130,8 +130,8 @@ status: planned
 - `requirements.md`
 - `design.md`
 - `interfaces.md`
-- `EVALUATION.md`
-- `RUNBOOK.md`
+- `docs/birdseye/caps/EVALUATION.md.json`
+- `docs/birdseye/caps/RUNBOOK.md.json`
 - `docs/birdseye/index.json`
 
 - [ ] 章ごとに `Release Note Draft`（1〜3行）を作成する（Task Seed 1件/章、<=0.5d）
@@ -156,7 +156,7 @@ status: planned
   - 保存先: `memx_spec_v3/docs/reviews/`
   - 命名: `DESIGN-REVIEW-YYYYMMDD-###.md`
   - 必須項目: 対象章 / 関連 REQ-ID / Node IDs / 指摘一覧（重大度付き） / 再確認結果 / 判定（pass/fail/waiver）
-  - 判定根拠: `EVALUATION.md` pass/fail ルール参照を必須化
+  - 判定根拠: `docs/birdseye/caps/EVALUATION.md.json` pass/fail ルール参照を必須化
   - 完了条件: `docs/TASKS.md` の `Release Note Draft` / `Status` / `Moved-to-CHANGES` を確認済み
 - 統合受け入れレポートが `memx_spec_v3/docs/design-acceptance-report-spec.md` に準拠している
   - 保存先: `memx_spec_v3/docs/reviews/`
