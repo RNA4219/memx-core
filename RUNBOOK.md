@@ -354,6 +354,32 @@ PY
 - 不具合起票時は GitHub Issue テンプレートを使用する: [.github/ISSUE_TEMPLATE/bug.yml](.github/ISSUE_TEMPLATE/bug.yml)
 - 再現手順・期待値/実際値・影響範囲・関連 Intent ID を必ず記入する。
 
+## 設計書作成前の静的検査手順（最短）
+参照解決検証は `memx_spec_v3/docs/design-reference-validation-automation-spec.md` を正本とし、次を順に実行する。
+
+1. `memx_spec_v3/docs/EVALUATION.md` 誤参照の検出。
+```bash
+rg -n "memx_spec_v3/docs/EVALUATION\.md" TASK.*.md orchestration/*.md memx_spec_v3/docs/design-*.md
+```
+2. `path#section` 未指定参照の検出（`Source:`/`Dependencies:` 行）。
+```bash
+rg -n "^(Source|Dependencies):\s+[^#\s]+$" TASK.*.md orchestration/*.md memx_spec_v3/docs/design-*.md
+```
+3. テンプレート ID (`IN-YYYYMMDD-001`) 混入の検出。
+```bash
+rg -n "IN-YYYYMMDD-001" TASK.*.md orchestration/*.md memx_spec_v3/docs/design-*.md
+```
+4. `contracts.md` 表記ゆれ（未解決）の検出。
+```bash
+rg -n "memx_spec_v3/docs/contracts\.md|\bcontracts\.md\b" TASK.*.md orchestration/*.md memx_spec_v3/docs/design-*.md
+```
+5. Birdseye 側（node/caps）は別責務として実行。
+```bash
+python workflow-cookbook/tools/codemap/update.py --targets docs/birdseye/index.json,docs/birdseye/caps --emit index+caps
+```
+
+各コマンドの出力が 0 件であることを pass 条件とし、1 件でも検出した場合は設計書作成着手を停止する。
+
 
 ## Birdseye 鮮度不足時の復旧手順
 `docs/birdseye/index.json.generated_at` が判定時刻から7日を超える場合は、以下を順に実行する。
