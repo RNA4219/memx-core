@@ -160,6 +160,7 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 
 - [ ] `memx_spec_v3/docs/contracts/reports/` 配下に `CONTRACT-ALIGN-YYYYMMDD-###.md` と `LATEST.md` が存在することを確認した
 - [ ] `memx_spec_v3/docs/EVALUATION.md` のレポートIDと、`memx_spec_v3/docs/contracts/reports/LATEST.md` の `report_id` が一致することを確認した
+- [ ] `memx_spec_v3/docs/contracts/reports/LATEST.md` の必須キー（`report_id/report_path/decision_date/high_count/phase3_status`）が最新レポートと整合していることを確認した
 
 ### 起票時タスク化提案（競合回避のため分離）
 - 提案1: 「Trigger 判定のみ」を行う 0.5d Task Seed を先行起票し、該当 Trigger IDs と必須更新先を固定する。
