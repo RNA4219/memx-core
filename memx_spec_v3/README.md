@@ -4,6 +4,9 @@
 
 ## 構成
 
+## 設計書作成開始入口（IA）
+- 設計着手時の単一入口: [docs/design-doc-ia-spec.md](./docs/design-doc-ia-spec.md)
+
 正本は `docs/spec.md` の役割分担に従って参照してください。
 
 - `docs/spec.md`

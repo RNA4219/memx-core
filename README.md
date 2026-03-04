@@ -4,6 +4,9 @@ Local-first personal memory & knowledge store for LLM agents.
 
 `memx` は、ローカルLLM／エージェント向けの 4 ストア構成（short / chronicle / memopedia / archive）のメモリ基盤です。
 
+## 設計書作成開始入口（IA）
+- 参照入口（責務境界・更新優先順位・Trigger別必須更新先）: [memx_spec_v3/docs/design-doc-ia-spec.md](./memx_spec_v3/docs/design-doc-ia-spec.md)
+
 ## 正本ドキュメント（memx_spec_v3/docs）
 - 参照起点・役割分担（正本/補助）: [memx_spec_v3/docs/spec.md](./memx_spec_v3/docs/spec.md)
 - 要求事項の正本（MUST/SHOULD/FUTURE, ID 定義）: [memx_spec_v3/docs/requirements.md](./memx_spec_v3/docs/requirements.md)

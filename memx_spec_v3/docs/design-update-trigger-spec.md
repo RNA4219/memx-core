@@ -21,6 +21,21 @@
 | TRG-RUNBOOK | 条件付き（設計前提変更時） | 条件付き（I/F記述へ波及時） | 条件付き（REQ対応の証跡更新時） | 条件付き（運用評価軸変更時） | 必須 | 必須 |
 | TRG-IN-PREVENTIVE | 条件付き（恒久対策が設計変更を伴う時） | 条件付き（契約変更を伴う時） | 必須 | 必須 | 必須 | 必須 |
 
+## IA仕様との対応
+- IA の責務境界・文書区分・更新優先順位は [design-doc-ia-spec.md](./design-doc-ia-spec.md) を参照する。
+- 本書は Trigger 判定と Done 遷移条件の正本、`design-doc-ia-spec.md` は文書責務境界の正本として相互参照する。
+
+## 必須更新先マトリクス（IA連携）
+凡例: `必須` / `条件付き` / `不要`
+
+| Trigger | requirements | design | interfaces | traceability | CONTRACTS (machine-readable) | error-contract | operations | design-doc-ia-spec |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TRG-REQ | 必須 | 必須 | 条件付き | 必須 | 条件付き | 条件付き | 条件付き | 必須 |
+| TRG-OAS | 条件付き | 条件付き | 必須 | 必須 | 必須 | 必須 | 条件付き | 必須 |
+| TRG-CLI-SCHEMA | 条件付き | 条件付き | 必須 | 必須 | 必須 | 条件付き | 条件付き | 必須 |
+| TRG-RUNBOOK | 条件付き | 条件付き | 条件付き | 条件付き | 不要 | 条件付き | 必須 | 必須 |
+| TRG-IN-PREVENTIVE | 条件付き | 条件付き | 条件付き | 必須 | 条件付き | 必須 | 必須 | 必須 |
+
 ## CHANGELOG / CHANGES 反映要否判定
 
 ### 判定ルール
