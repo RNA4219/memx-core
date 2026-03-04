@@ -78,11 +78,12 @@ status: planned
 - [ ] `EVALUATION.md` の評価項目リンクが最新章へ到達するか確認する（Task Seed 1件、<=0.5d）
 - [ ] Birdseye 検証 issue（node_id 参照切れを含む）を `docs/birdseye/memx-birdseye-validation-spec.md` に従って修正する（Task Seed 1件、<=0.5d）
 - [ ] 章間リンクの相対パス/アンカー健全性を確認する（Task Seed 1件、<=0.5d）
+- [ ] Phase 3 Done Criteria 判定時に `memx_spec_v3/docs/link-integrity-spec.md` を参照する運用タスクを登録し、章別 Task Seed へ反映する（Task Seed 1件、<=0.5d）
 
 ### Done Criteria
 - 仕様整合チェックを満たす（要件ID網羅率 100%）
 - 仕様整合チェックを満たす（契約同期: `memx_spec_v3/docs/contract-alignment-spec.md` に基づく判定で high=0 件）
-- 仕様整合チェックを満たす（リンク健全性: 章内/章間/運用リンクの不達 0 件）
+- 仕様整合チェックを満たす（リンク健全性: `memx_spec_v3/docs/link-integrity-spec.md` に基づき、章内/章間/運用リンクの不達 0 件）
 - 仕様整合チェック結果を各章 Task Seed の `Requirements` と `Commands` に反映済みである
 
 ## Phase 4: 受け入れレビュー
