@@ -43,6 +43,7 @@
 ## 6. 最終判定
 - 判定: `pass`
 - 参照元固定: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-003.md`（最新 validation 実体）
+- Evidence Index 参照固定: `memx_spec_v3/docs/reviews/DESIGN-GATE-EVIDENCE-INDEX.md` でも `mapping_match_check` は `DESIGN-CHAPTER-VALIDATION-20260304-003.md` を正本参照する。
 
 - `mapping_match_check` 比較ログ:
   - comparison_at: `2026-03-04T09:15:00Z`
