@@ -17,6 +17,7 @@ CLI -> API -> Service(Usecase) -> DB / LLM / Gatekeeper
 - DB/LLM/Gatekeeper: 副作用を持つインフラ層。
 
 ## 2. DB 責務分割
+- ADR: [ADR-0001: 4DB分割と責務境界](../../docs/ADR/ADR-0001-4db-boundary.md)
 - `short.db`: 一次投入先。短期メモ、GC 対象の起点。
 - `chronicle.db`: 時系列ログ（出来事・進捗）。
 - `memopedia.db`: 抽象知識（定義・方針）。
@@ -169,7 +170,19 @@ short 固有:
 | `REQ-ERR-001` | [requirements.md#6-4-エラーモデル](./requirements.md#6-4-エラーモデル) |
 | `REQ-SEC-001` | [requirements.md#2-7-security--retention-requirements](./requirements.md#2-7-security--retention-requirements) |
 
-## 5. 設計→契約→検証 導線（要件ID単位）
+## 5. ADR参照運用ルール
+
+- 本書で設計判断を追加/変更する場合は、該当節に ADR リンクを追記する。
+- ADR 未作成で判断を固定しない。最小でも `Context / Decision / Consequences / Status / Date` を満たす ADR を先に作成する。
+- 本書の該当節リンクと `requirements.md` の対応節リンクは同一PRで更新する。
+- v1必須3エンドポイント関連は  
+  [ADR-0002](../../docs/ADR/ADR-0002-v1-required-endpoints.md) を参照する。
+- ErrorCode / retryable 境界は  
+  [ADR-0003](../../docs/ADR/ADR-0003-errorcode-retryable-boundary.md) を参照する。
+
+---
+
+## 6. 設計→契約→検証 導線（要件ID単位）
 
 | Requirement ID | Design Section | Interface ID | Evaluation項目 |
 | --- | --- | --- | --- |
@@ -182,22 +195,28 @@ short 固有:
 | [`REQ-NFR-002`](./requirements.md#5-2-可用性復旧整合性回復運用nfr) | 5.1 | 運用復旧フロー | RTO/RPO 同時成立 |
 | [`REQ-NFR-005`](./requirements.md#5-3-整合性回復要件archive-補償フロー) | 5.1 | short→archive 補償 | 30分以内収束または IN 起票 |
 
-## 5.1 NFR設計（性能/復旧/整合性回復）
+---
+
+## 6.1 NFR設計（性能 / 復旧 / 整合性回復）
 
 | Requirement ID | 判定入力（ログ/成果物） | 判定方法 |
 | --- | --- | --- |
 | [`REQ-NFR-001`](./requirements.md#5-1-性能目標v1必須3エンドポイント) | `RUNBOOK.md` の trace 実行ログ、性能計測結果（p95） | ingest/search/show の 3 エンドポイントのみ対象に閾値比較 |
 | [`REQ-NFR-002`](./requirements.md#5-2-可用性復旧整合性回復運用nfr) | インシデント記録（`docs/IN-*.md`）、運用タイムライン | `rto_minutes <= 30` かつ `rpo_minutes <= 5` を同時充足 |
-| [`REQ-NFR-003`](./requirements.md#5-2-可用性復旧整合性回復運用nfr) | 検知時刻/暫定復旧時刻ログ | 検知〜暫定復旧が 15 分以内 |
+| [`REQ-NFR-003`](./requirements.md#5-2-可用性復旧整合性回復運用nfr) | 検知時刻 / 暫定復旧時刻ログ | 検知〜暫定復旧が 15 分以内 |
 | [`REQ-NFR-004`](./requirements.md#5-2-可用性復旧整合性回復運用nfr) | 再試行履歴、ジョブログ | 1 リクエストあたり再処理 2 回以内 |
 | [`REQ-NFR-005`](./requirements.md#5-3-整合性回復要件archive-補償フロー) | 補償フロー実行ログ、`docs/IN-*.md` 起票有無 | 30分以内収束、未収束時は IN 起票 |
 
+---
+
 ### Source
+
 - `memx_spec_v3/docs/requirements.md#5-1-性能目標v1必須3エンドポイント`
 - `memx_spec_v3/docs/requirements.md#5-2-可用性復旧整合性回復運用nfr`
 - `memx_spec_v3/docs/requirements.md#5-3-整合性回復要件archive-補償フロー`
 
 ### Dependencies
+
 - `RUNBOOK.md`
 - `EVALUATION.md`
 - `docs/IN-*.md`
