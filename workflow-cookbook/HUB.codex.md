@@ -116,6 +116,11 @@ plan:
 
 ## 3. 自動タスク分割フロー
 
+0. **Birdseye Readiness Check**:
+   - **`index.json` 検証**: `docs/birdseye/index.json` の存在確認と JSON 妥当性検証を行う。
+   - **`caps` 参照検証**: `index.json.nodes[*].caps` に含まれる参照先ファイルの存在確認を行う。
+   - **鮮度検証**: `index.json.generated_at` と対象ドキュメント更新時刻の鮮度条件を確認し、判定基準は [`GUARDRAILS.md` の「鮮度管理（Staleness Handling）」](GUARDRAILS.md#鮮度管理staleness-handling) を正とする。
+   - **判定値**: 結果は `ready | degraded | blocked` の3値で扱う。`degraded` は既知ノード限定の分割継続、`blocked` は新規分割停止を意味する。
 1. **スキャン**: ルートと `orchestration/` 配下を再帰探索し、Markdown front matter
    (`---`) を含むファイルを優先取得。
 2. **Birdseye 専用サブステップ**:
@@ -207,22 +212,26 @@ in_progress → blocked → in_progress（解除後に戻す）
 
 - **ケースA（`index.json` 不在/破損）**
   - 判定: `docs/birdseye/index.json` が読めない、または JSON パース失敗。
+  - Readiness: `blocked`。
   - 処理: **タスク生成を停止**し、新規分割を行わない。
   - ステータス: 全候補を `blocked`。
   - 次アクション: `codemap.update` による `index+caps` 再生成を人間へ依頼（`GUARDRAILS.md` の鮮度管理フローに準拠）。
 - **ケースB（`caps` 部分欠損）**
   - 判定: `index.json` は読めるが、参照先 `docs/birdseye/caps/*.json` の一部が欠損/破損。
+  - Readiness: `degraded`。
   - 処理: **既知ノードのみ限定タスク化**し、欠損ノード依存のタスクは生成しても `blocked` に固定。
   - ステータス: 既知ノード=`planned`/`active` 可、欠損ノード=`blocked`。
   - 次アクション: 欠損 Capsule のみを対象に `codemap.update`（`emit:"caps"`）再生成を依頼。
 - **ケースC（`hot.json` のみ欠損）**
   - 判定: `index.json` と必要 `caps` は利用可能で、`docs/birdseye/hot.json` のみ欠損/破損。
+  - Readiness: `ready`（警告付き）。
   - 処理: **`index`/`caps` ベースで継続処理**し、ホットリスト最適化のみ無効化。
   - ステータス: 通常どおり（警告付き）でタスク生成を継続。
   - 次アクション: 警告を `notes` に残し、次回 Birdseye 再生成時に `hot.json` を復旧。
 
 #### `notes` 必須記録項目（Birdseye欠損時）
 
+- `readiness_status`: `ready` / `degraded` / `blocked` のいずれか（必須）。
 - `missing_files`: 欠損/破損ファイルの相対パス（例: `docs/birdseye/index.json`）。
 - `impacted_node_ids`: 影響を受けたノードID一覧（不明な場合は `unknown` を明記）。
 - `provisional_decision`: 暫定判断（停止 / 限定継続 / 警告付き継続）と理由。
