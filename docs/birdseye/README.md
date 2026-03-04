@@ -68,3 +68,8 @@
 - 更新責任者: memx-core（変更PRの作成者が更新を実施）
 - 更新トリガ: PR 作成前（必須）
 - 更新トリガ: 週次定期メンテナンス（少なくとも週1回）
+
+
+## 復旧手順の参照先
+- 正本参照: `./workflow-cookbook/tools/codemap/README.md`
+- 別名パス: `tools/codemap/README.md`（注記扱い）

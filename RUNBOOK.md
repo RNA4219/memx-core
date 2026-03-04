@@ -388,7 +388,7 @@ python workflow-cookbook/tools/codemap/update.py --targets docs/birdseye/index.j
 
 
 ## Birdseye 鮮度不足時の復旧手順
-`docs/birdseye/index.json.generated_at` が判定時刻から7日を超える場合に実施する。詳細は `workflow-cookbook/tools/codemap/README.md`（`tools/codemap/README.md`）の「Birdseyeアクセス異常時の復旧手順」を正本とし、ここでは実行順のみ示す。
+`docs/birdseye/index.json.generated_at` が判定時刻から7日を超える場合に実施する。詳細は `./workflow-cookbook/tools/codemap/README.md`（別名パス `tools/codemap/README.md` は注記扱い）の「Birdseyeアクセス異常時の復旧手順」を正本とし、ここでは canonical path `workflow-cookbook/tools/codemap/update.py` の実行順のみ示す。
 
 運用モード（HUB と同一語彙）:
 - 現行運用（既定）: `docs/birdseye/hot.json` は `optional`（未運用）。再生成対象に含めない。
