@@ -6,7 +6,7 @@
 - 判定値: `100%` | 根拠ファイル: `memx_spec_v3/docs/reviews/DESIGN-ACCEPTANCE-20260304.md` | 根拠箇所（見出し名）: `## 2. REQ網羅率`
 
 ## mapping_match_check
-- 判定値: `pass`（全章） | 根拠ファイル: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-002.md` | 根拠箇所（見出し名）: `## mapping_match_check 判定ログ`
+- 判定値: `pass`（全章） | 根拠ファイル: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304-003.md` | 根拠箇所（見出し名）: `## mapping_match_check 判定ログ`
 
 ## contract_align_report
 - 判定値: `high_count=0, phase3_status=done` | 根拠ファイル: `memx_spec_v3/docs/contracts/reports/LATEST.md` | 根拠箇所（見出し名）: `先頭キー（report_id/report_path/decision_date/high_count/phase3_status）`
