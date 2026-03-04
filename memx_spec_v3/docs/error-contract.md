@@ -58,8 +58,8 @@
 | v1必須保証 | `INTERNAL` | `500 Internal Server Error` | MUST | 未分類エラーのフォールバック。 |
 | v1.x拡張（feature/sentinel依存） | `CONFLICT` | `409 Conflict` | SHOULD | service sentinel（例: `ErrConflict`）+ `mapError` 明示マップ時のみ返却。未実装時は `INTERNAL` へフォールバック。 |
 | v1.x拡張（feature/sentinel依存） | `GATEKEEP_DENY` | `403 Forbidden` | SHOULD | gatekeeper deny sentinel（例: `ErrGatekeepDeny`）+ `mapError` 明示マップ時のみ返却。未実装時は `INTERNAL` へフォールバック。 |
-| v1.x拡張（feature flag依存） | `FEATURE_DISABLED` | `409 Conflict` | SHOULD | feature flag 無効時に返却（例: `gc_short` 無効）。 |
-| v1.x運用解釈（`/v1/gc:run`） | `NOT_FOUND` / `INTERNAL` | `404` / `500` | SHOULD | route 非公開時は `NOT_FOUND`、route 公開かつ flag OFF の現行実装は `INTERNAL`（FAILED_PRECONDITION 相当の暫定フォールバック）として扱う。 |
+| v1.x拡張（feature flag依存） | `FEATURE_DISABLED` | `409 Conflict` | SHOULD | feature flag 無効時に返却（将来移行候補）。v1 正本契約では未採用。 |
+| v1.x運用解釈（`/v1/gc:run`） | `NOT_FOUND` / `INTERNAL` | `404` / `500` | SHOULD | route 非公開時は `NOT_FOUND`、route 公開かつ flag OFF（`mem.features.gc_short=false`）は `INTERNAL` を正本契約として固定。 |
 
 
 ## 現行実装との差分注記
@@ -79,10 +79,10 @@
 - route 公開かつ flag OFF（`mem.features.gc_short=false`）
   - HTTP status: `500 Internal Server Error`
   - body: 標準 `INTERNAL` エラー
-  - 解釈: `FAILED_PRECONDITION` 相当の「実行前提未充足」を、現行 API 実装の都合で `INTERNAL` にフォールバックしている状態
+  - 解釈: `FAILED_PRECONDITION` 相当の「実行前提未充足」を v1 正本契約として `INTERNAL` に固定
 
 ## 実装整合メモ（`go/api/http_server.go`）
 
 - `writeErr` は `INVALID_ARGUMENT=400` / `NOT_FOUND=404` / `CONFLICT=409` / `GATEKEEP_DENY=403` / その他 `500` を返す。
-- `FEATURE_DISABLED` は現行 `ErrorCode` に未定義のため、flag OFF を専用コードで返さない。
-- したがって `/v1/gc:run` の flag OFF は、上流が専用 sentinel を返さない限り `INTERNAL=500` と解釈する。
+- `FEATURE_DISABLED` は将来移行候補として定義されるが、v1 正本では `/v1/gc:run` の flag OFF 専用コードとして採用しない。
+- したがって `/v1/gc:run` の flag OFF は `INTERNAL=500` を正本契約として扱う。

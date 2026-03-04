@@ -103,7 +103,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
         '500':
-          description: Flag disabled fallback or internal error.
+          description: Feature disabled fallback (`mem.features.gc_short=false`) or internal error.
           x-requirement-id: REQ-ERR-001
           content:
             application/json:
@@ -116,7 +116,7 @@ paths:
                         const: INTERNAL
                     description: |
                       When /v1/gc:run is published but mem.features.gc_short is OFF,
-                      current implementation returns INTERNAL (FAILED_PRECONDITION-equivalent fallback).
+                      return INTERNAL as the canonical v1 fallback (FAILED_PRECONDITION-equivalent).
 components:
   responses:
     InvalidArgumentError:

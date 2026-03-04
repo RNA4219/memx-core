@@ -163,6 +163,12 @@ next_review_due: 2026-06-03
 - エラーコード区分・運用差分は `error-contract.md` を正本運用要約として参照。
 - API 契約正本は `docs/contracts/openapi.yaml`。
 
+
+### 4.3 GC route 無効時契約（`POST /v1/gc:run`）
+- route 非公開時は `NOT_FOUND` / `404`。
+- route 公開かつ `mem.features.gc_short=false` 時は `INTERNAL` / `500`（v1 正本契約の固定値）。
+- `FEATURE_DISABLED` / `409` は将来移行候補であり、v1 では採用しない。
+
 ## 5. 契約変更手順（更新順序固定）
 1. `memx_spec_v3/docs/requirements.md` を更新する。
 2. 正本スキーマ（`memx_spec_v3/docs/contracts/openapi.yaml` / `memx_spec_v3/docs/contracts/cli-json.schema.json`）を更新する。

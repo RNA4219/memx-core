@@ -27,7 +27,7 @@ status: planned
 - 境界値: trigger 閾値ちょうど一致時に実行/非実行判定が仕様通りであることを検証する。
 - 副作用有無: dry-run 実行時は DB 更新/削除が発生せず、実行モード時のみ副作用が発生することを検証する。
 - JSON 互換: 既存 CLI/JSON 契約を維持し、キー名・型の後方互換を確認する。
-- 無効時レスポンス固定依存: `mem.features.gc_short=false` 時の `POST /v1/gc:run` は全環境で `HTTP 409` + `{"code":"FEATURE_DISABLED","message":"gc_short feature is disabled"}` を返す契約に従う。
+- 無効時レスポンス固定依存: `mem.features.gc_short=false` かつ route 公開時の `POST /v1/gc:run` は `HTTP 500` + `INTERNAL` エラー（FAILED_PRECONDITION 相当フォールバック）を返す正本契約に従う。
 
 ## Commands
 - `go test ./memx_spec_v3/go/db -run GC -count=1`

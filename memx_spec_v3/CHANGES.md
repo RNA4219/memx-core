@@ -2,6 +2,9 @@
 
 ## v3 (requirements v1.3)
 
+
+- [#incident:IN-20260303-001][#sev:SEV2][#action:mitigation] `POST /v1/gc:run` の flag OFF 契約を v1 正本に合わせて `INTERNAL/500` フォールバック継続へ統一（[記録](docs/IN-20260303-001.md)）。
+- 移行条件: `service.ErrFeatureDisabled` 実装と `go/api/errors.go` の `FEATURE_DISABLED -> 409` 明示マッピングが同一リリースで有効化された時点で 409 へ移行する。
 - CLI と API を分離：CLI は API の薄いラッパ。
 - API（HTTP + in-proc）を追加：`/v1/notes:ingest`, `/v1/notes:search`, `/v1/notes/{id}` など。
 - Service(usecase) 層を追加：短期ストアの ingest/search/get を最小実装。
