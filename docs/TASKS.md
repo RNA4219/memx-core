@@ -60,6 +60,7 @@
 - 必須例として記載するのは、リポジトリ内で実在し運用対象のコマンドのみとする。
   - lint/type/test の基準は `docs/QUALITY_GATES.md` に従う。
   - 現行の必須最小構成は `go test ./...`（Go）で、Python/Node は対象外として扱う。
+  - 仕様書作成・更新タスクでも同じ判定基準（`docs/QUALITY_GATES.md`）を `Commands` に記載し、Task 起票時の誤記載を防止する。
 
 ### Dependencies
 - 前提タスク、依存PR、外部条件を列挙する。
