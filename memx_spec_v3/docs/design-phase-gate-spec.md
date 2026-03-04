@@ -4,7 +4,7 @@
 - 本書は、Design Docs オーサリングの **Phase 1〜4 の gate 判定正本** である。
 - 各 Phase の gate 判定は、本書で定義する entry/exit criteria・fail 条件・遷移条件に従う。
 - `orchestration/memx-design-docs-authoring.md` は実施手順の正本とし、判定ロジックを重複定義しない。
-- 優先度評価の4軸（Blocker / REQ網羅率 / 契約差分 high 件数 / Birdseye issue）に `HUB入力カバレッジ` を加えた5列を、各 gate の判定列として必須入力とする（`docs/design-docs-prioritization-spec.md` 準拠）。
+- 優先度評価の4軸（Blocker / REQ網羅率 / 契約差分 high 件数 / Birdseye issue）に `HUB入力カバレッジ` を加えた5列を、各 gate の正式判定列として固定する（`docs/design-docs-prioritization-spec.md`・`memx_spec_v3/docs/design-hub-source-coverage-spec.md` 準拠）。
 
 ## 2. Gate 判定列（全Phase共通）
 
@@ -14,13 +14,11 @@
 | `gate_req_coverage` | `high/medium/low` | REQ網羅率100%未達確定なら `high`、低下可能性なら `medium`、影響なしは `low` |
 | `gate_contract_high` | `high/medium/low` | 契約差分 `high` が1件以上なら `high`、`medium/low` 差分のみは `medium`、差分なしは `low` |
 | `gate_birdseye_issue` | `high/medium/low` | node_id参照切れ/caps欠落は `high`、軽微issueは `medium`、issueなしは `low` |
-| `gate_hub_source_coverage` | `high/medium/low` | HUB必須入力（検索キー/対象パス）で Incident または Orchestration の欠落があれば `high`、欠落はあるが Incident/Orchestration 欠落はない場合は `medium`、欠落なしは `low` |
+| `gate_hub_source_coverage` | `high/medium/low` | `memx_spec_v3/docs/design-hub-source-coverage-spec.md` の判定キー別 pass/warn/fail と写像規則を適用する正式列 |
 
-### 2.1 HUB入力カバレッジ判定の固定ルール
-- `gate_hub_source_coverage` の判定根拠は以下の検索キー・対象パスに固定する。
-  - 検索キー: `Incident`, `Orchestration`, `TASK`
-  - 対象パス: `docs/IN-*.md`, `orchestration/*.md`, `TASK.*`
-- 判定時は上記3系統をすべて確認し、レビュー時に別解釈（任意キーワード/任意パス追加）を持ち込まない。
+### 2.1 HUB入力カバレッジ判定仕様
+- `gate_hub_source_coverage` の判定ロジックは `memx_spec_v3/docs/design-hub-source-coverage-spec.md` を唯一の正本として適用する。
+- 検索キー・対象パス・証跡要件・`high/medium/low` 写像は同仕様に従い、個別文書で重複定義しない。
 
 ### 2.2 総合判定ルール
 1. 5列のいずれかが `high` の場合は gate `fail`。

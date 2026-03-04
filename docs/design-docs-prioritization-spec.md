@@ -10,7 +10,7 @@
 
 ## 2. 評価軸定義
 
-HUB入力カバレッジ判定の根拠は、検索キー `Incident` / `Orchestration` / `TASK` と対象パス `docs/IN-*.md` / `orchestration/*.md` / `TASK.*` に固定する。
+HUB入力カバレッジ判定は `memx_spec_v3/docs/design-hub-source-coverage-spec.md` を正本として参照する。
 
 | 評価軸 | 判定条件 | high | medium | low |
 | --- | --- | --- | --- | --- |
@@ -28,12 +28,10 @@ HUB入力カバレッジ判定の根拠は、検索キー `Incident` / `Orchestr
 2. 上記に該当せず、4軸のうち1つ以上が medium の場合、`priority: medium`。
 3. 4軸すべてが low の場合のみ、`priority: low`。
 
-4. HUB入力漏れ（上記固定キー/固定パスでの未充足）がある場合、4軸評価への影響として優先度を引き上げる。
-   - HUB入力漏れがある場合の最低優先度は `medium`。
-   - `Incident` または `Orchestration` の漏れを含む場合は `priority: high`。
+4. HUB入力カバレッジの判定結果は `memx_spec_v3/docs/design-hub-source-coverage-spec.md` の写像規則を優先適用し、`gate_hub_source_coverage` と矛盾しないように `priority` を補正する。
 
 ## 4. 運用手順
-1. Task Seed 起票時に4軸を判定し、`Requirements` か `Dependencies` に根拠を1行ずつ残す（加えて固定キー/固定パスで HUB入力漏れ有無を確認する）。
+1. Task Seed 起票時に4軸を判定し、`Requirements` か `Dependencies` に根拠を1行ずつ残す（HUB入力カバレッジは `memx_spec_v3/docs/design-hub-source-coverage-spec.md` に従って別途記録する）。
 2. `priority` は本仕様のルールで決定し、`docs/TASKS.md` の書式に従って記載する。
 3. Phase完了判定（orchestration）ごとに再評価し、軸が変化した場合は `priority` を更新する。
 4. `status: blocked` へ遷移した Task は、再開時に4軸を再判定してから `planned/active` へ戻す。
@@ -55,4 +53,4 @@ HUB入力カバレッジ判定の根拠は、検索キー `Incident` / `Orchestr
 - 各列の値は `high/medium/low` の3値のみ許可する。
 - gate の総合判定は「high が1つでもあれば fail、high なしで medium があれば hold、全列 low のみ pass」とする。
 - Task Seed の `priority` は gate 判定列の値を流用して再計算し、Phase 境界で差分が出た場合は更新する。
-- HUB入力漏れが検出された場合は本書 3.4 を優先して適用し、最低 `medium`（Incident/Orchestration漏れは `high`）へ補正する。
+- HUB入力カバレッジ補正は `memx_spec_v3/docs/design-hub-source-coverage-spec.md` の写像規則を適用する。
