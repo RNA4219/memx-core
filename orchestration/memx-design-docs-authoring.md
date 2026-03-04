@@ -89,6 +89,7 @@ status: planned
 - `docs/birdseye/index.json`
 
 - [ ] 章ごとに `Release Note Draft`（1〜3行）を作成する（Task Seed 1件/章、<=0.5d）
+- [ ] レビュー記録は [テンプレート](../memx_spec_v3/docs/reviews/TEMPLATE.md) から作成し、[保存先ルール](../memx_spec_v3/docs/reviews/README.md) に従って `memx_spec_v3/docs/reviews/` へ保存する（Task Seed 1件、<=0.5d）
 - [ ] 章ごとにレビューコメントを反映し再チェックする（Task Seed 1件/章、<=0.5d）
 - [ ] 仕様整合チェック結果（要件ID網羅率/契約同期/リンク健全性）をレビュー記録に添付する（Task Seed 1件、<=0.5d）
 - [ ] `Status` を `reviewing` から `done` へ更新する条件を確認する（Task Seed 1件、<=0.5d）
