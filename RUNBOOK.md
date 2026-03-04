@@ -411,6 +411,7 @@ python workflow-cookbook/tools/codemap/update.py --targets docs/birdseye/index.j
 3. breach 発生時は `governance/metrics.yaml` の `action_on_breach` に従ってインシデントを起票する。
 
 ## リリース前確認（Release Drafter）
-1. マージ済み PR に `feature` / `fix` / `chore` / `breaking` ラベルが正しく付与されていることを確認する。
-2. GitHub の Releases 画面で Draft Release を開き、カテゴリ分類（Features/Fixes/Chores/Breaking Changes）とタイトルを確認する。
-3. 誤分類や欠落がある場合は PR ラベルを修正し、Release Drafter の再実行でドラフトを更新する。
+1. `git ls-files -- memx_spec_v3/go/go.mod memx_spec_v3/go/go.sum` を実行し、`memx_spec_v3/go/go.mod` と `memx_spec_v3/go/go.sum` の追跡状態を確認する。
+2. マージ済み PR に `feature` / `fix` / `chore` / `breaking` ラベルが正しく付与されていることを確認する。
+3. GitHub の Releases 画面で Draft Release を開き、カテゴリ分類（Features/Fixes/Chores/Breaking Changes）とタイトルを確認する。
+4. 誤分類や欠落がある場合は PR ラベルを修正し、Release Drafter の再実行でドラフトを更新する。

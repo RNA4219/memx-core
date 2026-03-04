@@ -215,8 +215,13 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 - 提案1: 「Trigger 判定のみ」を行う 0.5d Task Seed を先行起票し、該当 Trigger IDs と必須更新先を固定する。
 - 提案2: 「文書反映 + レビュー記録 + CHANGES 転記」を行う後続 Task Seed を分離し、`done` 条件を満たした時点で統合する。
 
+## 2-2. 共通チェックリスト
 
-## 2-2. 変更タイプ別チェックリスト（requirements 0-0-4 整合）
+- [ ] `memx_spec_v3/go/go.mod` を変更した場合は、`memx_spec_v3/go/go.sum` を同一コミットで同時更新している
+- [ ] 差分に `memx_spec_v3/go/go.mod` または `memx_spec_v3/go/go.sum` が含まれる場合、`git diff --name-only` で両方が差分に含まれていることを確認している
+
+
+## 2-3. 変更タイプ別チェックリスト（requirements 0-0-4 整合）
 
 ### 互換維持変更
 - [ ] `Requirements` に後方互換維持（CLI/API/`--json` 同型）を明記する
