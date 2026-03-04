@@ -165,13 +165,12 @@ status: planned
   - 必須項目: 対象章 / 関連 REQ-ID / Node IDs / 指摘一覧（重大度付き） / 再確認結果 / 判定（pass/fail/waiver）
   - 判定根拠: `docs/birdseye/caps/EVALUATION.md.json` pass/fail ルール参照を必須化
   - 完了条件: `docs/TASKS.md` の `Release Note Draft` / `Status` / `Moved-to-CHANGES` を確認済み
-- 統合受け入れレポートが `memx_spec_v3/docs/design-acceptance-report-spec.md` に準拠している
-  - 保存先: `memx_spec_v3/docs/reviews/`
-  - 命名: 実体記録は `DESIGN-ACCEPTANCE-<実日付>.md`（`DESIGN-ACCEPTANCE-YYYYMMDD.md` はテンプレート専用）
-  - 運用: リリース判定ごとに `DESIGN-ACCEPTANCE-<実日付>.md` を新規作成し、テンプレート専用ファイルの直接利用を禁止する
-  - 必須項目: 対象章 / REQ網羅率 / high差分件数 / リンク不達件数 / Birdseye issue件数 / 最終判定
-  - 追加必須チェック: `evidence_paths` が実在ファイルのみを指すこと
-  - 判定規則: `high>0` または `REQ網羅率<100%` または `リンク不達件数>0` または `Birdseye issue件数>0` で fail
+- 統合受け入れレポートが `memx_spec_v3/docs/design-acceptance-report-spec.md` と `memx_spec_v3/docs/design-acceptance-lifecycle-spec.md` に準拠している
+  - DA-LC-01: テンプレートと実体ファイルの責務分離
+  - DA-LC-02: 実体ファイルの新規作成（上書き・テンプレート流用禁止）
+  - DA-LC-03: 実体命名規則 `DESIGN-ACCEPTANCE-<実日付>.md`
+  - DA-LC-04: 作成タイミング（Phase 4 entry / 再レビュー / 最終判定）
+  - DA-LC-05: 差戻し条件（必須6項目欠落 / `evidence_paths` 不整合 / gate列 `high`）
 - 章別検証サマリ（`memx_spec_v3/docs/design-chapter-validation-spec.md`）が作成済みで、レビュー記録・受け入れレポートの参照を添付済みである（参照: `memx_spec_v3/docs/reviews/DESIGN-CHAPTER-VALIDATION-20260304.md`）
 - `lint/type/test` ではなく、仕様整合チェック（要件ID網羅率・契約同期・リンク健全性）で受け入れ判定する運用が明文化されている
 - Phase 1〜4 のチェックボックスがすべて完了している

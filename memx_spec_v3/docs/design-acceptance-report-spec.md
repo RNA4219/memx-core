@@ -59,5 +59,6 @@
 - 上記いずれにも該当しない場合のみ `pass`
 
 ## 5. 保存場所・命名規則・テンプレート
-- `DESIGN-ACCEPTANCE-YYYYMMDD.md` の保存場所・命名規則・テンプレート本文は `memx_spec_v3/docs/design-evidence-template-spec.md` を参照する。
-- リリース判定時は必ず `DESIGN-ACCEPTANCE-<実日付>.md` を `memx_spec_v3/docs/reviews/` 配下に新規作成し、テンプレート専用ファイル（`DESIGN-ACCEPTANCE-YYYYMMDD.md`）の直接利用・改名運用を禁止する。
+- 保存場所・命名規則・作成タイミング・差戻し条件は `memx_spec_v3/docs/design-acceptance-lifecycle-spec.md` を正本とする。
+- テンプレート本文（章構成・必須キー）は `memx_spec_v3/docs/design-evidence-template-spec.md` を参照する。
+- 本仕様では受け入れレポートのライフサイクル運用を重複定義せず、`memx_spec_v3/docs/design-acceptance-lifecycle-spec.md` のチェックID（DA-LC-01〜05）へ参照集約する。

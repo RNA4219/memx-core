@@ -161,7 +161,17 @@ CLI/API の既存必須フィールド削除、型変更、意味変更、既存
 - [ ] `memx_spec_v3/docs/contracts/reports/` 配下に `CONTRACT-ALIGN-YYYYMMDD-###.md` と `LATEST.md` が存在することを確認した
 - [ ] `memx_spec_v3/docs/EVALUATION.md` のレポートIDと、`memx_spec_v3/docs/contracts/reports/LATEST.md` の `report_id` が一致することを確認した
 
+## 2-1-4. 受け入れレポート定型チェック（必須）
+
+- [ ] 作成済みチェック: `memx_spec_v3/docs/reviews/DESIGN-ACCEPTANCE-<実日付>.md` が存在する
+- [ ] 命名正当性チェック: 実体ファイル名が `DESIGN-ACCEPTANCE-<実日付>.md` に一致する（テンプレート `DESIGN-ACCEPTANCE-YYYYMMDD.md` を実体として利用していない）
+- [ ] 最終判定一致チェック: 受け入れレポートの最終判定が `memx_spec_v3/docs/design-doc-dod-spec.md` の判定結果と一致する
+
 ### 起票時タスク化提案（競合回避のため分離）
+- 提案1: 「受け入れレポート作成/命名検証」を行う Task Seed を先行起票し、DA-LC-03/04 を固定する。
+- 提案2: 「最終判定一致の照合（DoD照合 + evidence_paths検証）」を行う後続 Task Seed を分離する。
+
+### 起票時タスク化提案（2-1-3: 競合回避のため分離）
 - 提案1: 「Trigger 判定のみ」を行う 0.5d Task Seed を先行起票し、該当 Trigger IDs と必須更新先を固定する。
 - 提案2: 「文書反映 + レビュー記録 + CHANGES 転記」を行う後続 Task Seed を分離し、`done` 条件を満たした時点で統合する。
 
