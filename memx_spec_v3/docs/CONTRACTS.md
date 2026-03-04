@@ -7,7 +7,9 @@ next_review_due: 2026-06-03
 
 # CONTRACTS
 
-API/CLI の機械可読契約（フィールド単位）の正本。
+API/CLI の機械可読契約（フィールド単位）を示す参照文書。
+
+本書は補助文書であり、正本は `spec.md` の「1. 文書の役割分担（正本/補助）」で定義された `contracts/openapi.yaml` と `contracts/cli-json.schema.json` とする。
 
 ## API Contracts
 
