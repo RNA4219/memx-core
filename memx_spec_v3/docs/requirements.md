@@ -61,6 +61,11 @@ priority: high
 | NFR | `REQ-NFR-001`〜`REQ-NFR-006` | 非機能要件 |
 | typed_ref | `FR-008` | typed_ref 正規化（4セグメント canonical） |
 | typed_ref | `AC-006` | typed_ref 一貫性（cross-system 追跡可能） |
+| bundle | `FR-006` | 継続用 bundle 保存（監査項目必須） |
+| state | `FR-007` | 状態遷移明示化（current/history 分離） |
+| audit | `NFR-001` | 再現性（bundle 再現可能） |
+| audit | `NFR-002` | 可監査性（source_refs/generator_version 追跡） |
+| audit | `AC-007` | Bundle 監査性（必須監査項目確認） |
 
 ---
 
@@ -93,3 +98,8 @@ priority: high
 | `REQ-NFR-001` | 性能目標 | [requirements/nfr.md#5-1](./requirements/requirements-nfr.md#5-1-性能目標v1必須3エンドポイント) |
 | `FR-008` | typed_ref 正規化（canonical format） | [requirements/api.md#6-6](./requirements/requirements-api.md#6-6-typed_ref-正規化fr-008) |
 | `AC-006` | typed_ref 一貫性（cross-system） | [requirements/nfr.md#5-5](./requirements/requirements-nfr.md#5-5-typed_ref-一貫性ac-006) |
+| `FR-006` | 継続用 bundle 保存（監査項目） | [requirements/api.md#6-7](./requirements/requirements-api.md#6-7-継続用-bundle-保存fr-006) |
+| `FR-007` | 状態遷移明示化（current/history 分離） | [requirements/api.md#6-8](./requirements/requirements-api.md#6-8-状態遷移明示化fr-007) |
+| `NFR-001` | 再現性（bundle 再現可能） | [requirements/nfr.md#5-6](./requirements/requirements-nfr.md#5-6-再現性可監査性nfr-001--nfr-002) |
+| `NFR-002` | 可監査性（source_refs 追跡） | [requirements/nfr.md#5-6](./requirements/requirements-nfr.md#5-6-再現性可監査性nfr-001--nfr-002) |
+| `AC-007` | Bundle 監査性（必須監査項目確認） | [requirements/nfr.md#5-7](./requirements/requirements-nfr.md#5-7-bundle-監査性ac-007) |

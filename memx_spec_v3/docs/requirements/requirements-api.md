@@ -255,3 +255,70 @@ CLI 出力との互換責任範囲：
 - `domain`, `entity_type`, `provider`, `entity_id` がいずれも空でないこと
 - `domain` は既知 namespace（`memx` / `workx` / `tracker`）のいずれかであること
 - 実在性確認は別責務とする（形式検証とは分離）
+
+### 6-7. 継続用 bundle 保存（FR-006）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-3-context-bundle-の必須監査項目の明確化`
+
+- Requirement ID: `FR-006`
+
+継続用 context bundle は、再開・監査・再現性のために以下の必須項目を持たなければならない。
+
+#### bundle 必須項目
+
+| 項目 | 説明 | 必須 |
+|------|------|------|
+| `purpose` | bundle 生成目的 | 必須 |
+| `rebuild_level` | 再構成レベル（summary/raw/full） | 必須 |
+| `summary` | bundle 内容の要約 | 必須 |
+| `state_snapshot` | 現在状態のスナップショット | 必須 |
+| `decision_digest` | 判断の要約 | 必須 |
+| `open_question_digest` | 未解決質問の要約 | 必須 |
+| `source_refs` | 参照元の typed_ref リスト | 必須 |
+| `raw_included_flag` | raw データ含有フラグ | 必須 |
+| `generator_version` | bundle 生成器のバージョン | 必須 |
+| `generated_at` | 生成タイムスタンプ | 必須 |
+| `diagnostics` | 診断情報 | 必須 |
+
+#### diagnostics 必須項目
+
+| 項目 | 説明 |
+|------|------|
+| `missing_refs` | 解決できなかった ref リスト |
+| `unsupported_refs` | 未対応の ref リスト |
+| `partial_bundle_flag` | 部分的な bundle かどうか |
+| `resolver_warnings` | resolver からの警告 |
+
+### 6-8. 状態遷移明示化（FR-007）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-2-current-dashboard-と-state-history-の分離`
+
+- Requirement ID: `FR-007`
+
+システムは、task の進行状態を以下の 2 層で保持しなければならない。
+
+#### 2 層構造
+
+1. **materialized current state**: 最新状態を示すダッシュボード
+2. **state transition history**: append-only の状態遷移履歴
+
+#### 状態遷移ルール
+
+- 状態変更は暗黙更新ではなく、履歴付き遷移として記録されなければならない
+- `task.status` の変更は専用の状態遷移処理を経由し、直接更新してはならない
+
+#### 状態遷移履歴の必須項目
+
+| 項目 | 説明 |
+|------|------|
+| `from_state` | 遷移元状態 |
+| `to_state` | 遷移先状態 |
+| `reason` | 遷移理由 |
+| `actor` | 遷移実行者 |
+| `related_run_ref` | 関連 run の typed_ref |
+| `changed_at` | 遷移タイムスタンプ |
+
+#### 失敗条件
+
+- current state は復元できるが state history が失われている
+- `task.status` が直接更新され、履歴付き遷移として辿れない

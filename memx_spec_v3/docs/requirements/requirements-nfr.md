@@ -179,3 +179,61 @@ rg -n "memx:[a-z_]+:[a-z]+:" memx_spec_v3/go/ --type go
 #### 関連要件
 
 - `FR-008` typed_ref 正規化（requirements-api.md#6-6-typed_ref-正規化fr-008）
+
+### 5-6. 再現性・可監査性（NFR-001 / NFR-002）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-3-context-bundle-の必須監査項目の明確化`
+
+#### NFR-001 再現性
+
+- Requirement ID: `NFR-001`
+
+同一状態集合と同一 `generator_version` から再構成される bundle は、意味的に再現可能でなければならない。
+
+**判定条件:**
+- 同一入力に対して同一 `generator_version` で生成された bundle は、内容が意味的に等価であること
+- `source_refs` の順序違いは許容するが、欠落・過剰は許容しない
+
+#### NFR-002 可監査性
+
+- Requirement ID: `NFR-002`
+
+bundle 本体だけでなく、bundle 生成時に使用された `source_refs`、`generator_version`、`diagnostics` を後から監査可能でなければならない。
+
+**監査可能項目:**
+- `source_refs`: bundle の参照元を一意に特定可能
+- `generator_version`: 生成時のロジックを追跡可能
+- `diagnostics`: 生成時の警告・欠損を確認可能
+- `generated_at`: 生成時刻を記録
+
+### 5-7. Bundle 監査性（AC-007）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-3-context-bundle-の必須監査項目の明確化`
+
+- Requirement ID: `AC-007`
+
+任意の bundle について、以下の監査項目を確認できること。
+
+#### 必須監査項目
+
+| 項目 | 確認内容 |
+|------|---------|
+| `purpose` | 生成目的 |
+| `source_refs` | 参照元の typed_ref リスト |
+| `raw_included_flag` | raw データ含有有無 |
+| `generator_version` | 生成器バージョン |
+| `diagnostics` | 診断情報（missing/unsupported refs 等） |
+
+#### 検証コマンド
+
+```bash
+# bundle 監査項目の確認
+rg -n "purpose|source_refs|raw_included|generator_version|diagnostics" <bundle-path>
+```
+
+#### 関連要件
+
+- `FR-006` 継続用 bundle 保存（requirements-api.md#6-7）
+- `FR-007` 状態遷移明示化（requirements-api.md#6-8）
+- `NFR-001` 再現性（本節）
+- `NFR-002` 可監査性（本節）
