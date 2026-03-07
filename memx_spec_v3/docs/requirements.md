@@ -65,6 +65,7 @@ priority: high
 | state | `FR-007` | 状態遷移明示化（current/history 分離） |
 | context | `FR-003` | Context Rebuild の外部依存制約（tracker optional） |
 | conflict | `FR-009` | 競合検出（stale state/bundle 検出） |
+| tracker | `FR-010` | Tracker 統合（外部 issue 接続） |
 | audit | `NFR-001` | 再現性（bundle 再現可能） |
 | audit | `NFR-002` | 可監査性（source_refs/generator_version 追跡） |
 | audit | `NFR-004` | 劣化耐性（競合検出優先） |
