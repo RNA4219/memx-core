@@ -8,6 +8,21 @@ next_review_due: 2026-06-03
 
 # RUNBOOK
 
+## KV優先ロードマップ（最重要参照）
+
+**実装・設計変更時は必ず参照すること。**
+
+詳細: [`docs/kv-priority-roadmap/プライオリティ.md`](kv-priority-roadmap/プライオリティ.md)
+
+実施順（厳守）:
+1. **P1**: `kv-cache-independence-amendments.md` — KVキャッシュ独立化
+2. **P2**: `01-typed-ref-unification.md` — typed_ref 統一
+3. **P3**: `02-workx-state-history-and-bundle-audit.md` — WorkX 状態履歴・バンドル監査
+4. **P4**: `03-workx-memx-context-rebuild-resolver.md` — WorkX/MemX コンテキスト再構築リゾルバ
+5. **P5**: `04-tracker-bridge-minimum-integration.md` — Tracker Bridge 最小統合
+
+**警告**: `typed_ref` 統一前に各PJを並行で深く進めるのは危険。順序を崩さないこと。
+
 ## v1 必須運用フロー
 1. **ingest**: `go run ./memx_spec_v3/go/cmd/mem in short`（または `POST /v1/notes:ingest`）で short へ投入。
 2. **search**: `go run ./memx_spec_v3/go/cmd/mem out search`（または `POST /v1/notes:search`）で FTS 検索。
