@@ -237,3 +237,68 @@ rg -n "purpose|source_refs|raw_included|generator_version|diagnostics" <bundle-p
 - `FR-007` 状態遷移明示化（requirements-api.md#6-8）
 - `NFR-001` 再現性（本節）
 - `NFR-002` 可監査性（本節）
+
+### 5-8. 劣化耐性（NFR-004 追記）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-6-stale-state--stale-bundle-への競合制御`
+
+- Requirement ID: `NFR-004`
+
+再開時に古い state や bundle が使われた場合でも、誤更新より競合検出を優先しなければならない。
+
+#### 優先順位
+
+1. **競合検出**: 古いデータに基づく更新を防ぐ
+2. **データ保護**: 意図しない上書きを防ぐ
+3. **再開継続**: 可能な限り再開を支援する（競合解決後）
+
+#### 検証コマンド
+
+```bash
+# 競合検出機構の確認
+rg -n "state_revision|task_version|bundle_generated_at" <state-path>
+```
+
+#### 関連要件
+
+- `FR-009` 競合検出（requirements-api.md#6-10）
+
+### 5-9. 段階的導入整合（AC-008）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-4-memx-core-依存の段階化`
+
+- Requirement ID: `AC-008`
+
+memx-core 依存の導入は段階的に評価してよい。
+
+#### 導入フェーズ
+
+| Phase | 内容 | 必須度 |
+|-------|------|--------|
+| Phase 1 | task 継続に必要な構造状態を外部化 | 必須 |
+| Phase 2 | summary-first で evidence/knowledge/artifact を再構成に利用 | 必須 |
+| Phase 3 | lineage/chronicle/distilled knowledge により根拠追跡を強化 | 推奨 |
+
+#### 受入条件
+
+1. 初期段階では `work state` のみで再開可能であってもよい
+2. 後続段階では summary-first の memory integration を通じて evidence/knowledge/artifact を bundle に取り込めること
+3. 最終的には raw evidence と distilled knowledge の双方へ辿れる構造を持たなければならない
+
+#### 記憶基盤連携原則
+
+- summary-first を原則とする
+- raw データは必要時のみ selected inclusion とする
+- 段階的に機能を導入し、各段階で動作確認を行う
+
+#### 検証コマンド
+
+```bash
+# Phase 2 以降の確認
+rg -n "evidence|knowledge|artifact" <bundle-path>
+```
+
+#### 関連要件
+
+- `FR-003` Context Rebuild の外部依存制約（requirements-api.md#6-9）
+- `FR-006` 継続用 bundle 保存（requirements-api.md#6-7）

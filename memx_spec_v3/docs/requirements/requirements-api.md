@@ -322,3 +322,59 @@ CLI 出力との互換責任範囲：
 
 - current state は復元できるが state history が失われている
 - `task.status` が直接更新され、履歴付き遷移として辿れない
+
+### 6-9. Context Rebuild の外部依存制約（FR-003）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-5-tracker-情報は-optional-input-であり必須依存ではないことの明記`
+
+- Requirement ID: `FR-003`
+
+tracker issue snapshot や外部 issue 情報は optional input として利用してよいが、task 再開の必須条件としてはならない。
+
+#### 許可される依存
+
+| 入力 | 必須/任意 | 備考 |
+|------|----------|------|
+| 内部状態（task/state/decision） | 必須 | KV Cache Independence の核心 |
+| memx-core（evidence/knowledge/artifact） | 必須（段階的導入） | Phase 2 以降で完全必須化 |
+| tracker issue snapshot | 任意 | 利用可能だが欠けても再開可能 |
+| 外部 issue 情報 | 任意 | 同期されていなくても継続可能 |
+
+#### 失敗条件
+
+- 外部 tracker 情報がないと task を再開できない
+- 外部 issue snapshot が欠けると current state を復元できない
+
+#### 非対象
+
+外部 tracker を内部作業状態の正本として扱うことは本要求の対象外とする。
+
+### 6-10. 競合検出（FR-009）
+
+> Source: `docs/kv-priority-roadmap/kv-cache-independence-amendments.md#追記案-6-stale-state--stale-bundle-への競合制御`
+
+- Requirement ID: `FR-009`
+
+システムは、stale state または stale bundle に基づく更新を検出可能でなければならない。
+
+#### 競合検出機構
+
+最低限、以下のいずれかを持たなければならない。
+
+| 機構 | 説明 |
+|------|------|
+| `state_revision` | 状態の版番号 |
+| `task_version` | task のバージョン |
+| `expected_current_state` | 期待される現在状態のハッシュ |
+| `bundle_generated_at` | bundle 生成時刻 |
+| `source_snapshot_version` | 参照元スナップショットの版 |
+
+#### 競合時の挙動
+
+- 不一致時は **暗黙 merge を行わず、競合として扱わなければならない**
+- 競合検出時は operator へ通知し、明示的な解決を求める
+
+#### 失敗条件
+
+- stale bundle からの更新を検出できない
+- 古い current state に基づいて superseded decision や古い next action を採用してしまう
