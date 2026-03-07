@@ -148,8 +148,8 @@ func TestSearchChronicle(t *testing.T) {
 
 	// 複数ノート作成
 	_, err = svc.IngestChronicle(ctx, IngestChronicleRequest{
-		Title:        "Go言語入門",
-		Body:         "GoはGoogleが開発したプログラミング言語です",
+		Title:        "Go Programming Language",
+		Body:         "Go is a programming language developed by Google",
 		WorkingScope: "dev",
 	})
 	if err != nil {
@@ -157,8 +157,8 @@ func TestSearchChronicle(t *testing.T) {
 	}
 
 	_, err = svc.IngestChronicle(ctx, IngestChronicleRequest{
-		Title:        "Python入門",
-		Body:         "Pythonは人気のあるスクリプト言語です",
+		Title:        "Python Programming",
+		Body:         "Python is a popular scripting language",
 		WorkingScope: "dev",
 	})
 	if err != nil {
