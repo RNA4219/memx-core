@@ -17,8 +17,8 @@ next_review_due: 2026-06-03
 実施順（厳守）:
 1. **P1**: `kv-cache-independence-amendments.md` — KVキャッシュ独立化
 2. **P2**: `01-typed-ref-unification.md` — typed_ref 統一
-3. **P3**: `02-workx-state-history-and-bundle-audit.md` — WorkX 状態履歴・バンドル監査
-4. **P4**: `03-workx-memx-context-rebuild-resolver.md` — WorkX/MemX コンテキスト再構築リゾルバ
+3. **P3**: `02-agent-taskstate-state-history-and-bundle-audit.md` — WorkX 状態履歴・バンドル監査
+4. **P4**: `03-agent-taskstate-memx-context-rebuild-resolver.md` — WorkX/MemX コンテキスト再構築リゾルバ
 5. **P5**: `04-tracker-bridge-minimum-integration.md` — Tracker Bridge 最小統合
 
 **警告**: `typed_ref` 統一前に各PJを並行で深く進めるのは危険。順序を崩さないこと。
@@ -173,10 +173,10 @@ node --test
 printf '%s' 'traceability-sample' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title traceability --api-url http://127.0.0.1:7766
 
 # CLI/API search
-go run ./memx_spec_v3/go/cmd/mem out search 'traceability' --api-url http://127.0.0.1:7766
+go run ./memx_spec_v3/go/cmd/mem out search --api-url http://127.0.0.1:7766 'traceability'
 
 # CLI/API show
-go run ./memx_spec_v3/go/cmd/mem out show 1 --api-url http://127.0.0.1:7766
+go run ./memx_spec_v3/go/cmd/mem out show --api-url http://127.0.0.1:7766 1
 
 # GC dry-run (flag ON 想定)
 go run ./memx_spec_v3/go/cmd/mem gc short --dry-run --api-url http://127.0.0.1:7766
@@ -188,7 +188,7 @@ curl -sS -X POST http://127.0.0.1:7766/v1/gc:run -H "content-type: application/j
 
 ### REQ-CLI-001 検証コマンド（IF: IF-CLI-SEARCH-REQ / IF-CLI-SEARCH-RES）
 ```bash
-go run ./memx_spec_v3/go/cmd/mem out search 'traceability' --api-url http://127.0.0.1:7766
+go run ./memx_spec_v3/go/cmd/mem out search --api-url http://127.0.0.1:7766 'traceability'
 ```
 
 <a id="trace-req-api-001"></a>
@@ -220,7 +220,7 @@ printf '%s' 'secret-token-for-trace' | go run ./memx_spec_v3/go/cmd/mem in short
 
 ### REQ-ERR-001 検証コマンド（IF: IF-CLI-SHOW-REQ / IF-ERR-MATRIX）
 ```bash
-go run ./memx_spec_v3/go/cmd/mem out show 999999 --api-url http://127.0.0.1:7766
+go run ./memx_spec_v3/go/cmd/mem out show --api-url http://127.0.0.1:7766 999999
 ```
 
 <a id="trace-perf"></a>
@@ -237,7 +237,7 @@ go run ./memx_spec_v3/go/cmd/mem out show 999999 --api-url http://127.0.0.1:7766
 - コマンド正本: リポジトリルート起点の `go run ./memx_spec_v3/go/cmd/mem ...` のみを使用する
 - 入力データ形式: UTF-8 プレーンテキスト（1ノート約500文字、1行1ノートで生成）
 - 計測対象コマンド実体:
-  - ingest: `go run ./memx_spec_v3/go/cmd/mem in short`
+  - ingest: `go run ./memx_spec_v3/go/cmd/mem in short --no-llm`
   - search: `go run ./memx_spec_v3/go/cmd/mem out search`
   - show: `go run ./memx_spec_v3/go/cmd/mem out show`
 
@@ -245,9 +245,9 @@ go run ./memx_spec_v3/go/cmd/mem out show 999999 --api-url http://127.0.0.1:7766
 
 | 計測対象 | 正本コマンド | `artifacts/perf/perf-result.json` の対応項目 |
 | --- | --- | --- |
-| ingest | `go run ./memx_spec_v3/go/cmd/mem in short --stdin --title <title> --api-url http://127.0.0.1:7766` | `results.ingest.p50_ms` / `results.ingest.p95_ms` / `results.ingest.runs` |
-| search | `go run ./memx_spec_v3/go/cmd/mem out search '<query>' --api-url http://127.0.0.1:7766` | `results.search.p50_ms` / `results.search.p95_ms` / `results.search.runs` |
-| show | `go run ./memx_spec_v3/go/cmd/mem out show <id> --api-url http://127.0.0.1:7766` | `results.show.p50_ms` / `results.show.p95_ms` / `results.show.runs` |
+| ingest | `go run ./memx_spec_v3/go/cmd/mem in short --stdin --title <title> --no-llm --api-url http://127.0.0.1:7766` | `results.ingest.p50_ms` / `results.ingest.p95_ms` / `results.ingest.runs` |
+| search | `go run ./memx_spec_v3/go/cmd/mem out search --api-url http://127.0.0.1:7766 '<query>'` | `results.search.p50_ms` / `results.search.p95_ms` / `results.search.runs` |
+| show | `go run ./memx_spec_v3/go/cmd/mem out show --api-url http://127.0.0.1:7766 <id>` | `results.show.p50_ms` / `results.show.p95_ms` / `results.show.runs` |
 
 ### 出力 JSON スキーマ（`artifacts/perf/perf-result.json`）
 ```json
@@ -343,13 +343,13 @@ def pct(values, p):
     return round(values[i], 2)
 
 for _ in range(WARMUP):
-    ms(f"printf '%s' 'warmup' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title warmup --api-url {API}")
-    ms(f"go run ./memx_spec_v3/go/cmd/mem out search '{query}' --api-url {API}")
-    ms(f"go run ./memx_spec_v3/go/cmd/mem out show {known_id} --api-url {API}")
+    ms(f"printf '%s' 'warmup' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title warmup --no-llm --api-url {API}")
+    ms(f"go run ./memx_spec_v3/go/cmd/mem out search --api-url {API} '{query}'")
+    ms(f"go run ./memx_spec_v3/go/cmd/mem out show --api-url {API} {known_id}")
 
-ingest = [ms(f"printf '%s' 'bench' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title bench --api-url {API}") for _ in range(RUNS)]
-search = [ms(f"go run ./memx_spec_v3/go/cmd/mem out search '{query}' --api-url {API}") for _ in range(RUNS)]
-show = [ms(f"go run ./memx_spec_v3/go/cmd/mem out show {known_id} --api-url {API}") for _ in range(RUNS)]
+ingest = [ms(f"printf '%s' 'bench' | go run ./memx_spec_v3/go/cmd/mem in short --stdin --title bench --no-llm --api-url {API}") for _ in range(RUNS)]
+search = [ms(f"go run ./memx_spec_v3/go/cmd/mem out search --api-url {API} '{query}'") for _ in range(RUNS)]
+show = [ms(f"go run ./memx_spec_v3/go/cmd/mem out show --api-url {API} {known_id}") for _ in range(RUNS)]
 
 Path("artifacts/perf/warmup-result.json").write_text(json.dumps({"warmup": WARMUP}, indent=2), encoding="utf-8")
 Path("artifacts/perf/perf-result.json").write_text(json.dumps({
@@ -437,8 +437,77 @@ python workflow-cookbook/tools/codemap/update.py --targets docs/birdseye/hot.jso
 2. 日次確認では `ingest` / `search` / `show` / `compatibility` / `error_classification` / `recall_threshold` の breach 有無を確認する。
 3. breach 発生時は `governance/metrics.yaml` の `action_on_breach` に従ってインシデントを起票する。
 
+## 実API検証手順（テスト品質保証）
+
+モックテストのみでパスした機能は、実際の外部APIを使用した統合テストで動作確認を行うこと。
+
+### LLM統合テスト
+
+#### 前提条件
+- `.env` に `OPENAI_API_KEY` または `DASHSCOPE_API_KEY` が設定されていること
+- ネットワーク接続があること
+
+#### 実行コマンド
+```bash
+# テスト実行（.env から自動読み込み）
+cd C:\Users\ryo-n\Codex_dev\memx-core
+go test ./memx_spec_v3/go/... -v
+
+# 特定のテストのみ実行
+go test ./memx_spec_v3/go/db/... -v -run TestOpenAI
+```
+
+#### 検証項目
+1. **正常系**: 要約生成が成功し、空でない結果が返ること
+2. **タイムアウト**: 15秒以内にレスポンスが返ること（またはタイムアウトエラーが適切に処理されること）
+3. **エラー処理**: 無効なAPI Keyで認証エラーが返ること
+
+#### モックテストとの併用ルール
+- モックテストはユニットテストとして維持する
+- 新規機能追加時はモックテスト＋統合テストの両方を作成する
+- 統合テストは環境変数がある場合のみ実行可能とする
+
+### API エンドポイント結合テスト
+
+v1必須3エンドポイントの結合テストを以下の手順で実施する。
+
+#### 手順
+```bash
+# 1. APIサーバー起動（別ターミナル）
+go run ./memx_spec_v3/go/cmd/mem api serve --addr 127.0.0.1:7766 --short ./test.db
+
+# 2. ingest テスト
+curl -sS -X POST http://127.0.0.1:7766/v1/notes:ingest \
+  -H "content-type: application/json" \
+  -d "{\"title\":\"test\",\"body\":\"test body\"}"
+
+# 3. search テスト
+curl -sS -X POST http://127.0.0.1:7766/v1/notes:search \
+  -H "content-type: application/json" \
+  -d "{\"query\":\"test\"}"
+
+# 4. show テスト（IDは手順2の結果を使用）
+curl -sS http://127.0.0.1:7766/v1/notes/<ID>
+```
+
+#### 合否判定
+- 各エンドポイントが200系ステータスを返すこと
+- レスポンスJSONが `contracts/cli-json.schema.json` に適合すること
+- エラー時に `code` / `message` フィールドが含まれること
+
+### 機能リリース前チェックリスト
+
+新規機能のリリース前に以下を確認すること。
+
+- [ ] モックテストがパスしていること
+- [ ] 統合テスト（実API使用）がパスしていること
+- [ ] 手動でのCLI/API実行で期待通りの結果が得られること
+- [ ] エラー時に適切なエラーコードが返ること
+- [ ] 性能要件（NFR-001）を満たしていること（該当する場合）
+
 ## リリース前確認（Release Drafter）
 1. `git ls-files -- memx_spec_v3/go/go.mod memx_spec_v3/go/go.sum` を実行し、`memx_spec_v3/go/go.mod` と `memx_spec_v3/go/go.sum` の追跡状態を確認する。
 2. マージ済み PR に `feature` / `fix` / `chore` / `breaking` ラベルが正しく付与されていることを確認する。
 3. GitHub の Releases 画面で Draft Release を開き、カテゴリ分類（Features/Fixes/Chores/Breaking Changes）とタイトルを確認する。
 4. 誤分類や欠落がある場合は PR ラベルを修正し、Release Drafter の再実行でドラフトを更新する。
+

@@ -10,7 +10,7 @@
 
 ### 追加理由
 
-`workx` / `memx-core` / `tracker-bridge` の参照形式が揃っていないと、`source refs`、`entity_link`、`lineage`、`context rebuild` の接続点が壊れる。
+`agent-taskstate` / `memx-core` / `tracker-bridge` の参照形式が揃っていないと、`source refs`、`entity_link`、`lineage`、`context rebuild` の接続点が壊れる。
 
 ### 追記先候補
 
@@ -48,7 +48,7 @@ canonical format は以下とする。
 
 ### AC-006 typed_ref 一貫性
 
-`workx` / `memx-core` / `tracker-bridge` をまたぐ主要参照が、同一 canonical `typed_ref` 形式で保存・再利用・追跡可能であること。
+`agent-taskstate` / `memx-core` / `tracker-bridge` をまたぐ主要参照が、同一 canonical `typed_ref` 形式で保存・再利用・追跡可能であること。
 
 ---
 

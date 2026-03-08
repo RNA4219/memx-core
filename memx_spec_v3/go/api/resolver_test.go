@@ -44,7 +44,7 @@ func TestShortNoteResolver_ResolveRef(t *testing.T) {
 		},
 		{
 			name:    "unsupported domain",
-			ref:     NewTypedRefWithProvider(DomainWorkx, "task", ProviderLocal, "task-1"),
+			ref:     NewTypedRefWithProvider(DomainAgentTaskstate, "task", ProviderLocal, "task-1"),
 			wantErr: true,
 		},
 		{
@@ -119,7 +119,7 @@ func TestShortNoteResolver_ResolveMany(t *testing.T) {
 		NewTypedRef(EntityTypeEvidence, "id-1"),
 		NewTypedRef(EntityTypeKnowledge, "id-2"),
 		NewTypedRef(EntityTypeEvidence, "not-found"),
-		NewTypedRefWithProvider(DomainWorkx, "task", ProviderLocal, "task-1"),
+		NewTypedRefWithProvider(DomainAgentTaskstate, "task", ProviderLocal, "task-1"),
 	}
 
 	report, err := resolver.ResolveMany(context.Background(), refs)
@@ -252,8 +252,8 @@ func TestValidateTypedRefForResolve(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:    "unsupported workx domain",
-			ref:     NewTypedRefWithProvider(DomainWorkx, "task", ProviderLocal, "task-1"),
+			name:    "unsupported agent-taskstate domain",
+			ref:     NewTypedRefWithProvider(DomainAgentTaskstate, "task", ProviderLocal, "task-1"),
 			wantErr: true,
 		},
 		{
@@ -273,5 +273,200 @@ func TestValidateTypedRefForResolve(t *testing.T) {
 				t.Errorf("unexpected error: %v", err)
 			}
 		})
+	}
+}
+
+// -------------------- P4 Tests: Context Bundle --------------------
+
+func TestContextBundle_Build(t *testing.T) {
+	notes := map[string]*Note{
+		"ev-1": {ID: "ev-1", Title: "Evidence 1", Summary: "Evidence summary 1", Body: "Full evidence body"},
+		"art-1": {ID: "art-1", Title: "Artifact 1", Summary: "Artifact summary 1"},
+	}
+
+	searchFunc := func(ctx context.Context, query string, topK int) ([]Note, error) {
+		return nil, nil
+	}
+	showFunc := func(ctx context.Context, id string) (*Note, error) {
+		if note, ok := notes[id]; ok {
+			return note, nil
+		}
+		return nil, errors.New("not found")
+	}
+
+	resolver := NewShortNoteResolver(searchFunc, showFunc)
+
+	refs := []TypedRef{
+		NewTypedRef(EntityTypeEvidence, "ev-1"),
+		NewTypedRef(EntityTypeArtifact, "art-1"),
+	}
+
+	report, err := resolver.ResolveMany(context.Background(), refs)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(report.Resolved) != 2 {
+		t.Errorf("resolved count = %d, want 2", len(report.Resolved))
+	}
+
+	// Verify bundle structure
+	bundle := ContextBundle{
+		ID:             "test-bundle",
+		Purpose:        "test",
+		Summary:        "Test bundle",
+		SourceRefs:     []BundleSourceRef{},
+		RawIncluded:    false,
+		GeneratorVersion: "test/v1",
+		Diagnostics: BundleDiagnostics{
+			PartialBundle: report.Diagnostics.PartialBundle,
+		},
+	}
+
+	if bundle.ID == "" {
+		t.Error("bundle ID should not be empty")
+	}
+	if bundle.Purpose == "" {
+		t.Error("bundle purpose should not be empty")
+	}
+}
+
+func TestBundleDiagnostics_PartialBundle(t *testing.T) {
+	tests := []struct {
+		name          string
+		unresolved    int
+		unsupported   int
+		wantPartial   bool
+	}{
+		{
+			name:        "complete bundle",
+			unresolved:  0,
+			unsupported: 0,
+			wantPartial: false,
+		},
+		{
+			name:        "partial with unresolved",
+			unresolved:  1,
+			unsupported: 0,
+			wantPartial: true,
+		},
+		{
+			name:        "partial with unsupported",
+			unresolved:  0,
+			unsupported: 1,
+			wantPartial: true,
+		},
+		{
+			name:        "partial with both",
+			unresolved:  2,
+			unsupported: 1,
+			wantPartial: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			diagnostics := BundleDiagnostics{
+				MissingRefs:     make([]TypedRef, tt.unresolved),
+				UnsupportedRefs: make([]TypedRef, tt.unsupported),
+				PartialBundle:   tt.unresolved > 0 || tt.unsupported > 0,
+			}
+
+			if diagnostics.PartialBundle != tt.wantPartial {
+				t.Errorf("PartialBundle = %v, want %v", diagnostics.PartialBundle, tt.wantPartial)
+			}
+		})
+	}
+}
+
+func TestBundleSourceRef_Structure(t *testing.T) {
+	ref := NewTypedRef(EntityTypeEvidence, "test-id")
+	sourceRef := BundleSourceRef{
+		Ref:         ref,
+		SourceKind:  "evidence",
+		SelectedRaw: true,
+		MetadataJSON: `{"key": "value"}`,
+	}
+
+	if sourceRef.Ref.ID != "test-id" {
+		t.Errorf("ref ID = %s, want test-id", sourceRef.Ref.ID)
+	}
+	if sourceRef.SourceKind != "evidence" {
+		t.Errorf("source kind = %s, want evidence", sourceRef.SourceKind)
+	}
+	if !sourceRef.SelectedRaw {
+		t.Error("selected raw should be true")
+	}
+}
+
+// -------------------- P4 Tests: API Types --------------------
+
+func TestResolveRefRequest_Response(t *testing.T) {
+	ref := NewTypedRef(EntityTypeEvidence, "test-id")
+	req := ResolveRefRequest{Ref: ref}
+
+	if req.Ref.ID != "test-id" {
+		t.Errorf("ref ID = %s, want test-id", req.Ref.ID)
+	}
+
+	resolved := ResolvedRef{
+		Ref:     ref,
+		Status:  RefStatusResolved,
+		Summary: "Test summary",
+	}
+
+	resp := ResolveRefResponse{Resolved: resolved}
+	if resp.Resolved.Status != RefStatusResolved {
+		t.Errorf("status = %s, want resolved", resp.Resolved.Status)
+	}
+}
+
+func TestResolveManyRequest_Response(t *testing.T) {
+	refs := []TypedRef{
+		NewTypedRef(EntityTypeEvidence, "id-1"),
+		NewTypedRef(EntityTypeKnowledge, "id-2"),
+	}
+
+	req := ResolveManyRequest{Refs: refs}
+	if len(req.Refs) != 2 {
+		t.Errorf("refs count = %d, want 2", len(req.Refs))
+	}
+
+	report := ResolveReport{
+		Resolved: []ResolvedRef{
+			{Ref: refs[0], Status: RefStatusResolved},
+			{Ref: refs[1], Status: RefStatusResolved},
+		},
+		Unresolved:  []TypedRef{},
+		Unsupported: []TypedRef{},
+	}
+
+	resp := ResolveManyResponse{Report: report}
+	if len(resp.Report.Resolved) != 2 {
+		t.Errorf("resolved count = %d, want 2", len(resp.Report.Resolved))
+	}
+}
+
+func TestBuildBundleRequest_Response(t *testing.T) {
+	req := BuildBundleRequest{
+		Purpose:    "context rebuild test",
+		SourceRefs: []TypedRef{NewTypedRef(EntityTypeEvidence, "ev-1")},
+		IncludeRaw: false,
+	}
+
+	if req.Purpose != "context rebuild test" {
+		t.Errorf("purpose = %s, want 'context rebuild test'", req.Purpose)
+	}
+
+	bundle := ContextBundle{
+		ID:          "bundle-001",
+		Purpose:     req.Purpose,
+		Summary:     "Test summary",
+		RawIncluded: req.IncludeRaw,
+	}
+
+	resp := BuildBundleResponse{Bundle: bundle}
+	if resp.Bundle.ID != "bundle-001" {
+		t.Errorf("bundle ID = %s, want bundle-001", resp.Bundle.ID)
 	}
 }

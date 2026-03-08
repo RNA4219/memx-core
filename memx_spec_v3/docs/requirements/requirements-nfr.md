@@ -157,7 +157,7 @@ next_review_due: 2026-06-03
 
 - Requirement ID: `AC-006`
 
-`workx` / `memx-core` / `tracker-bridge` をまたぐ主要参照が、同一 canonical `typed_ref` 形式で保存・再利用・追跡可能であること。
+`agent-taskstate` / `memx-core` / `tracker-bridge` をまたぐ主要参照が、同一 canonical `typed_ref` 形式で保存・再利用・追跡可能であること。
 
 #### 受入条件
 

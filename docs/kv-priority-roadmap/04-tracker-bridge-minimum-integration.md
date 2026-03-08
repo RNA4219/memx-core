@@ -2,7 +2,7 @@
 
 ## 目的
 
-外部 issue を「外界の窓口」として `workx` / `memx-core` に接続する。
+外部 issue を「外界の窓口」として `agent-taskstate` / `memx-core` に接続する。
 
 ただし tracker を正本にしない。`tracker-bridge` は最後まで補助層に留める。
 
@@ -13,14 +13,14 @@ P4 のゴールは full sync ではない。
 最小で成立すべきなのは以下。
 
 1. issue を取得できる
-2. `workx task` とリンクできる
+2. `agent-taskstate task` とリンクできる
 3. 重要更新を `sync_event` に残せる
-4. 必要な snapshot だけを `workx context build` に渡せる
+4. 必要な snapshot だけを `agent-taskstate context build` に渡せる
 5. `done` / `review` などを外部へ短文投影できる
 
 ## なぜ優先度 4 なのか
 
-- KV 問題の本丸は `workx` と `memx-core`
+- KV 問題の本丸は `agent-taskstate` と `memx-core`
 - tracker は再開の補助情報であって、内部状態の正本ではない
 - ここを先に厚くすると、外部 issue が内部思考を侵食する
 
@@ -51,7 +51,7 @@ P4 のゴールは full sync ではない。
 
 ### 2. linking
 
-- `tracker:issue:*:*` と `workx:task:local:*` の link
+- `tracker:issue:*:*` と `agent-taskstate:task:local:*` の link
 - role:
   - `primary`
   - `related`
@@ -65,7 +65,7 @@ P4 のゴールは full sync ではない。
 
 ### 4. snapshot export
 
-`workx context build` が必要時に使える最小 snapshot を返す。
+`agent-taskstate context build` が必要時に使える最小 snapshot を返す。
 
 例:
 
@@ -95,9 +95,9 @@ P4 のゴールは full sync ではない。
 - `tracker:issue:jira:PROJ-123`
 - `tracker:issue:github:owner/repo#123`
 
-### 3. workx 連携は suggestion ベースに留める
+### 3. agent-taskstate 連携は suggestion ベースに留める
 
-tracker 更新を見て、いきなり `workx task.status` を書き換えない。
+tracker 更新を見て、いきなり `agent-taskstate task.status` を書き換えない。
 
 最初は以下に留める。
 
@@ -108,10 +108,10 @@ tracker 更新を見て、いきなり `workx task.status` を書き換えない
 ## 受入条件
 
 - 外部 issue を 1 件 fetch して `issue_cache` に保存できる
-- issue と `workx task` を entity_link できる
+- issue と `agent-taskstate task` を entity_link できる
 - inbound / outbound の sync_event を追跡できる
-- `workx context build` が tracker snapshot を optional input として使える
-- tracker を見失っても `workx` と `memx-core` だけで task 継続は可能
+- `agent-taskstate context build` が tracker snapshot を optional input として使える
+- tracker を見失っても `agent-taskstate` と `memx-core` だけで task 継続は可能
 
 ## 完了の定義
 
@@ -122,5 +122,5 @@ tracker 更新を見て、いきなり `workx task.status` を書き換えない
 
 - P1（`kv-cache-independence-amendments.md`）完了が必須
 - P2（`01-typed-ref-unification.md`）完了が必須
-- P3（`02-workx-state-history-and-bundle-audit.md`）完了後に進めるのが安全
-- P4（`03-workx-memx-context-rebuild-resolver.md`）完了後に進めるのが安全
+- P3（`02-agent-taskstate-state-history-and-bundle-audit.md`）完了後に進めるのが安全
+- P4（`03-agent-taskstate-memx-context-rebuild-resolver.md`）完了後に進めるのが安全

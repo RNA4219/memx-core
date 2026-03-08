@@ -14,7 +14,7 @@ func TestTypedRef_String(t *testing.T) {
 		{TypedRef{Domain: DomainMemx, Type: EntityTypeArtifact, Provider: ProviderLocal, ID: "01HZZZZZZZ"}, "memx:artifact:local:01HZZZZZZZ"},
 		{TypedRef{Domain: DomainMemx, Type: EntityTypeLineage, Provider: ProviderLocal, ID: "01HAAAAAAA"}, "memx:lineage:local:01HAAAAAAA"},
 		{TypedRef{Domain: DomainMemx, Type: EntityTypeEvidenceChunk, Provider: ProviderLocal, ID: "01HCHUNK"}, "memx:evidence_chunk:local:01HCHUNK"},
-		{TypedRef{Domain: DomainWorkx, Type: "task", Provider: ProviderLocal, ID: "task_01J"}, "workx:task:local:task_01J"},
+		{TypedRef{Domain: DomainAgentTaskstate, Type: "task", Provider: ProviderLocal, ID: "task_01J"}, "agent-taskstate:task:local:task_01J"},
 		{TypedRef{Domain: DomainTracker, Type: "issue", Provider: ProviderJira, ID: "PROJ-123"}, "tracker:issue:jira:PROJ-123"},
 		{TypedRef{Domain: DomainTracker, Type: "issue", Provider: ProviderGitHub, ID: "owner/repo#123"}, "tracker:issue:github:owner/repo#123"},
 	}
@@ -37,7 +37,7 @@ func TestParseTypedRef(t *testing.T) {
 		{"memx:knowledge:local:01HYYYYYYY", TypedRef{Domain: DomainMemx, Type: EntityTypeKnowledge, Provider: ProviderLocal, ID: "01HYYYYYYY"}, false},
 		{"memx:artifact:local:01HZZZZZZZ", TypedRef{Domain: DomainMemx, Type: EntityTypeArtifact, Provider: ProviderLocal, ID: "01HZZZZZZZ"}, false},
 		{"memx:lineage:local:01HAAAAAAA", TypedRef{Domain: DomainMemx, Type: EntityTypeLineage, Provider: ProviderLocal, ID: "01HAAAAAAA"}, false},
-		{"workx:task:local:task_01J", TypedRef{Domain: DomainWorkx, Type: "task", Provider: ProviderLocal, ID: "task_01J"}, false},
+		{"agent-taskstate:task:local:task_01J", TypedRef{Domain: DomainAgentTaskstate, Type: "task", Provider: ProviderLocal, ID: "task_01J"}, false},
 		{"tracker:issue:jira:PROJ-123", TypedRef{Domain: DomainTracker, Type: "issue", Provider: ProviderJira, ID: "PROJ-123"}, false},
 		{"tracker:issue:github:owner/repo#123", TypedRef{Domain: DomainTracker, Type: "issue", Provider: ProviderGitHub, ID: "owner/repo#123"}, false},
 
@@ -53,7 +53,7 @@ func TestParseTypedRef(t *testing.T) {
 		{"foo:evidence:local:01HXXX", TypedRef{}, true}, // wrong domain
 		{"memx:unknown:local:01HXXX", TypedRef{}, true}, // unknown type for memx
 		{"memx:evidence:local:", TypedRef{}, true},      // empty id
-		{"workx:task:01J", TypedRef{}, true},            // 3-segment only memx allowed
+		{"agent-taskstate:task:01J", TypedRef{}, true},            // 3-segment only memx allowed
 	}
 
 	for _, tt := range tests {
@@ -79,7 +79,7 @@ func TestTypedRef_RoundTrip(t *testing.T) {
 		{Domain: DomainMemx, Type: EntityTypeKnowledge, Provider: ProviderLocal, ID: "01HYYYYYYY"},
 		{Domain: DomainMemx, Type: EntityTypeArtifact, Provider: ProviderLocal, ID: "01HZZZZZZZ"},
 		{Domain: DomainMemx, Type: EntityTypeLineage, Provider: ProviderLocal, ID: "01HAAAAAAA"},
-		{Domain: DomainWorkx, Type: "task", Provider: ProviderLocal, ID: "task_01J"},
+		{Domain: DomainAgentTaskstate, Type: "task", Provider: ProviderLocal, ID: "task_01J"},
 		{Domain: DomainTracker, Type: "issue", Provider: ProviderJira, ID: "PROJ-123"},
 	}
 

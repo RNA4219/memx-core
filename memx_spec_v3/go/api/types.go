@@ -65,6 +65,7 @@ type NotesIngestRequest struct {
 	SourceTrust string   `json:"source_trust,omitempty"`
 	Sensitivity string   `json:"sensitivity,omitempty"`
 	Tags        []string `json:"tags,omitempty"`
+	NoLLM       bool     `json:"no_llm,omitempty"`
 }
 
 type NotesIngestResponse struct {
@@ -123,6 +124,7 @@ type JournalIngestRequest struct {
 	Tags         []string `json:"tags,omitempty"`
 	WorkingScope string   `json:"working_scope"`
 	IsPinned     bool     `json:"is_pinned,omitempty"`
+	NoLLM        bool     `json:"no_llm,omitempty"`
 }
 
 type JournalIngestResponse struct {
@@ -160,6 +162,7 @@ type KnowledgeIngestRequest struct {
 	Tags         []string `json:"tags,omitempty"`
 	WorkingScope string   `json:"working_scope"`
 	IsPinned     bool     `json:"is_pinned,omitempty"`
+	NoLLM        bool     `json:"no_llm,omitempty"`
 }
 
 type KnowledgeIngestResponse struct {
@@ -213,4 +216,126 @@ type ArchiveListResponse struct {
 
 type ArchiveRestoreResponse struct {
 	Note Note `json:"note"`
+}
+
+// -------------------- Recall --------------------
+
+type RecallRequest struct {
+	Query        string   `json:"query"`
+	TopK         int      `json:"top_k,omitempty"`
+	MessageRange int      `json:"message_range,omitempty"`
+	Stores       []string `json:"stores,omitempty"`
+	FallbackFTS  bool     `json:"fallback_fts,omitempty"`
+}
+
+type RecallResponse struct {
+	Results []NoteWithContext `json:"results"`
+}
+
+type NoteWithContext struct {
+	Anchor RecallNote   `json:"anchor"`
+	Before []RecallNote `json:"before,omitempty"`
+	After  []RecallNote `json:"after,omitempty"`
+}
+
+type RecallNote struct {
+	ID      string  `json:"id"`
+	Title   string  `json:"title"`
+	Summary string  `json:"summary,omitempty"`
+	Body    string  `json:"body,omitempty"`
+	Store   string  `json:"store"`
+	Score   float64 `json:"score"`
+}
+
+// -------------------- Resolver API (P4) --------------------
+
+// ResolveRefRequest は単一の typed_ref 解決リクエスト。
+type ResolveRefRequest struct {
+	Ref TypedRef `json:"ref"`
+}
+
+// ResolveRefResponse は単一の typed_ref 解決レスポンス。
+type ResolveRefResponse struct {
+	Resolved ResolvedRef `json:"resolved"`
+}
+
+// ResolveManyRequest は複数の typed_ref 一括解決リクエスト。
+type ResolveManyRequest struct {
+	Refs []TypedRef `json:"refs"`
+}
+
+// ResolveManyResponse は複数の typed_ref 一括解決レスポンス。
+type ResolveManyResponse struct {
+	Report ResolveReport `json:"report"`
+}
+
+// LoadSummaryRequest は要約取得リクエスト（summary-first retrieval）。
+type LoadSummaryRequest struct {
+	Ref TypedRef `json:"ref"`
+}
+
+// LoadSummaryResponse は要約取得レスポンス。
+type LoadSummaryResponse struct {
+	Payload SummaryPayload `json:"payload"`
+}
+
+// LoadSelectedRawRequest は raw データ取得リクエスト。
+type LoadSelectedRawRequest struct {
+	Ref      TypedRef    `json:"ref"`
+	Selector RawSelector `json:"selector"`
+}
+
+// LoadSelectedRawResponse は raw データ取得レスポンス。
+type LoadSelectedRawResponse struct {
+	Payload RawPayload `json:"payload"`
+}
+
+// -------------------- Context Bundle (P4) --------------------
+
+// ContextBundle は再開用の文脈バンドル。
+// P4仕様: purpose, summary, decision_digest, open_question_digest, artifact_refs, evidence_refs, source_refs, raw_included, resolver_diagnostics
+type ContextBundle struct {
+	ID                 string             `json:"id"`
+	Purpose            string             `json:"purpose"`
+	Summary            string             `json:"summary"`
+	RebuildLevel       string             `json:"rebuild_level"`
+	DecisionDigest     string             `json:"decision_digest,omitempty"`
+	OpenQuestionDigest string             `json:"open_question_digest,omitempty"`
+	ArtifactRefs       []TypedRef         `json:"artifact_refs,omitempty"`
+	EvidenceRefs       []TypedRef         `json:"evidence_refs,omitempty"`
+	SourceRefs         []BundleSourceRef  `json:"source_refs,omitempty"`
+	TrackerRefs        []TypedRef         `json:"tracker_refs,omitempty"`
+	RawIncluded        bool               `json:"raw_included"`
+	GeneratorVersion   string             `json:"generator_version"`
+	GeneratedAt        string             `json:"generated_at"`
+	Diagnostics        BundleDiagnostics  `json:"diagnostics"`
+}
+
+// BundleSourceRef はバンドル内のソース参照。
+type BundleSourceRef struct {
+	Ref          TypedRef `json:"ref"`
+	SourceKind   string   `json:"source_kind"`
+	SelectedRaw  bool     `json:"selected_raw"`
+	MetadataJSON string   `json:"metadata_json,omitempty"`
+}
+
+// BundleDiagnostics はバンドル生成時の診断情報。
+type BundleDiagnostics struct {
+	MissingRefs      []TypedRef `json:"missing_refs,omitempty"`
+	UnsupportedRefs  []TypedRef `json:"unsupported_refs,omitempty"`
+	ResolverWarnings []string   `json:"resolver_warnings,omitempty"`
+	PartialBundle    bool       `json:"partial_bundle"`
+}
+
+// BuildBundleRequest は Context Bundle 構築リクエスト。
+type BuildBundleRequest struct {
+	Purpose      string     `json:"purpose"`
+	SourceRefs   []TypedRef `json:"source_refs"`
+	IncludeRaw   bool       `json:"include_raw,omitempty"`
+	RawSelectors map[string]RawSelector `json:"raw_selectors,omitempty"`
+}
+
+// BuildBundleResponse は Context Bundle 構築レスポンス。
+type BuildBundleResponse struct {
+	Bundle ContextBundle `json:"bundle"`
 }

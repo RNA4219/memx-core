@@ -9,9 +9,9 @@ import (
 type Domain string
 
 const (
-	DomainMemx    Domain = "memx"
-	DomainWorkx   Domain = "workx"
-	DomainTracker Domain = "tracker"
+	DomainMemx          Domain = "memx"
+	DomainAgentTaskstate Domain = "agent-taskstate"
+	DomainTracker       Domain = "tracker"
 )
 
 // EntityType は memx 内のエンティティ種別。
@@ -153,10 +153,10 @@ func parseFourSegment(parts []string) (TypedRef, error) {
 // validateDomain はドメインが有効かどうかを検証する。
 func validateDomain(domain Domain) error {
 	switch domain {
-	case DomainMemx, DomainWorkx, DomainTracker:
+	case DomainMemx, DomainAgentTaskstate, DomainTracker:
 		return nil
 	default:
-		return fmt.Errorf("invalid domain: %s (expected memx, workx, or tracker)", domain)
+		return fmt.Errorf("invalid domain: %s (expected memx, agent-taskstate, or tracker)", domain)
 	}
 }
 
@@ -177,7 +177,7 @@ func validateEntityType(domain Domain, entityType EntityType) error {
 		}
 	}
 
-	// 他のドメイン（workx, tracker）では空でないことを確認するのみ
+	// 他のドメイン（agent-taskstate, tracker）では空でないことを確認するのみ
 	// 実在性確認は別責務とする
 	return nil
 }

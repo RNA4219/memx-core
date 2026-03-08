@@ -1,28 +1,28 @@
-# Priority 4: workx x memx-core の context rebuild resolver
+# Priority 4: agent-taskstate x memx-core の context rebuild resolver
 
 ## 目的
 
-`workx` の bundle build を「単なる ref の寄せ集め」から、「再開に必要な文脈を再構成する処理」へ進化させる。
+`agent-taskstate` の bundle build を「単なる ref の寄せ集め」から、「再開に必要な文脈を再構成する処理」へ進化させる。
 
-そのために、`workx` から `memx-core` の evidence / knowledge / artifact を引く resolver を定義する。
+そのために、`agent-taskstate` から `memx-core` の evidence / knowledge / artifact を引く resolver を定義する。
 
 ## 結論
 
-再開時の中心は `workx` の `ContextRebuildService` とし、`memx-core` はその下で使う memory substrate として扱う。
+再開時の中心は `agent-taskstate` の `ContextRebuildService` とし、`memx-core` はその下で使う memory substrate として扱う。
 
 依存方向:
 
 ```txt
-workx -> memx-core
-workx -> tracker snapshot provider
-runtime -> workx
+agent-taskstate -> memx-core
+agent-taskstate -> tracker snapshot provider
+runtime -> agent-taskstate
 ```
 
 `memx-core` 自体に task 概念を入れない。
 
 ## 現状の問題
 
-- `workx` の build は task/state/decision/question を集めるところまで
+- `agent-taskstate` の build は task/state/decision/question を集めるところまで
 - `memx-core` の思想は合っているが、公開面はまだ short 中心
 - lineage / journal / knowledge を前提にしすぎると、今すぐ動かない
 
@@ -86,7 +86,7 @@ bundle build が不完全でも落としきらない。
 
 ### Phase 3A: interface 固定
 
-`workx` 側に以下の抽象 I/F を置く。
+`agent-taskstate` 側に以下の抽象 I/F を置く。
 
 ```txt
 ResolveRef(ref) -> ResolvedRef
@@ -128,7 +128,7 @@ LoadSelectedRaw(ref, selector) -> RawPayload
 
 ## 受入条件
 
-- 会話履歴ゼロで `workx context build` を再実行できる
+- 会話履歴ゼロで `agent-taskstate context build` を再実行できる
 - `memx` ref があれば summary-first で bundle に反映される
 - raw が必要な局面だけ selected raw を含められる
 - ref 解決不能でも bundle build 自体は継続できる
@@ -136,11 +136,11 @@ LoadSelectedRaw(ref, selector) -> RawPayload
 
 ## 完了の定義
 
-- `workx` の rebuild が本当に `context rebuild` になる
+- `agent-taskstate` の rebuild が本当に `context rebuild` になる
 - `memx-core` が「保存箱」ではなく「再開用 memory substrate」として効き始める
 
 ## 依存
 
 - P1（`kv-cache-independence-amendments.md`）完了が必須
 - P2（`01-typed-ref-unification.md`）完了が必須
-- P3（`02-workx-state-history-and-bundle-audit.md`）の bundle/source 構造が先に必要
+- P3（`02-agent-taskstate-state-history-and-bundle-audit.md`）の bundle/source 構造が先に必要

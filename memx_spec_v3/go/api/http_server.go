@@ -48,6 +48,13 @@ func (s *HTTPServer) Handler() http.Handler {
 	mux.HandleFunc("/v1/archive", s.handleArchiveList)
 	mux.HandleFunc("/v1/archive/", s.handleArchiveGetOrRestore)
 
+	// Resolver API (P4)
+	mux.HandleFunc("/v1/resolve", s.handleResolveRef)
+	mux.HandleFunc("/v1/resolve-many", s.handleResolveMany)
+	mux.HandleFunc("/v1/summary", s.handleLoadSummary)
+	mux.HandleFunc("/v1/raw", s.handleLoadSelectedRaw)
+	mux.HandleFunc("/v1/bundle:build", s.handleBuildBundle)
+
 	return mux
 }
 
@@ -460,4 +467,87 @@ func (s *HTTPServer) handleArchiveRestore(w http.ResponseWriter, r *http.Request
 		return
 	}
 	writeOK(w, resp)
+}
+
+// -------------------- Resolver API (P4) --------------------
+
+func (s *HTTPServer) handleResolveRef(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	var req ResolveRefRequest
+	if err := decodeJSON(w, r, &req); err != nil {
+		writeErr(w, err)
+		return
+	}
+	resp, apiErr := s.InProc.ResolveRef(r.Context(), req)
+	if apiErr != nil {
+		writeErr(w, apiErr)
+		return
+	}
+	writeOK(w, resp)
+}
+
+func (s *HTTPServer) handleResolveMany(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	var req ResolveManyRequest
+	if err := decodeJSON(w, r, &req); err != nil {
+		writeErr(w, err)
+		return
+	}
+	resp, apiErr := s.InProc.ResolveMany(r.Context(), req)
+	if apiErr != nil {
+		writeErr(w, apiErr)
+		return
+	}
+	writeOK(w, resp)
+}
+
+func (s *HTTPServer) handleLoadSummary(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	var req LoadSummaryRequest
+	if err := decodeJSON(w, r, &req); err != nil {
+		writeErr(w, err)
+		return
+	}
+	resp, apiErr := s.InProc.LoadSummary(r.Context(), req)
+	if apiErr != nil {
+		writeErr(w, apiErr)
+		return
+	}
+	writeOK(w, resp)
+}
+
+func (s *HTTPServer) handleLoadSelectedRaw(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	var req LoadSelectedRawRequest
+	if err := decodeJSON(w, r, &req); err != nil {
+		writeErr(w, err)
+		return
+	}
+	resp, apiErr := s.InProc.LoadSelectedRaw(r.Context(), req)
+	if apiErr != nil {
+		writeErr(w, apiErr)
+		return
+	}
+	writeOK(w, resp)
+}
+
+func (s *HTTPServer) handleBuildBundle(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	// P4: BuildBundle is temporarily disabled - will be implemented by P4 agent
+	writeErr(w, &Error{Code: CodeInternal, Message: "BuildBundle not yet implemented"})
 }

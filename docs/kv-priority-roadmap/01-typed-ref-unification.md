@@ -2,7 +2,7 @@
 
 ## 目的
 
-`workx` / `memx-core` / `tracker-bridge` の参照表現を 1 つに固定する。
+`agent-taskstate` / `memx-core` / `tracker-bridge` の参照表現を 1 つに固定する。
 
 KV Cache Independence の観点では、`source_refs`、`entity_link`、`lineage`、`context_bundle_source` が同じ文字列表現で扱えないと、再開・監査・根拠追跡が途中で壊れる。
 
@@ -16,8 +16,8 @@ canonical format は以下で固定する。
 
 例:
 
-- `workx:task:local:task_01J...`
-- `workx:decision:local:dec_01J...`
+- `agent-taskstate:task:local:task_01J...`
+- `agent-taskstate:decision:local:dec_01J...`
 - `memx:evidence:local:ev_01J...`
 - `memx:artifact:local:art_01J...`
 - `tracker:issue:jira:PROJ-123`
@@ -26,14 +26,14 @@ canonical format は以下で固定する。
 ## この形式を採る理由
 
 - `tracker` は provider を外せない
-- `workx` 側の契約文書は既に 4 セグメント前提
+- `agent-taskstate` 側の契約文書は既に 4 セグメント前提
 - `local` と `external provider` を同じ規則で扱える
 - 将来 `resolver` や `bundle source` の集約時に条件分岐を減らせる
 
 ## 現状の問題
 
-- `workx` の契約文書は 4 セグメント
-- `workx` の現実装は 3 セグメント
+- `agent-taskstate` の契約文書は 4 セグメント
+- `agent-taskstate` の現実装は 3 セグメント
 - `memx-core` の実装は `memx:<type>:<id>` 固定
 - `tracker-bridge` は 3 セグメント生成かつ `len(parts) >= 3` の緩い検証
 
@@ -56,7 +56,7 @@ canonical format は以下で固定する。
 
 ### 1. 契約を 4 セグメントへ統一
 
-- `workx` の docs を正本として残す
+- `agent-taskstate` の docs を正本として残す
 - `memx-core` docs / code を 4 セグメントへ更新する
 - `tracker-bridge` docs / code を 4 セグメントへ更新する
 
@@ -77,7 +77,7 @@ canonical format は以下で固定する。
 ### 4. canonicalization を追加する
 
 - `memx:evidence:01H...` を入力したら、一時互換として `memx:evidence:local:01H...` へ正規化可能にする
-- `workx:task:01H...` も同様に `workx:task:local:01H...` へ正規化可能にする
+- `agent-taskstate:task:01H...` も同様に `agent-taskstate:task:local:01H...` へ正規化可能にする
 - この正規化は migration 用であり、最終的な出力は常に canonical
 
 ## 変更対象
@@ -93,7 +93,7 @@ canonical format は以下で固定する。
 
 - 3 repo が同じ canonical format を出力する
 - 3 repo が同じ validation rule を持つ
-- `workx` bundle source / `memx` lineage / `tracker-bridge` entity_link で同じ ref を共有できる
+- `agent-taskstate` bundle source / `memx` lineage / `tracker-bridge` entity_link で同じ ref を共有できる
 - 既存 3 セグメント ref を migration 期間中に読み込める
 
 ## 完了の定義

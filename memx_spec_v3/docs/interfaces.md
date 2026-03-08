@@ -201,7 +201,7 @@ next_review_due: 2026-06-03
 
 | セグメント | 説明 | 許容値 |
 |-----------|------|--------|
-| `domain` | システム領域 | `memx`, `workx`, `tracker` |
+| `domain` | システム領域 | `memx`, `agent-taskstate`, `tracker` |
 | `entity_type` | エンティティ種別 | `evidence`, `artifact`, `knowledge`, `lineage`, `task`, `decision`, `issue` 等 |
 | `provider` | データソース | `local`, `jira`, `github`, `linear` 等 |
 | `entity_id` | 一意識別子 | システム固有のID形式 |
@@ -234,7 +234,7 @@ next_review_due: 2026-06-03
 // 検証条件
 // 1. 4セグメントに split 可能
 // 2. 全セグメントが空でない
-// 3. domain が既知 namespace（memx, workx, tracker）
+// 3. domain が既知 namespace（memx, agent-taskstate, tracker）
 // 4. 実在性確認は別責務（形式検証とは分離）
 ```
 
