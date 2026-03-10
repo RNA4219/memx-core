@@ -1,63 +1,44 @@
 ---
-intent_id: INT-001
-owner: memx-resolver
+intent_id: memx-safety-guardrails-v1
+owner: memx-core
 status: active
-last_reviewed_at: 2026-03-10
-next_review_due: 2026-04-10
+last_reviewed_at: 2026-03-03
+next_review_due: 2026-06-03
 ---
 
-# Guardrails & 行動指針
+# GUARDRAILS
 
-## 目的
+## セーフティ・判定
+- Gatekeeper 判定は `allow` / `deny` / `needs_human`。
+- v1.3 では `needs_human` を deny 相当として fail-closed 運用する。
+- 保存前(`memory_store`)と出力前(`memory_output`)で必ずフック可能な構造を維持する。
 
-- docs/requirements.md, docs/interfaces.md, docs/design.md の仕様を遵守する
-- 変更は最小差分で行い、Public APIを破壊しない
-- テスト駆動開発を基本とし、テストを先に記述する
+## エラー・互換性
+- 閾値定義（`EVALUATION.md` と `governance/metrics.yaml`）に不整合がある場合は deploy block とする。
+- API 最小保証コードは `INVALID_ARGUMENT` / `NOT_FOUND` / `INTERNAL`。
+- 未分類エラーは互換維持のため `INTERNAL` にフォールバック。
+- v1 内で禁止:
+  - 必須フィールド削除
+  - 既存フィールド意味変更
+  - 既存成功レスポンスの型/構造破壊
 
-## スコープとドキュメント
+## スキーマ/移行
+- `migrate_other.go` は `schema/*.sql` 適用に統一し、部分適用失敗時はロールバック。
+- DDL 適用順序は notes → notes_fts(採用時) → tags/note_tags → note_embeddings(採用時) → user_version。
+- `user_version` は初期 1、破壊的/非互換 DDL のみ +1。
 
-1. 目的を一文で定義し、誰のどの課題をなぜ今扱うかを明示する
-2. Scopeを固定し、In/Outの境界を先に決めて記録する
-3. I/O契約をBLUEPRINT.mdに整理する
-4. Acceptance CriteriaをEVALUATION.mdに列挙する
-5. 最小フローをRUNBOOK.mdに記す
-6. HUB.codex.mdの自動タスク分割フローに従う
+## データ一貫性
+- ATTACH 跨ぎ完全原子性は前提にせず、「データ喪失より重複許容」で設計する。
+- `lineage` により追跡・再蒸留可能性を確保する。
 
-## 実装原則
+## セキュリティ
+- APIキーや秘密情報は `memory_policy.yaml` と Gatekeeper で保存前ブロックを行う。
+- v1 はローカル運用前提とし、認証・権限・監査を伴う公開運用は対象外。
+- `archive_move` / `archive_purge` の監査ログは、成功/失敗を問わず `result`, `reason`, `retryable`, `owner`, `next_attempt_at` を必須記録とする。
+- requirements（`memx_spec_v3/docs/requirements.md` 2-7節）と矛盾時は requirements を正本とし、本書を追従更新する。
+- fail-closed 整合チェック要件（`REQ-SEC-GRD-001`）は requirements 2-7-5 を正本とする。
 
-- 型安全：新規・変更シグネチャには必ず型を付与
-- 例外設計：既存errors階層に合わせ、再試行可否を区別
-- 後方互換：CLI/JSON出力は互換性を維持
-- スコープ上限：1回の変更は合計100行または2ファイルまで
 
-## Birdseye / Minimal Context Intake Guardrails
-
-### MUST（必須）
-
-1. まずREADME.mdのLLM-BOOTSTRAPブロックのみ読む
-2. `docs/birdseye/index.json`を読み、対象変更ファイル±2 hopのノードID集合を得る
-3. 対応する`docs/birdseye/caps/*.json`だけを読み込む
-4. 生成物ではノードID（パス）を明示し出典を示す
-
-### SHOULD（推奨）
-
-- 2 hopの合計が1,200 tokensを超えそうなら1 hopに縮小
-- 読み順はentrypoints → application → domain → infra → ui
-
-### MUST NOT（禁止）
-
-- `node_modules`, `.venv`, `dist`, `build`, `coverage`等の重量ディレクトリを直読みしない
-- 偽の読込結果を作らない
-
-## 鮮度管理（Staleness Handling）
-
-- `index.json.generated_at`が最新コミットより古い場合、再生成を要求
-- 依頼フロー：人間がcodemapスクリプトをローカルで実行し、成果物をコミット
-
-## 生成物に関する要求（出力契約）
-
-- **plan**：読み込んだCapsノードID一覧とhop、抜粋理由
-- **patch**：変更対象ファイルの相対パスを先頭コメントで明記
-- **tests**：対象ノードのtests/*を参照して増補
-- **commands**：読込に使ったツールと再現手順
-- **notes**：鮮度判断、スコープ外ファイル、既知リスク
+## エージェント出力契約
+- `plan/patch/tests/commands/notes` の出力契約および `plan` の Birdseye 必須項目（`node_id` / `role` / `source_caps`）は `HUB.codex.md` を正本とする。
+- 本書に同種の規定を追加する場合も重複定義を避け、`HUB.codex.md` への参照のみを保持する。
